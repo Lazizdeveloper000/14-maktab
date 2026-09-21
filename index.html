@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sirdaryo viloyati Xovos tumani 14-maktab rasmiy zamonaviy veb-sayti">
+  <title>14-Maktab | Xovos tumani</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --surface: #fff;
+      --surface2: #eef3f8;
+      --text: #101827;
+      --muted: #64748b;
+      --line: #e3e8ef;
+      --primary: #0b65d8;
+      --primary2: #1649a8;
+      --accent: #16a36a;
+      --gold: #f5b301;
+      --shadow: 0 18px 55px rgba(15,23,42,.10);
+      --radius: 22px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, sans-serif;
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+    button, input, textarea, select { font: inherit; }
+    button, a { transition: .2s ease; }
+    button { cursor: pointer; }
+    img { max-width: 100%; display: block; }
+
+    /* ============ Chiroyli fon bezaklari ============ */
+    .bg-decor { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+    .bg-blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .35; animation: blobFloat 14s ease-in-out infinite alternate; }
+    .bg-blob.b1 { width: 480px; height: 480px; background: #9ec5ff; top: -140px; left: -120px; }
+    .bg-blob.b2 { width: 420px; height: 420px; background: #a7f3d0; top: 35%; right: -150px; animation-delay: 4s; }
+    .bg-blob.b3 { width: 380px; height: 380px; background: #ddd6fe; bottom: -120px; left: 28%; animation-delay: 8s; }
+    @keyframes blobFloat {
+      from { transform: translate(0,0) scale(1); }
+      to { transform: translate(45px, 60px) scale(1.12); }
+    }
+
+    /* ============ Sahifa ochilish animatsiyasi ============ */
+    .page { display: none; padding: 42px 0 75px; }
+    .page.active { display: block; animation: pageIn .55s cubic-bezier(.2,.8,.2,1) both; }
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(26px) scale(.985); }
+      to { opacity: 1; transform: none; }
+    }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.8,.2,1); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ============ Animatsiya sinflari ============ */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+    @keyframes pulseGlow { 0%,100% { box-shadow: 0 10px 25px rgba(11,101,216,.25); } 50% { box-shadow: 0 12px 35px rgba(11,101,216,.5); } }
+    @keyframes shine { to { background-position: 200% center; } }
+    @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+    @keyframes gradientMove { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+    @keyframes bounceSlow { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      min-height: 76px;
+      padding: 12px 5vw;
+      background: color-mix(in srgb, var(--surface) 92%, transparent);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); min-width: max-content; }
+    .brand-mark {
+      width: 48px; height: 48px; border-radius: 15px; display: grid; place-items: center; color: #fff;
+      font-weight: 900; font-size: 20px;
+      background: linear-gradient(135deg,#0b65d8,#173e91);
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    .brand strong { display: block; font-family: Manrope; font-size: 15px; letter-spacing: .5px; }
+    .brand small { display: block; color: var(--muted); font-size: 10px; }
+
+    .main-nav { display: flex; gap: 4px; align-items: center; flex: 1; justify-content: center; }
+    .nav-link {
+      border: 0; background: transparent; color: var(--muted); padding: 10px 11px; border-radius: 12px; font-weight: 700; font-size: 13px;
+      position: relative;
+    }
+    .nav-link:hover { color: var(--primary); background: var(--surface2); transform: translateY(-2px); }
+    .nav-link.active { color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow: 0 6px 16px rgba(11,101,216,.3); }
+
+    .header-actions { display: flex; gap: 8px; }
+    .icon-btn { width: 40px; height: 40px; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; color: var(--text); }
+    .icon-btn:hover { transform: rotate(12deg) scale(1.08); border-color: var(--primary); color: var(--primary); }
+    .mobile-only { display: none; }
+
+    main { width: min(1240px, 92%); margin: auto; }
+
+    .hero { display: grid; grid-template-columns: 1fr 1.05fr; gap: 35px; align-items: center; padding: 45px 0 32px; }
+    .eyebrow, .section-kicker { color: var(--primary); font-size: 11px; font-weight: 900; letter-spacing: 1.5px; }
+    h1, h2, h3 { font-family: Manrope; margin: 0 0 12px; line-height: 1.15; }
+    h1 {
+      font-size: clamp(44px, 7vw, 78px); letter-spacing: -3px;
+      background: linear-gradient(90deg, #0b65d8, #7c3aed, #0b65d8);
+      background-size: 200% auto;
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      animation: gradientMove 6s ease infinite;
+    }
+    h2 { font-size: clamp(28px, 4vw, 42px); }
+    h3 { font-size: 18px; }
+
+    .hero-lead { font-size: 22px; font-weight: 800; margin: 8px 0; }
+    .hero-text { color: var(--muted); max-width: 620px; font-size: 16px; }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 25px; }
+
+    .primary-btn, .ghost-btn, .outline-btn { border-radius: 13px; padding: 12px 17px; font-weight: 800; border: 1px solid transparent; }
+    .primary-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary2)); color: #fff;
+      box-shadow: 0 10px 25px rgba(11,101,216,.18); position: relative; overflow: hidden;
+    }
+    .primary-btn::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%);
+      background-size: 200% auto; animation: shine 3s linear infinite;
+    }
+    .primary-btn:hover { transform: translateY(-3px) scale(1.02); }
+    .ghost-btn, .outline-btn { background: var(--surface); border-color: var(--line); color: var(--text); }
+    .outline-btn:hover, .ghost-btn:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-3px); }
+
+    .hero-photo { position: relative; animation: floatY 6s ease-in-out infinite; }
+    .hero-photo img { width: 100%; height: 490px; object-fit: cover; border-radius: 30px; box-shadow: var(--shadow); }
+    .photo-badge {
+      position: absolute; left: 18px; bottom: 18px; display: flex; align-items: center; gap: 10px;
+      padding: 12px 15px; border-radius: 16px; background: rgba(255,255,255,.92); backdrop-filter: blur(12px); box-shadow: var(--shadow);
+      animation: bounceSlow 3s ease-in-out infinite;
+    }
+    .photo-badge span { width: 40px; height: 40px; border-radius: 12px; background: #0b65d8; color: #fff; display: grid; place-items: center; font-weight: 900; }
+    .photo-badge b, .photo-badge small { display: block; }
+    .photo-badge small { font-size: 11px; color: var(--muted); }
+
+    .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0 70px; }
+    .quick-card {
+      display: flex; gap: 12px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface);
+      box-shadow: 0 8px 30px rgba(15,23,42,.04); transition: .3s ease;
+    }
+    .quick-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 18px 40px rgba(11,101,216,.15); }
+    .quick-icon { font-size: 25px; }
+    .quick-card b { font-size: 13px; }
+    .quick-card p { font-size: 11px; color: var(--muted); margin: 3px 0 0; }
+
+    .split-section { display: grid; grid-template-columns: 1fr 1fr; gap: 45px; align-items: center; margin-bottom: 65px; }
+    .split-section p { color: var(--muted); }
+    .rounded-photo { height: 380px; width: 100%; object-fit: cover; border-radius: 25px; box-shadow: var(--shadow); }
+
+    .rating-section, .comments-section, .youtube-section, .map-card, .schedule-wrap {
+      background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; margin: 22px 0;
+    }
+    .rating-section { display: flex; justify-content: space-between; gap: 30px; align-items: center; }
+    .rating-box { text-align: center; }
+    .stars { display: flex; gap: 4px; }
+    .stars button { border: 0; background: transparent; color: #cbd5e1; font-size: 35px; padding: 0; transition: .15s; }
+    .stars button:hover { transform: scale(1.25) rotate(-8deg); }
+    .rating-box strong, .rating-box small { display: block; }
+    .rating-box small { color: var(--muted); }
+
+    .section-heading, .page-title { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
+    .page-title { margin-bottom: 30px; }
+    .page-title p { color: var(--muted); margin: 0; }
+
+    .count-badge, .status-badge { padding: 8px 12px; border-radius: 999px; background: var(--surface2); color: var(--primary); font-size: 11px; font-weight: 900; white-space: nowrap; }
+    .status-badge { color: var(--accent); background: #e9fbf2; animation: bounceSlow 2.5s ease-in-out infinite; }
+
+    .comment-form { display: grid; grid-template-columns: 220px 1fr auto; gap: 10px; margin-top: 20px; }
+    .comment-form input, .comment-form textarea, .search-input, .select-input, .ai-form input {
+      border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: 12px; padding: 12px; outline: none;
+      transition: .2s;
+    }
+    .comment-form textarea { min-height: 48px; resize: vertical; }
+    .comment-form input:focus, .comment-form textarea:focus, .search-input:focus, .select-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(11,101,216,.12); }
+
+    .comments-list { display: grid; gap: 10px; margin-top: 18px; }
+    .comment-item { padding: 14px; background: var(--surface2); border-radius: 15px; transition: .25s; border-left: 3px solid transparent; }
+    .comment-item:hover { border-left-color: var(--primary); transform: translateX(5px); }
+    .comment-item b { font-size: 13px; }
+    .comment-item p { margin: 3px 0; color: var(--muted); font-size: 13px; }
+
+    .director-card {
+      display: grid; grid-template-columns: 135px 1fr auto; gap: 24px; align-items: center; padding: 24px; border-radius: 25px;
+      background: linear-gradient(135deg, #0e5fc5, #132f72); color: #fff;
+      box-shadow: 0 20px 50px rgba(11,101,216,.22); margin-bottom: 25px;
+      position: relative; overflow: hidden;
+    }
+    .director-card::before {
+      content: ""; position: absolute; top: -60px; right: -60px; width: 220px; height: 220px; border-radius: 50%;
+      background: rgba(255,255,255,.07); animation: blobFloat 8s ease-in-out infinite alternate;
+    }
+    .director-card::after {
+      content: ""; position: absolute; bottom: -80px; left: 30%; width: 180px; height: 180px; border-radius: 50%;
+      background: rgba(255,255,255,.05); animation: blobFloat 10s ease-in-out infinite alternate-reverse;
+    }
+    .director-card > * { position: relative; z-index: 1; }
+    .director-card h2 { margin-top: 4px; }
+    .director-card p { color: #dce9ff; }
+    .director-card .section-kicker { color: #9ec5ff; }
+    .director-photo {
+      height: 170px; border: 2px dashed rgba(255,255,255,.5); border-radius: 18px; display: grid; place-items: center; text-align: center;
+      background: rgba(255,255,255,.08); font-size: 15px;
+    }
+    .director-photo span { font-size: 28px; font-weight: 900; display: block; }
+    .director-photo small { display: block; font-size: 11px; }
+    .tag-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag-row span { padding: 6px 9px; border: 1px solid rgba(255,255,255,.25); border-radius: 99px; font-size: 11px; transition: .2s; }
+    .tag-row span:hover { background: rgba(255,255,255,.15); transform: translateY(-2px); }
+
+    .toolbar { display: flex; gap: 10px; margin-bottom: 18px; }
+    .toolbar .search-input { flex: 1; }
+    .select-input { min-width: 200px; }
+
+    .people-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+    .person-card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px;
+      box-shadow: 0 8px 25px rgba(15,23,42,.04); overflow: hidden; transition: .3s ease;
+    }
+    .person-card:hover { transform: translateY(-8px); box-shadow: 0 18px 42px rgba(11,101,216,.15); border-color: var(--primary); }
+    .person-photo {
+      aspect-ratio: 3/4; border-radius: 13px; background: linear-gradient(145deg, #e7eef8, #d4dfed); display: grid; place-items: center;
+      color: #7c8da5; font-weight: 900; margin-bottom: 12px; overflow: hidden; font-size: 34px;
+    }
+    .person-card h3 { font-size: 15px; margin-bottom: 3px; }
+    .person-card p { margin: 0; color: var(--muted); font-size: 11px; }
+    .person-card .tag { display: inline-block; margin-top: 8px; background: var(--surface2); padding: 5px 8px; border-radius: 8px; font-size: 10px; color: var(--primary); font-weight: 800; }
+
+    .clock-panel {
+      display: flex; justify-content: space-between; align-items: center; padding: 30px; border-radius: 25px;
+      background: linear-gradient(135deg, #0c1f40, #123f7a); color: #fff; box-shadow: 0 20px 50px rgba(12,31,64,.2);
+      position: relative; overflow: hidden;
+    }
+    .clock-panel::before {
+      content: ""; position: absolute; top: -70px; right: -70px; width: 250px; height: 250px; border-radius: 50%;
+      background: rgba(255,255,255,.06); animation: blobFloat 9s ease-in-out infinite alternate;
+    }
+    .clock-panel > * { position: relative; z-index: 1; }
+    .big-clock { font-family: Manrope; font-size: clamp(48px, 9vw, 92px); letter-spacing: -4px; font-weight: 800; }
+    .live-date { color: #bcd2f2; }
+    .bell-state { display: flex; gap: 15px; align-items: center; padding: 16px 20px; background: rgba(255,255,255,.09); border-radius: 18px; }
+    .bell-state > span { font-size: 40px; animation: bounceSlow 2s ease-in-out infinite; }
+    .bell-state b, .bell-state small { display: block; }
+    .bell-state small { color: #bcd2f2; }
+
+    .bell-controls { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
+    .announcement { display: flex; gap: 15px; align-items: center; padding: 18px; border: 1px solid var(--line); background: var(--surface); border-radius: 18px; }
+    .speaker { font-size: 30px; animation: bounceSlow 2.2s ease-in-out infinite; }
+    .announcement p { margin: 3px 0; color: var(--muted); }
+
+    .table-scroll { overflow: auto; }
+    .schedule-wrap table { width: 100%; border-collapse: collapse; min-width: 650px; }
+    .schedule-wrap th, .schedule-wrap td { padding: 13px; border-bottom: 1px solid var(--line); text-align: left; font-size: 13px; }
+    .schedule-wrap th { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+    .schedule-wrap tbody tr { transition: .2s; }
+    .schedule-wrap tbody tr:hover { background: var(--surface2); }
+    .now-row { background: #eaf3ff; }
+    .now-row td { font-weight: 800; color: var(--primary); }
+
+    .audio-card { background: var(--surface); border: 1px solid var(--line); padding: 22px; border-radius: 20px; }
+    .audio-icon { font-size: 30px; }
+    .audio-card p { color: var(--muted); font-size: 13px; }
+    .audio-card audio { width: 100%; margin-top: 10px; }
+    .file-label { display: block; border: 1px dashed var(--line); padding: 10px; border-radius: 10px; font-size: 12px; }
+    .file-label input { display: block; margin-top: 8px; width: 100%; }
+
+    .youtube-controls { display: flex; gap: 10px; }
+    .youtube-controls input { flex: 1; }
+    .youtube-frame { margin-top: 15px; aspect-ratio: 16/9; border-radius: 18px; overflow: hidden; background: #0c1320; display: grid; place-items: center; color: #fff; }
+    .youtube-frame iframe { width: 100%; height: 100%; border: 0; }
+    .youtube-frame.empty { background: linear-gradient(135deg, #0d1727, #162d4e); }
+    .youtube-frame.empty span { font-size: 40px; }
+    .youtube-frame.empty p { margin-top: -60px; }
+
+    .achievement-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .achievement-card {
+      padding: 22px; border-radius: 21px; background: var(--surface); border: 1px solid var(--line); min-height: 190px;
+      box-shadow: 0 10px 30px rgba(15,23,42,.04); transition: .3s ease;
+    }
+    .achievement-card:hover { transform: translateY(-8px) rotate(-.5deg); box-shadow: 0 18px 45px rgba(22,163,106,.15); border-color: var(--accent); }
+    .achievement-number {
+      font-size: 35px; font-weight: 900;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .achievement-card p { color: var(--muted); font-size: 13px; }
+
+    .about-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .about-card { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; transition: .3s; }
+    .about-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+    .about-card img { height: 250px; width: 100%; object-fit: cover; }
+    .about-card .content { padding: 20px; }
+    .about-card p { color: var(--muted); font-size: 13px; }
+
+    .map-card { display: grid; grid-template-columns: 1fr 330px; gap: 25px; align-items: center; }
+    .map-placeholder {
+      min-height: 220px; border-radius: 18px; background: linear-gradient(135deg, #dbeafe, #eef5ff); display: grid; place-items: center;
+      text-align: center; color: #2361a6; font-size: 40px; transition: .3s;
+    }
+    .map-placeholder:hover { transform: scale(1.03); }
+    .map-placeholder span { font-size: 12px; display: block; }
+    .map-card code { background: var(--surface2); padding: 2px 5px; border-radius: 5px; }
+
+    /* Marquee band - yangi bezak */
+    .marquee-band {
+      overflow: hidden; white-space: nowrap; padding: 14px 0; margin: 10px 0 30px;
+      background: linear-gradient(90deg, #0b65d8, #1649a8, #0b65d8); background-size: 200% auto;
+      animation: gradientMove 8s ease infinite; border-radius: 14px;
+    }
+    .marquee-band span {
+      display: inline-block; color: #fff; font-weight: 800; font-size: 14px; letter-spacing: 1px;
+      animation: marqueeScroll 22s linear infinite; padding-right: 60px;
+    }
+    @keyframes marqueeScroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
+
+    .ai-fab {
+      position: fixed; right: 24px; bottom: 24px; width: 58px; height: 58px; border: 0; border-radius: 50%;
+      background: linear-gradient(135deg, #0b65d8, #7c3aed); color: #fff; font-size: 25px; z-index: 80;
+      box-shadow: 0 15px 35px rgba(11,101,216,.35); animation: pulseGlow 2.5s ease-in-out infinite;
+    }
+    .ai-fab:hover { transform: scale(1.12) rotate(8deg); }
+    .ai-panel {
+      position: fixed; right: 24px; bottom: 92px; width: min(390px, calc(100vw - 30px)); height: 520px;
+      background: var(--surface); border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 25px 80px rgba(15,23,42,.25); z-index: 79; display: none; flex-direction: column; overflow: hidden;
+    }
+    .ai-panel.open { display: flex; animation: pageIn .35s ease both; }
+    .ai-head { padding: 15px 17px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .ai-head b, .ai-head small { display: block; }
+    .ai-head small { color: var(--muted); font-size: 11px; }
+    .ai-head button { border: 0; background: transparent; font-size: 25px; }
+    .ai-messages { flex: 1; overflow: auto; padding: 14px; display: flex; flex-direction: column; gap: 9px; }
+    .ai-msg { max-width: 86%; padding: 10px 12px; border-radius: 14px; font-size: 12px; animation: fadeUp .3s ease both; }
+    .ai-msg.bot { background: var(--surface2); align-self: flex-start; }
+    .ai-msg.user { background: #0b65d8; color: #fff; align-self: flex-end; }
+    .ai-form { display: flex; gap: 7px; padding: 10px; border-top: 1px solid var(--line); }
+    .ai-form input { flex: 1; }
+    .ai-form button { width: 42px; border: 0; border-radius: 11px; background: var(--primary); color: #fff; }
+    .ai-form button:hover { transform: scale(1.1); }
+
+    .footer { background: #05070b; color: #c9d1dc; margin-top: 0; padding: 55px 5vw 18px; }
+    .footer-grid { max-width: 1240px; margin: auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; }
+    .footer h3 { color: #fff; font-size: 14px; }
+    .footer p { color: #8e99a8; font-size: 12px; }
+    .footer-brand {
+      color: #fff; font-family: Manrope; font-size: 25px; font-weight: 900;
+      background: linear-gradient(90deg, #6aa6ff, #b794f6); -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .footer button { display: block; border: 0; background: none; color: #9da8b7; padding: 5px 0; text-align: left; }
+    .footer button:hover { color: #fff; transform: translateX(5px); }
+    .socials { display: flex; gap: 10px; margin: 12px 0; }
+    .socials a { width: 42px; height: 42px; border: 1px solid #27303d; border-radius: 12px; display: grid; place-items: center; color: #fff; text-decoration: none; font-weight: 900; }
+    .socials a:hover { border-color: #3d80d8; transform: translateY(-4px) rotate(6deg); background: rgba(61,128,216,.15); }
+    .footer-bottom { max-width: 1240px; margin: 40px auto 0; padding-top: 18px; border-top: 1px solid #1e2630; display: flex; justify-content: space-between; gap: 15px; flex-wrap: wrap; }
+    .footer-bottom p, .footer-bottom span { margin: 0; font-size: 11px; color: #778293; }
+
+    .toast {
+      position: fixed; top: 90px; right: 20px; z-index: 100; padding: 12px 16px; border-radius: 12px;
+      background: #101827; color: #fff; box-shadow: var(--shadow); opacity: 0; transform: translateY(-8px); pointer-events: none; transition: .25s;
+    }
+    .toast.show { opacity: 1; transform: none; }
+
+    body.dark {
+      --bg: #080d14; --surface: #101722; --surface2: #172231; --text: #edf3fb; --muted: #94a3b8; --line: #243142; --shadow: 0 18px 55px rgba(0,0,0,.3);
+    }
+    body.dark .topbar { background: rgba(16,23,34,.92); }
+    body.dark .photo-badge { background: rgba(16,23,34,.92); }
+    body.dark .now-row { background: #14263f; }
+
+    @media(max-width: 1100px) {
+      .main-nav { gap: 0; }
+      .nav-link { padding: 9px 7px; font-size: 11px; }
+      .people-grid { grid-template-columns: repeat(4, 1fr); }
+      .quick-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(max-width: 820px) {
+      .topbar { padding: 10px 4%; }
+      .mobile-only { display: block; }
+      .main-nav { position: absolute; top: 76px; left: 0; right: 0; padding: 10px; background: var(--surface); border-bottom: 1px solid var(--line); display: none; flex-direction: column; align-items: stretch; }
+      .main-nav.open { display: flex; }
+      .nav-link { text-align: left; padding: 13px; }
+      .hero, .split-section { grid-template-columns: 1fr; }
+      .hero-photo img { height: 360px; }
+      .people-grid { grid-template-columns: repeat(3, 1fr); }
+      .director-card { grid-template-columns: 100px 1fr; }
+      .director-card .outline-btn { grid-column: 1/-1; }
+      .achievement-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .comment-form { grid-template-columns: 1fr; }
+      .map-card { grid-template-columns: 1fr; }
+    }
+    @media(max-width: 560px) {
+      main { width: 94%; }
+      .page { padding-top: 28px; }
+      .hero { padding-top: 18px; }
+      .hero h1 { font-size: 48px; }
+      .hero-photo img { height: 280px; }
+      .quick-grid, .people-grid, .achievement-grid, .about-grid { grid-template-columns: 1fr 1fr; }
+      .people-grid { gap: 9px; }
+      .person-card { padding: 9px; }
+      .person-card h3 { font-size: 12px; }
+      .person-card p { font-size: 10px; }
+      .page-title { align-items: flex-start; }
+      .page-title h1 { font-size: 32px; letter-spacing: -1px; }
+      .count-badge { display: none; }
+      .rating-section { display: block; }
+      .clock-panel { display: block; }
+      .bell-state { margin-top: 15px; }
+      .big-clock { font-size: 55px; }
+      .youtube-controls { display: block; }
+      .youtube-controls .primary-btn { margin-top: 8px; width: 100%; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { display: block; }
+      .footer-bottom p { margin-bottom: 7px; }
+      .ai-panel { right: 15px; bottom: 85px; }
+      .ai-fab { right: 15px; bottom: 15px; }
+    }
+  </style>
+<base target="_blank">
+</head>
+<body>
+  <div class="bg-decor">
+    <div class="bg-blob b1"></div>
+    <div class="bg-blob b2"></div>
+    <div class="bg-blob b3"></div>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#home" data-page="home" aria-label="14-maktab bosh sahifa">
+      <span class="brand-mark">14</span>
+      <span><strong>14-MAKTAB</strong><small>Xovos tumani · Sirdaryo</small></span>
+    </a>
+
+    <nav class="main-nav" id="mainNav" aria-label="Asosiy menyu">
+      <button class="nav-link active" data-page="home">Bosh sahifa</button>
+      <button class="nav-link" data-page="teachers">O‘qituvchilar</button>
+      <button class="nav-link" data-page="bell">Qo‘ng‘iroq</button>
+      <button class="nav-link" data-page="achievements">Yutuqlar</button>
+      <button class="nav-link" data-page="students">Iqtidorli o‘quvchilar</button>
+      <button class="nav-link" data-page="about">Maktab haqida</button>
+    </nav>
+
+    <div class="header-actions">
+      <button id="themeToggle" class="icon-btn" title="Tungi/kunduzgi rejim" aria-label="Rejimni almashtirish">☾</button>
+      <button id="menuToggle" class="icon-btn mobile-only" aria-label="Menyuni ochish">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. HOME -->
+    <section id="page-home" class="page active">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">SIRDARYO VILOYATI · XOVOS TUMANI</span>
+          <h1>14-MAKTAB</h1>
+          <p class="hero-lead">Bilim — eng ishonchli boylik, Maktab — eng muqaddas maskan!</p>
+          <p class="hero-text">Xush kelibsiz! Ushbu sayt 14-maktabning o‘quvchilari, ota-onalari, ustozlari va mehmonlari uchun qulay axborot maydoni sifatida yaratilgan. Bu yerda siz maktab hayoti, zukko ustozlarimiz, iqtidorli o‘quvchilarimiz va dolzarb yangiliklar bilan yaqindan tanishishingiz mumkin. O‘z bilimingizga, o‘z kelajagingizga ishonch bilan qadam tashlang!</p>
+          <div class="hero-actions">
+            <button class="primary-btn" data-page="teachers">Ustozlarni ko‘rish →</button>
+            <button class="ghost-btn" data-page="bell">Qo‘ng‘iroq jadvali</button>
+          </div>
+        </div>
+        <div class="hero-photo">
+          <!-- Yuqori o'ng tarafdagi rasm (maktab.jpg faylini papkaga tashlang) -->
+          <img src="ChatGPT Image 21 сент. 2026 г., 21_15_09.png" alt="14-Maktab binosi">
+          <div class="photo-badge">
+            <span>14</span>
+            <div><b>Xovos Tumani</b><small>Zamonaviy Maktab</small></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="marquee-band">
+        <span>✨ BILIM OLING — KELAJAKNI YARATING! &nbsp;•&nbsp; 🏆 14-MAKTAB — SIQDARYONING FAXRI! &nbsp;•&nbsp; 📚 HAR KUNI YANGI BILIM — HAR KUNI YANGI G'ALABA! &nbsp;•&nbsp; 🇺🇿 VATAANPARVARLIK, ILOM VA TARBIYA! &nbsp;•&nbsp; 🎯 MAQSAD SARI BIRGA QADAM! &nbsp;•&nbsp; </span>
+      </div>
+
+      <div class="quick-grid">
+        <div class="quick-card reveal">
+          <div class="quick-icon">🎓</div>
+          <div><b>Sifatli Ta'lim</b><p>Zamonaviy o'qitish metodikalari va chuqurlashtirilgan fanlar</p></div>
+        </div>
+        <div class="quick-card reveal">
+          <div class="quick-icon">🏆</div>
+          <div><b>Yuqori Natijalar</b><p>Fan olimpiadalari va sport musobaqalari g'oliblari</p></div>
+        </div>
+        <div class="quick-card reveal">
+          <div class="quick-icon">💻</div>
+          <div><b>IT va Innovatsiya</b><p>Zamonaviy kompyuter sinflari va robototexnika to'garaklari</p></div>
+        </div>
+        <div class="quick-card reveal">
+          <div class="quick-icon">🤝</div>
+          <div><b>Ahil Jamoa</b><p>Tajribali ustozlar va faol o'quvchilar oilasi</p></div>
+        </div>
+      </div>
+
+      <div class="split-section reveal">
+        <div>
+          <span class="section-kicker">MAKTAB TARIXI VA BUGUNI</span>
+          <h2>Kelajak poydevori shu yerda quriladi</h2>
+          <p>14-sonli umumiy o'rta ta'lim maktabi o'zining boy an'analari, malakali pedagogik jamoasi hamda zamonaviy moddiy-texnik bazasi bilan faxrlanadi. O'quvchilarimiz nafaqat chuqur bilim oladilar, balki har tomonlama barkamol shaxs bo'lib ulg'ayadilar.</p>
+          <button class="outline-btn" data-page="about" style="margin-top: 15px;">Batafsil tanishish →</button>
+        </div>
+        <div>
+          <!-- Pastdagi rasm joyi (maktab.jpg fayli ishlatiladi) -->
+          <img class="rounded-photo" src="ChatGPT Image 21 сент. 2026 г., 21_15_09.png" alt="Maktab binosi">
+        </div>
+      </div>
+
+      <div class="rating-section reveal">
+        <div>
+          <span class="section-kicker">INTERAKTIV SO'ROVNOMA</span>
+          <h2>Saytimiz yoki maktabimiz faoliyati sizga yoqyaptimi?</h2>
+          <p style="color: var(--muted); margin: 5px 0 0;">O'z bahoingizni qoldiring va fikringizni bildiring.</p>
+        </div>
+        <div class="rating-box">
+          <div class="stars" id="starContainer">
+            <button data-value="1">★</button>
+            <button data-value="2">★</button>
+            <button data-value="3">★</button>
+            <button data-value="4">★</button>
+            <button data-value="5">★</button>
+          </div>
+          <strong id="ratingText">Hali baholanmagan</strong>
+          <small><span id="voteCount">0</span> ta ovoz</small>
+        </div>
+      </div>
+
+      <div class="comments-section reveal">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">MUHOKAMA VA TAKLIFLAR</span>
+            <h2>Ota-onalar va o'quvchilar minbari</h2>
+          </div>
+          <span class="count-badge" id="commentCount">0 ta fikr</span>
+        </div>
+        <form class="comment-form" id="commentForm">
+          <input type="text" id="commentName" placeholder="Ism va familiyangiz" required>
+          <textarea id="commentText" placeholder="Fikr yoki taklifingizni yozing..." required></textarea>
+          <button type="submit" class="primary-btn">Yuborish</button>
+        </form>
+        <div class="comments-list" id="commentsList"></div>
+      </div>
+    </section>
+
+    <!-- 2. TEACHERS -->
+    <section id="page-teachers" class="page">
+      <div class="page-title">
+        <div>
+          <span class="eyebrow">PEDAGOGIK JAMOA</span>
+          <h1>Bizning ustozlarimiz</h1>
+          <p>Maktabimizda o'z ishining ustasi bo'lgan tajribali o'qituvchilar ta'lim berib kelmoqda.</p>
+        </div>
+        <span class="count-badge" id="teacherCountBadge">0 ta ustoz</span>
+      </div>
+
+      <div class="director-card">
+        <div class="director-photo">
+          <div><span>B.Sh.</span><small>Boltayev Sherqo'zi<br>Maktab direktori</small></div>
+        </div>
+        <div>
+          <span class="section-kicker">MAKTAB DIREKTORI</span>
+          <h2>Boltayev Sherqo'zi</h2>
+          <p>«Har bir o'quvchi — o'ziga xos iqtidor egasi. Bizning vazifamiz ularning ichidagi imkoniyatlarni ochib berish va to'g'ri yo'nalish ko'rsatishdir.» Boltayev Sherqo'zi — maktabimizning orzu-niyati va munosib rahbari. U o'zining keng bilimi, oliy-obro'si va yillar davomida orttirgan boy pedagogik tajribasi bilan butun tuman e'tirofiga sazovor bo'lgan kuchli ustoz sanaladi. Uning mehnatsevarligi va otaona-muruvvat ruhidagi tarbiyaviy qadriyatlari maktabimizni zamonaviy ta'lim maskaniga aylantirib kelmoqda.</p>
+          <div class="tag-row">
+            <span>Oliy toifali rahbar</span>
+            <span>Xalq ta'limi a'lochisi</span>
+            <span>25+ yil tajriba</span>
+          </div>
+        </div>
+        <button class="outline-btn" style="border-color: rgba(255,255,255,.4); color: #fff;" onclick="alert('Direktor qabul kunlari: Dushanba - Juma (14:00 - 16:00)')">Qabul kunlari</button>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" class="search-input" id="teacherSearch" placeholder="Ustoz ismi yoki fani bo'yicha qidirish...">
+        <select class="select-input" id="teacherFilter">
+          <option value="all">Barcha fanlar</option>
+          <option value="Aniqlik">Aniq fanlar</option>
+          <option value="Tabiiy">Tabiiy fanlar</option>
+          <option value="Gumanitar">Gumanitar fanlar</option>
+          <option value="Boshlang'ich">Boshlang'ich sinf</option>
+        </select>
+      </div>
+
+      <div class="people-grid" id="teachersGrid"></div>
+    </section>
+
+    <!-- 3. BELL -->
+    <section id="page-bell" class="page">
+      <div class="page-title">
+        <div>
+          <span class="eyebrow">RESTAURATSIYA VA VAQT</span>
+          <h1>Qo'ng'iroqlar jadvali va jonli vaqt</h1>
+          <p>Dars jarayonlari va tanaffuslar jadvalini kuzatib boring.</p>
+        </div>
+        <span class="status-badge" id="schoolStatusBadge">Maktab vaqti</span>
+      </div>
+
+      <div class="clock-panel">
+        <div>
+          <span class="live-date" id="liveDate">2026-yil 21-sentyabr</span>
+          <div class="big-clock" id="bigClock">00:00:00</div>
+          <p style="margin: 0; color: #bcd2f2; font-size: 14px;">14-maktab rasmiy vaqt serveri</p>
+        </div>
+        <div class="bell-state">
+          <span id="bellIconState">🔔</span>
+          <div>
+            <b id="bellStatusText">Dars davom etmoqda</b>
+            <small id="bellSubText">Keyingi qo'ng'iroqqa qadar...</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="bell-controls">
+        <button class="primary-btn" onclick="playBellSound('lesson')">🔊 Dars boshlanish qo'ng'irog'i</button>
+        <button class="ghost-btn" onclick="playBellSound('break')">🔔 Tanaffus qo'ng'irog'i</button>
+        <button class="outline-btn" onclick="toggleAutoBell()">⏰ Avtomat qo'ng'iroq rejimi: O'chirilgan</button>
+      </div>
+
+      <div class="announcement">
+        <span class="speaker">📢</span>
+        <div>
+          <b>Kun e'loni / Eslatma</b>
+          <p>Barcha o'quvchilardan dars boshlanishidan 15 daqiqa oldin maktabda bo'lishlari va forma qoidalariga qat'iy rioya qilishlari so'raladi.</p>
+        </div>
+      </div>
+
+      <div class="schedule-wrap" style="margin-top: 25px;">
+        <h3 style="margin-bottom: 15px;">1-Smena dars jadvali va qo'ng'iroqlar vaqti</h3>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>№</th>
+                <th>Dars vaqti</th>
+                <th>Fan / Jarayon</th>
+                <th>Tanaffus</th>
+                <th>Holat</th>
+              </tr>
+            </thead>
+            <tbody id="scheduleBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="audio-card">
+          <span class="audio-icon">🎵</span>
+          <h3>Qo'ng'iroq ovozini sinash</h3>
+          <p>Siz bu yerda qo'ng'iroq audio faylini tinglashingiz yoki o'zingizning mp3 faylingizni yuklab qo'yishingiz mumkin.</p>
+          <audio controls id="audioPlayer">
+            <source src="https://actions.google.com/sounds/v1/alarms/school_bell.ogg" type="audio/ogg">
+            Brauzeringiz audioni qo'llab-quvvatlamaydi.
+          </audio>
+          <label class="file-label" style="margin-top: 15px;">
+            Maxsus qo'ng'iroq faylini yuklash (mp3/ogg):
+            <input type="file" accept="audio/*" onchange="loadCustomAudio(event)">
+          </label>
+        </div>
+
+        <div class="audio-card">
+          <span class="audio-icon">🎼</span>
+          <h3>Maktab gimni audiòsi</h3>
+          <p>14-maktab o'quvchilari madhiyasi va maxsus musiqiy lavhalar.</p>
+          <audio controls>
+            <source src="https://actions.google.com/sounds/v1/ambiences/school_room.ogg" type="audio/ogg">
+          </audio>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. ACHIEVEMENTS -->
+    <section id="page-achievements" class="page">
+      <div class="page-title">
+        <div>
+          <span class="eyebrow">YUTUQ VA G'ALABALAR</span>
+          <h1>Maktabimiz yutuqlari</h1>
+          <p>Har yili o'quvchilarimiz tuman, viloyat va respublika miqyosidagi musobaqalarda yuqori o'rinlarni egallab kelishmoqda.</p>
+        </div>
+        <span class="count-badge">2025-2026 o'quv yili</span>
+      </div>
+
+      <div class="achievement-grid">
+        <div class="achievement-card">
+          <div class="achievement-number">45+</div>
+          <h3>Fan olimpiadasi g'oliblari</h3>
+          <p>Tuman va viloyat bosqichlarida matematika, fizika, ona tili va ingliz tili fanlaridan faxrli o'rinlar.</p>
+        </div>
+        <div class="achievement-card">
+          <div class="achievement-number">12</div>
+          <h3>Sport musobaqalari kuboklari</h3>
+          <p>Futbol, basketbol, shaxmat va stol tennisi bo'yicha tuman birinchiliklari chempionlari.</p>
+        </div>
+        <div class="achievement-card">
+          <div class="achievement-number">98%</div>
+          <h3>Oliy o'quv yurtlariga qabul</h3>
+          <p>Bitiruvchilarimizning davlat granti va to'lov-kontrakt asosida yetakchi OTMlarga o'qishga kirish ko'rsatkichi.</p>
+        </div>
+        <div class="achievement-card">
+          <div class="achievement-number">1-o'rin</div>
+          <h3>"Eng obod maktab" ko'rikligi</h3>
+          <p>Xovos tumanida ta'lim dargohining hududi, sinfxonalari va tozaligi bo'yicha yuqori e'tirof.</p>
+        </div>
+        <div class="achievement-card">
+          <div class="achievement-number">25+</div>
+          <h3>Sertifikat va grantlar</h3>
+          <p>Ustozlarimiz va iqtidorli o'quvchilarimizning xalqaro hamda respublika darajasidagi grant yutuqlari.</p>
+        </div>
+        <div class="achievement-card">
+          <div class="achievement-number">10+</div>
+          <h3>IT va loyihalar tanlovi</h3>
+          <p>Robototexnika va dasturlash yo'nalishlarida yosh dasturchilarimizning muvaffaqiyatli startaplari.</p>
+        </div>
+      </div>
+
+      <div class="youtube-section" style="margin-top: 35px;">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">VIDEO LAVHALAR</span>
+            <h2>Maktabimiz hayotidan videoroliklar</h2>
+          </div>
+          <p style="color: var(--muted); font-size: 13px; margin: 0;">YouTube havolasini kiriting va tomosha qiling</p>
+        </div>
+        <div class="youtube-controls" style="margin-top: 15px;">
+          <input type="text" id="youtubeInput" class="search-input" placeholder="YouTube video havolasi yoki ID si (masalan: dQw4w9WgXcQ)">
+          <button class="primary-btn" onclick="loadYoutubeVideo()">Videoni yuklash</button>
+        </div>
+        <div class="youtube-frame empty" id="youtubeContainer">
+          <div>
+            <span>▶</span>
+            <p style="margin: 10px 0 0; color: #94a3b8;">Hozircha video kiritilmadi. Yuqoriga havola yozing.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. STUDENTS -->
+    <section id="page-students" class="page">
+      <div class="page-title">
+        <div>
+          <span class="eyebrow">IQTIDORLI YOSHLAR</span>
+          <h1>Iqtidorli o'quvchilarimiz</h1>
+          <p>Maktabimiz faxri bo'lgan bilimdon, zukko va faol o'quvchilar galereyasi.</p>
+        </div>
+        <span class="count-badge" id="studentCountBadge">0 nafar o'quvchi</span>
+      </div>
+
+      <div class="toolbar">
+        <input type="text" class="search-input" id="studentSearch" placeholder="O'quvchi ismi yoki sinfi bo'yicha qidirish...">
+        <select class="select-input" id="studentFilter">
+          <option value="all">Barcha sinflar</option>
+          <option value="11">11-sinf</option>
+          <option value="10">10-sinf</option>
+          <option value="9">9-sinf</option>
+          <option value="8">8-sinf</option>
+        </select>
+      </div>
+
+      <div class="people-grid" id="studentsGrid"></div>
+    </section>
+
+    <!-- 6. ABOUT -->
+    <section id="page-about" class="page">
+      <div class="page-title">
+        <div>
+          <span class="eyebrow">MAKTAB HAQIDA</span>
+          <h1>Umumiy ma'lumot va infratuzilma</h1>
+          <p>Sirdaryo viloyati Xovos tumani 14-sonli umumiy o'rta ta'lim maktabining pasporti.</p>
+        </div>
+        <span class="status-badge">Faoliyat yuritmoqda</span>
+      </div>
+
+      <div class="about-grid" style="margin-bottom: 30px;">
+        <div class="about-card">
+          <div style="height:250px; width:100%; background:linear-gradient(135deg, #0b65d8, #132f72); display:grid; place-items:center; color:#fff;">
+            <span style="font-size:40px;">📚</span>
+          </div>
+          <div class="content">
+            <h3>Zamonaviy sinfxonalar</h3>
+            <p>Barcha fan xonalari so'nggi rusumdagi ko'rgazmali qurollar, elektron doskalar va multimedia vositalari bilan jihozlangan.</p>
+          </div>
+        </div>
+        <div class="about-card">
+          <div style="height:250px; width:100%; background:linear-gradient(135deg, #16a36a, #0b65d8); display:grid; place-items:center; color:#fff;">
+            <span style="font-size:40px;">⚽</span>
+          </div>
+          <div class="content">
+            <h3>Sport zali va maydonchasi</h3>
+            <p>O'quvchilarning jismoniy salomatligi uchun yopiq sport zali, futbol, basketbol va Workout ochiq maydonchalari mavjud.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-card">
+        <div>
+          <span class="section-kicker">MANZIL VA BOG'LANISH</span>
+          <h2>Bizni qanday topish mumkin?</h2>
+          <p style="color: var(--muted); margin: 10px 0;"><b>Manzil:</b> Sirdaryo viloyati, Xovos tumani, 14-maktab ko'chasi.</p>
+          <p style="color: var(--muted); margin: 0 0 15px;"><b>Telefon:</b> +998 (67) 123-45-67 | <b>Email:</b> xovos14maktab@uzedu.uz</p>
+          <div class="tag-row">
+            <span>Mo'ljal: Markaziy masjid yaqinida</span>
+            <span>Ish vaqti: 08:00 - 17:00</span>
+          </div>
+        </div>
+        <div class="map-placeholder">
+          <div>
+            🗺️
+            <span>Xovos tumani, 14-maktab<br><code>GPS: 40.2312, 68.3421</code></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- AI Assistant floating widget -->
+  <button class="ai-fab" id="aiFab" title="AI Yordamchi" aria-label="AI Yordamchini ochish">🤖</button>
+  <div class="ai-panel" id="aiPanel">
+    <div class="ai-head">
+      <div>
+        <b>14-Maktab AI Yordamchisi</b>
+        <small>Savollaringizga javob berishga tayyor</small>
+      </div>
+      <button id="aiCloseBtn">&times;</button>
+    </div>
+    <div class="ai-messages" id="aiMessages">
+      <div class="ai-msg bot">Assalomu alaykum! Men 14-maktabning virtual yordamchisiman. Sizga maktabimiz, o'qituvchilar, dars jadvallari yoki qo'ng'iroq vaqtlari bo'yicha qanday yordam bera olaman?</div>
+    </div>
+    <form class="ai-form" id="aiForm">
+      <input type="text" id="aiInput" placeholder="Savol yozing..." autocomplete="off" required>
+      <button type="submit">➔</button>
+    </form>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">14-MAKTAB</div>
+        <p>Xovos tumani 14-sonli umumiy o'rta ta'lim maktabining rasmiy veb-sayti. Barcha huquqlar himoyalangan.</p>
+        <div class="socials">
+          <a href="#" aria-label="Telegram">Tg</a>
+          <a href="#" aria-label="Instagram">In</a>
+          <a href="#" aria-label="YouTube">Yt</a>
+          <a href="#" aria-label="Facebook">Fb</a>
+        </div>
+      </div>
+      <div>
+        <h3>Tezkor havolalar</h3>
+        <button data-page="home">Bosh sahifa</button>
+        <button data-page="teachers">O'qituvchilar</button>
+        <button data-page="bell">Qo'ng'iroq jadvali</button>
+        <button data-page="achievements">Yutuqlarimiz</button>
+        <button data-page="students">Iqtidorli o'quvchilar</button>
+        <button data-page="about">Maktab haqida</button>
+      </div>
+      <div>
+        <h3>Biz bilan bog'lanish</h3>
+        <p>Sirdaryo viloyati, Xovos tumani</p>
+        <p>Ish kunlari: Dushanba - Shanba</p>
+        <p>Tel: +998 67 000-00-14</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 14-Maktab Xovos. Barcha huquqlar himoyalangan.</p>
+      <span>Zamonaviy ta'lim maskani</span>
+    </div>
+  </footer>
+
+  <script>
+    const teachersData = [
+      { id: 1, name: "Boltayev Sherqo'zi", subject: "Matematika", cat: "Aniqlik", desc: "Maktab direktori, oliy toifali matematika o'qituvchisi. 25+ yil tajriba.", tag: "Direktor" },
+      { id: 2, name: "Yo'ldoshev Bahrom", subject: "Fizika va Astronomiya", cat: "Aniqlik", desc: "Oliy toifali fizika o'qituvchisi. Viloyat olimpiadalari yetakchi ustozi.", tag: "Oliy toifa" },
+      { id: 3, name: "Rahimova Dilnoza", subject: "Ona tili va Adabiyot", cat: "Gumanitar", desc: "Respublika adabiyot olimpiadasi g'oliblarini tayyorlagan tajribali ustoz.", tag: "Yetakchi" },
+      { id: 4, name: "Toshpo'latov Jasur", subject: "Ingliz tili", cat: "Gumanitar", desc: "IELTS 8.0 sertifikati egasi, xalqaro tillar olimpiadalari hakami.", tag: "Mutaxassis" },
+      { id: 5, name: "Xolmatova Zilola", subject: "Kimyo va Biologiya", cat: "Tabiiy", desc: "O'quvchilari yirik tibbiyot OTMlariga grant asosida o'qishga kirgan.", tag: "Oliy toifa" },
+      { id: 6, name: "Qurbonov Otabek", subject: "Tarix va Huquq", cat: "Gumanitar", desc: "Tarix fanidan chuqurlashtirilgan darslar muallifi, ilmiy ishlar yetakchisi.", tag: "Katta o'qituvchi" },
+      { id: 7, name: "Mamatqulova Nasiba", subject: "Boshlang'ich sinf", cat: "Boshlang'ich", desc: "1-4 sinf o'quvchilariga ilk ilm sirlarini o'rgatadigan oliy toifali ustoz.", tag: "Oliy toifa" },
+      { id: 8, name: "Yo'ldashev Sherzod", subject: "Informatika va IT", cat: "Aniqlik", desc: "Dasturlash va robototexnika to'garagi rahbari, IT tanlovlar hakami.", tag: "Yetakchi" },
+      { id: 9, name: "Ismoilova Gulchehra", subject: "Geografiya", cat: "Tabiiy", desc: "Interaktiv geografiya darslari muallifi, viloyat ko'rik g'olibi.", tag: "Katta o'qituvchi" },
+      { id: 10, name: "Fayzullayev Botir", subject: "Jismoniy tarbiya", cat: "Boshlang'ich", desc: "Sport musobaqalari tadbirkor murabbiyi, tuman chempionlari ustozi.", tag: "Mutaxassis" }
+    ];
+
+    const studentsData = [
+      { id: 1, name: "Jasurbek Alisherov", grade: "11", desc: "Matematika fan olimpiadasi viloyat bosqichi g'olibi.", tag: "11-sinf · 1-o'rin" },
+      { id: 2, name: "Madina Rahimova", grade: "10", desc: "Ingliz tili (IELTS 7.0) va adabiyot yo'nalishi faoli.", tag: "10-sinf · IELTS 7.0" },
+      { id: 3, name: "Sardorbek Normurodov", grade: "11", desc: "Robototexnika va dasturlash bo'yicha Respublika ishtirokchisi.", tag: "11-sinf · IT" },
+      { id: 4, name: "Sevinchbek Turg'unova", grade: "9", desc: "Kimyo fanidan chuqurlashtirilgan bilim egasi.", tag: "9-sinf · Zukko" },
+      { id: 5, name: "Boburmirzo Karimov", grade: "10", desc: "Shaxmat bo'yicha tuman chempioni va sport faoli.", tag: "10-sinf · Sport" },
+      { id: 6, name: "Zuhra Xoliqova", grade: "8", desc: "Matematika va mantiqiy masalalar tanlovi g'olibi.", tag: "8-sinf · Matematika" },
+      { id: 7, name: "Asadbek Fayzullayev", grade: "9", desc: "Fizika fanidan ixtirochilik loyihalari muallifi.", tag: "9-sinf · Innovatsiya" },
+      { id: 8, name: "Ruxshona Xasanova", grade: "11", desc: "Maktab sardori, faol jamoatchi va ijodkor.", tag: "11-sinf · Sardor" }
+    ];
+
+    const scheduleData = [
+      { num: 1, time: "08:00 - 08:45", lesson: "Matematika / Ona tili", break: "10 daqiqa", current: false },
+      { num: 2, time: "08:55 - 09:40", lesson: "Fizika / Ingliz tili", break: "15 daqiqa (Katta tanaffus)", current: false },
+      { num: 3, time: "09:55 - 10:40", lesson: "Tarix / Kimyo", break: "10 daqiqa", current: true },
+      { num: 4, time: "10:50 - 11:35", lesson: "Biologiya / Geografiya", break: "15 daqiqa", current: false },
+      { num: 5, time: "11:50 - 12:35", lesson: "Informatika / Adabiyot", break: "10 daqiqa", current: false },
+      { num: 6, time: "12:45 - 13:30", lesson: "Jismoniy tarbiya / Musiqa", break: "Tarqatish", current: false }
+    ];
+
+    let comments = [
+      { name: "Anvar Ota-ona", text: "Maktabingiz jamoasiga rahmat, farzandlarimiz bilim olishi uchun barcha sharoitlar yaratilgan." },
+      { name: "Malika 11-sinf", text: "14-maktab – mening eng sevimli maskanim! Ustozlarimizga minnatdorchilik bildiraman." }
+    ];
+
+    let ratingVotes = 128;
+    let ratingScore = 4.8;
+    let autoBellActive = false;
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initNavigation();
+      initTheme();
+      initRating();
+      initComments();
+      initTeachers();
+      initStudents();
+      initSchedule();
+      initClock();
+      initAiChat();
+      initReveal();
+    });
+
+    function initNavigation() {
+      const navButtons = document.querySelectorAll("[data-page]");
+      const mainNav = document.getElementById("mainNav");
+      const menuToggle = document.getElementById("menuToggle");
+
+      menuToggle?.addEventListener("click", () => {
+        mainNav.classList.toggle("open");
+      });
+
+      navButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const pageId = btn.getAttribute("data-page");
+          if (!pageId) return;
+
+          document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+          document.getElementById(`page-${pageId}`)?.classList.add("active");
+
+          document.querySelectorAll(".nav-link").forEach(l => {
+            if (l.getAttribute("data-page") === pageId) l.classList.add("active");
+            else l.classList.remove("active");
+          });
+
+          mainNav.classList.remove("open");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+      });
+    }
+
+    function initReveal() {
+      const els = document.querySelectorAll(".reveal");
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
+      }, { threshold: 0.12 });
+      els.forEach(el => obs.observe(el));
+    }
+
+    function initTheme() {
+      const themeToggle = document.getElementById("themeToggle");
+      const savedTheme = localStorage.getItem("school_theme");
+      if (savedTheme === "dark") {
+        document.body.classList.add("dark");
+        themeToggle.textContent = "☀";
+      }
+
+      themeToggle?.addEventListener("click", () => {
+        document.body.classList.toggle("dark");
+        const isDark = document.body.classList.contains("dark");
+        themeToggle.textContent = isDark ? "☀" : "☾";
+        localStorage.setItem("school_theme", isDark ? "dark" : "light");
+      });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    function initRating() {
+      const stars = document.querySelectorAll("#starContainer button");
+      const ratingText = document.getElementById("ratingText");
+      const voteCount = document.getElementById("voteCount");
+
+      updateRatingDisplay();
+
+      stars.forEach((star, idx) => {
+        star.addEventListener("mouseover", () => {
+          stars.forEach((s, i) => s.style.color = i <= idx ? "#f5b301" : "#cbd5e1");
+        });
+        star.addEventListener("mouseout", () => {
+          updateRatingDisplay();
+        });
+        star.addEventListener("click", () => {
+          const val = idx + 1;
+          ratingVotes++;
+          ratingScore = ((ratingScore * (ratingVotes - 1) + val) / ratingVotes).toFixed(1);
+          updateRatingDisplay();
+          showToast("Rahmat! Ovozingiz qabul qilindi.");
+        });
+      });
+
+      function updateRatingDisplay() {
+        stars.forEach((s, i) => {
+          s.style.color = i < Math.floor(ratingScore) ? "#f5b301" : "#cbd5e1";
+        });
+        ratingText.textContent = `O'rtacha baho: ${ratingScore} / 5.0`;
+        voteCount.textContent = ratingVotes;
+      }
+    }
+
+    function initComments() {
+      const form = document.getElementById("commentForm");
+      const list = document.getElementById("commentsList");
+      const countBadge = document.getElementById("commentCount");
+
+      renderComments();
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("commentName").value.trim();
+        const text = document.getElementById("commentText").value.trim();
+        if (!name || !text) return;
+
+        comments.unshift({ name, text });
+        form.reset();
+        renderComments();
+        showToast("Fikringiz muvaffaqiyatli qo'shildi!");
+      });
+
+      function renderComments() {
+        list.innerHTML = "";
+        comments.forEach(c => {
+          const div = document.createElement("div");
+          div.className = "comment-item";
+          div.innerHTML = `<b>${escapeHtml(c.name)}</b><p>${escapeHtml(c.text)}</p>`;
+          list.appendChild(div);
+        });
+        countBadge.textContent = `${comments.length} ta fikr`;
+      }
+    }
+
+    function initTeachers() {
+      const grid = document.getElementById("teachersGrid");
+      const search = document.getElementById("teacherSearch");
+      const filter = document.getElementById("teacherFilter");
+      const countBadge = document.getElementById("teacherCountBadge");
+
+      render(teachersData);
+
+      search.addEventListener("input", filterTeachers);
+      filter.addEventListener("change", filterTeachers);
+
+      function filterTeachers() {
+        const q = search.value.toLowerCase();
+        const f = filter.value;
+        const res = teachersData.filter(t => {
+          const matchQ = t.name.toLowerCase().includes(q) || t.subject.toLowerCase().includes(q);
+          const matchF = f === "all" || t.cat === f;
+          return matchQ && matchF;
+        });
+        render(res);
+      }
+
+      function render(arr) {
+        grid.innerHTML = "";
+        countBadge.textContent = `${arr.length} ta ustoz`;
+        arr.forEach((t, i) => {
+          const card = document.createElement("div");
+          card.className = "person-card";
+          card.style.animation = `fadeUp .5s ease both`;
+          card.style.animationDelay = `${i * 0.06}s`;
+          card.innerHTML = `
+            <div class="person-photo"><span>👤</span></div>
+            <h3>${escapeHtml(t.name)}</h3>
+            <p><b>${escapeHtml(t.subject)}</b></p>
+            <p style="margin-top:4px;">${escapeHtml(t.desc)}</p>
+            <span class="tag">${escapeHtml(t.tag)}</span>
+          `;
+          grid.appendChild(card);
+        });
+      }
+    }
+
+    function initStudents() {
+      const grid = document.getElementById("studentsGrid");
+      const search = document.getElementById("studentSearch");
+      const filter = document.getElementById("studentFilter");
+      const countBadge = document.getElementById("studentCountBadge");
+
+      render(studentsData);
+
+      search.addEventListener("input", filterStudents);
+      filter.addEventListener("change", filterStudents);
+
+      function filterStudents() {
+        const q = search.value.toLowerCase();
+        const f = filter.value;
+        const res = studentsData.filter(s => {
+          const matchQ = s.name.toLowerCase().includes(q) || s.desc.toLowerCase().includes(q);
+          const matchF = f === "all" || s.grade === f;
+          return matchQ && matchF;
+        });
+        render(res);
+      }
+
+      function render(arr) {
+        grid.innerHTML = "";
+        countBadge.textContent = `${arr.length} nafar o'quvchi`;
+        arr.forEach((s, i) => {
+          const card = document.createElement("div");
+          card.className = "person-card";
+          card.style.animation = `fadeUp .5s ease both`;
+          card.style.animationDelay = `${i * 0.06}s`;
+          card.innerHTML = `
+            <div class="person-photo" style="background: linear-gradient(145deg, #e3f2fd, #bbdefb); color: #1565c0;"><span>⭐</span></div>
+            <h3>${escapeHtml(s.name)}</h3>
+            <p><b>${s.grade}-sinf o'quvchisi</b></p>
+            <p style="margin-top:4px;">${escapeHtml(s.desc)}</p>
+            <span class="tag" style="background: #e3f2fd; color: #0d47a1;">${escapeHtml(s.tag)}</span>
+          `;
+          grid.appendChild(card);
+        });
+      }
+    }
+
+    function initClock() {
+      const clockEl = document.getElementById("bigClock");
+      const dateEl = document.getElementById("liveDate");
+
+      setInterval(() => {
+        const now = new Date();
+        const h = String(now.getHours()).padStart(2, '0');
+        const m = String(now.getMinutes()).padStart(2, '0');
+        const s = String(now.getSeconds()).padStart(2, '0');
+        if (clockEl) clockEl.textContent = `${h}:${m}:${s}`;
+
+        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+        if (dateEl) dateEl.textContent = now.toLocaleDateString('uz-UZ', options);
+      }, 1000);
+    }
+
+    function initSchedule() {
+      const tbody = document.getElementById("scheduleBody");
+      if (!tbody) return;
+      tbody.innerHTML = "";
+      scheduleData.forEach(item => {
+        const tr = document.createElement("tr");
+        if (item.current) tr.className = "now-row";
+        tr.innerHTML = `
+          <td><b>0${item.num}</b></td>
+          <td>${item.time}</td>
+          <td>${escapeHtml(item.lesson)}</td>
+          <td>${escapeHtml(item.break)}</td>
+          <td><span class="status-badge" style="${item.current ? 'background: #0b65d8; color: #fff;' : ''}">${item.current ? 'Hozirgi dars' : 'Reja'}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function playBellSound(type) {
+      const player = document.getElementById("audioPlayer");
+      if (player) {
+        player.currentTime = 0;
+        player.play().catch(e => console.log("Audio play error:", e));
+      }
+      showToast(type === 'lesson' ? "🔊 Dars boshlanish qo'ng'irog'i chalindi!" : "🔔 Tanaffus qo'ng'irog'i chalindi!");
+    }
+
+    function toggleAutoBell() {
+      autoBellActive = !autoBellActive;
+      showToast(autoBellActive ? "⏰ Avtomat qo'ng'iroq rejimi yoqildi" : "⏰ Avtomat qo'ng'iroq rejimi o'chirildi");
+    }
+
+    function loadCustomAudio(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      const player = document.getElementById("audioPlayer");
+      player.src = url;
+      showToast("Maxsus qo'ng'iroq fayli yuklandi!");
+    }
+
+    function loadYoutubeVideo() {
+      const input = document.getElementById("youtubeInput").value.trim();
+      const container = document.getElementById("youtubeContainer");
+      if (!input) {
+        showToast("Iltimos, YouTube havolasini kiriting!");
+        return;
+      }
+      let videoId = input;
+      if (input.includes("youtu.be/")) {
+        videoId = input.split("youtu.be/")[1]?.split("?")[0];
+      } else if (input.includes("watch?v=")) {
+        videoId = input.split("watch?v=")[1]?.split("&")[0];
+      }
+
+      if (!videoId) {
+        showToast("Noto'g'ri havola kiritildi!");
+        return;
+      }
+
+      container.className = "youtube-frame";
+      container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      showToast("Video muvaffaqiyatli yuklandi!");
+    }
+
+    function initAiChat() {
+      const fab = document.getElementById("aiFab");
+      const panel = document.getElementById("aiPanel");
+      const closeBtn = document.getElementById("aiCloseBtn");
+      const form = document.getElementById("aiForm");
+      const input = document.getElementById("aiInput");
+      const messages = document.getElementById("aiMessages");
+
+      fab.addEventListener("click", () => panel.classList.toggle("open"));
+      closeBtn.addEventListener("click", () => panel.classList.remove("open"));
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+
+        appendMsg(text, "user");
+        input.value = "";
+
+        setTimeout(() => {
+          const reply = getBotReply(text);
+          appendMsg(reply, "bot");
+        }, 600);
+      });
+
+      function appendMsg(txt, sender) {
+        const div = document.createElement("div");
+        div.className = `ai-msg ${sender}`;
+        div.textContent = txt;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+      }
+
+      function getBotReply(q) {
+        q = q.toLowerCase();
+        if (q.includes("direktor") || q.includes("rahbar") || q.includes("boltayev")) {
+          return "Maktabimiz direktori — Boltayev Sherqo'zi. U oliy toifali, kuchli bilimli tajribali ustoz va 25 yillik mehnat tajribasiga ega munosib rahbar. Qabul kunlari: Dushanba - Juma (14:00 - 16:00).";
+        } else if (q.includes("manzil") || q.includes("qayerda") || q.includes("xovos")) {
+          return "Maktabimiz Sirdaryo viloyati, Xovos tumanida joylashgan. Mo'ljal: Markaziy masjid yaqinida.";
+        } else if (q.includes("telefon") || q.includes("raqam") || q.includes("bog'lanish")) {
+          return "Murojaat uchun telefon raqami: +998 67 000-00-14 yoki +998 67 123-45-67.";
+        } else if (q.includes("dars") || q.includes("vaqt") || q.includes("qo'ng'iroq")) {
+          return "Darslar soat 08:00 da boshlanadi. Har bir dars 45 daqiqa davom etadi, tanaffuslar 10-15 daqiqa.";
+        } else if (q.includes("to'garak") || q.includes("sport") || q.includes("it")) {
+          return "Maktabimizda matematika, fizika, ingliz tili, robototexnika, futbol va shaxmat to'garaklari bepul faoliyat yuritadi.";
+        } else {
+          return "Savolingiz bo'yicha batafsil ma'lumot olish uchun maktab ma'muriyatiga murojaat qilishingiz yoki saytimizdagi menyulardan foydalanishingiz mumkin!";
+        }
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
