@@ -658,6 +658,24 @@
 
       <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
         <div class="audio-card">
+          <span class="audio-icon">🎼</span>
+          <h3>Maktab madhiyasi</h3>
+          <p>Ertalab soat 08:00 da va abetdagi smena vaqtida (soat 13:00 da) madhiya avtomatik yangraydi. Quyidagi tugma orqali o'zingizning mp3 faylingizni papkadan tanlab qo'ysangiz bo'ladi.</p>
+          <audio controls id="anthemPlayer">
+            <source src="" type="audio/mpeg">
+            Brauzeringiz audioni qo'llab-quvvatlamaydi.
+          </audio>
+          <label class="file-label" style="margin-top: 15px;">
+            Madhiya faylini yuklash (mp3):
+            <input type="file" accept="audio/*" onchange="loadAnthemAudio(event)">
+          </label>
+          <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+            <button class="outline-btn" onclick="playAnthem()">▶ Hozir tinglash</button>
+            <button class="ghost-btn" onclick="toggleAnthemSchedule()" id="anthemScheduleBtn">⏰ Avtomatik madhiya: Yoqilgan</button>
+          </div>
+        </div>
+
+        <div class="audio-card">
           <span class="audio-icon">🎵</span>
           <h3>Qo'ng'iroq ovozini sinash</h3>
           <p>Siz bu yerda qo'ng'iroq audio faylini tinglashingiz yoki o'zingizning mp3 faylingizni yuklab qo'yishingiz mumkin.</p>
@@ -669,15 +687,6 @@
             Maxsus qo'ng'iroq faylini yuklash (mp3/ogg):
             <input type="file" accept="audio/*" onchange="loadCustomAudio(event)">
           </label>
-        </div>
-
-        <div class="audio-card">
-          <span class="audio-icon">🎼</span>
-          <h3>Maktab gimni audiòsi</h3>
-          <p>14-maktab o'quvchilari madhiyasi va maxsus musiqiy lavhalar.</p>
-          <audio controls>
-            <source src="https://actions.google.com/sounds/v1/ambiences/school_room.ogg" type="audio/ogg">
-          </audio>
         </div>
       </div>
     </section>
@@ -880,16 +889,17 @@
 
   <script>
     const teachersData = [
+      // YANGI USTOZ QO'SHISH UCHUN: pastdagi qatorni nusxalang va ism-familiyani yozing
       { id: 1, name: "Boltayev Sherqo'zi", subject: "Matematika", cat: "Aniqlik", desc: "Maktab direktori, oliy toifali matematika o'qituvchisi. 25+ yil tajriba.", tag: "Direktor" },
-      { id: 2, name: "Yo'ldoshev Bahrom", subject: "Fizika va Astronomiya", cat: "Aniqlik", desc: "Oliy toifali fizika o'qituvchisi. Viloyat olimpiadalari yetakchi ustozi.", tag: "Oliy toifa" },
-      { id: 3, name: "Rahimova Dilnoza", subject: "Ona tili va Adabiyot", cat: "Gumanitar", desc: "Respublika adabiyot olimpiadasi g'oliblarini tayyorlagan tajribali ustoz.", tag: "Yetakchi" },
-      { id: 4, name: "Toshpo'latov Jasur", subject: "Ingliz tili", cat: "Gumanitar", desc: "IELTS 8.0 sertifikati egasi, xalqaro tillar olimpiadalari hakami.", tag: "Mutaxassis" },
-      { id: 5, name: "Xolmatova Zilola", subject: "Kimyo va Biologiya", cat: "Tabiiy", desc: "O'quvchilari yirik tibbiyot OTMlariga grant asosida o'qishga kirgan.", tag: "Oliy toifa" },
-      { id: 6, name: "Qurbonov Otabek", subject: "Tarix va Huquq", cat: "Gumanitar", desc: "Tarix fanidan chuqurlashtirilgan darslar muallifi, ilmiy ishlar yetakchisi.", tag: "Katta o'qituvchi" },
-      { id: 7, name: "Mamatqulova Nasiba", subject: "Boshlang'ich sinf", cat: "Boshlang'ich", desc: "1-4 sinf o'quvchilariga ilk ilm sirlarini o'rgatadigan oliy toifali ustoz.", tag: "Oliy toifa" },
-      { id: 8, name: "Yo'ldashev Sherzod", subject: "Informatika va IT", cat: "Aniqlik", desc: "Dasturlash va robototexnika to'garagi rahbari, IT tanlovlar hakami.", tag: "Yetakchi" },
-      { id: 9, name: "Ismoilova Gulchehra", subject: "Geografiya", cat: "Tabiiy", desc: "Interaktiv geografiya darslari muallifi, viloyat ko'rik g'olibi.", tag: "Katta o'qituvchi" },
-      { id: 10, name: "Fayzullayev Botir", subject: "Jismoniy tarbiya", cat: "Boshlang'ich", desc: "Sport musobaqalari tadbirkor murabbiyi, tuman chempionlari ustozi.", tag: "Mutaxassis" }
+      { id: 2, name: "Ustoz ismi", subject: "Fan nomi", cat: "Aniqlik", desc: "Ustoz haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "Toifa" },
+      { id: 3, name: "Ustoz ismi", subject: "Fan nomi", cat: "Tabiiy", desc: "Ustoz haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "Toifa" },
+      { id: 4, name: "Ustoz ismi", subject: "Fan nomi", cat: "Gumanitar", desc: "Ustoz haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "Toifa" },
+      { id: 5, name: "Ustoz ismi", subject: "Fan nomi", cat: "Gumanitar", desc: "Ustoz haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "Toifa" },
+      { id: 6, name: "Ustoz ismi", subject: "Fan nomi", cat: "Tabiiy", desc: "Ustoz haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "Toifa" },
+      { id: 7, name: "Ustoz ismi", subject: "Fan nomi", cat: "Boshlang'ich", desc: "Ustoz haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "Toifa" },
+      { id: 8, name: "Ustoz ismi", subject: "Fan nomi", cat: "Aniqlik", desc: "Ustoz haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "Toifa" },
+      { id: 9, name: "Ustoz ismi", subject: "Fan nomi", cat: "Tabiiy", desc: "Ustoz haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "Toifa" },
+      { id: 10, name: "Ustoz ismi", subject: "Fan nomi", cat: "Boshlang'ich", desc: "Ustoz haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "Toifa" }
     ];
 
     const studentsData = [
@@ -1271,6 +1281,51 @@
         }
       }
     }
+
+    // ============ Maktab madhiyasi avtomatik rejimi ============
+    let anthemScheduleActive = true;
+    let anthemPlayedToday = {};
+    let anthemLoaded = false;
+
+    function loadAnthemAudio(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      const player = document.getElementById("anthemPlayer");
+      player.src = url;
+      anthemLoaded = true;
+      showToast("Maktab madhiyasi fayli yuklandi! ✅");
+    }
+
+    function playAnthem() {
+      const player = document.getElementById("anthemPlayer");
+      if (!player.src || player.src === window.location.href) {
+        showToast("Iltimos, avval madhiya mp3 faylini yuklang!");
+        return;
+      }
+      player.currentTime = 0;
+      player.play().catch(() => showToast("Audio ijrosi uchun sahifada bir marta tugmaga bosing."));
+    }
+
+    function toggleAnthemSchedule() {
+      anthemScheduleActive = !anthemScheduleActive;
+      const btn = document.getElementById("anthemScheduleBtn");
+      btn.textContent = anthemScheduleActive ? "⏰ Avtomatik madhiya: Yoqilgan" : "⏰ Avtomatik madhiya: O'chirilgan";
+      showToast(anthemScheduleActive ? "Avtomatik madhiya rejimi yoqildi" : "Avtomatik madhiya rejimi o'chirildi");
+    }
+
+    setInterval(() => {
+      if (!anthemScheduleActive || !anthemLoaded) return;
+      const now = new Date();
+      const h = now.getHours();
+      const m = now.getMinutes();
+      const s = now.getSeconds();
+      const key = now.toDateString();
+      if ((h === 8 || h === 13) && m === 0 && s < 2 && !anthemPlayedToday[key + '-' + h]) {
+        anthemPlayedToday[key + '-' + h] = true;
+        playAnthem();
+      }
+    }, 1000);
 
     function escapeHtml(str) {
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
