@@ -380,6 +380,63 @@
     body.dark .photo-badge { background: rgba(16,23,34,.92); }
     body.dark .now-row { background: #14263f; }
 
+
+    /* ============ MEGA ANIMATSIYA PAKETI ============ */
+    #scrollProgress { position: fixed; top: 0; left: 0; height: 4px; width: 0%; z-index: 999; background: linear-gradient(90deg,#0b65d8,#7c3aed,#16a36a,#f5b301); background-size: 300% 100%; animation: gradientMove 3s linear infinite; border-radius: 0 4px 4px 0; box-shadow: 0 0 14px rgba(124,58,237,.7); }
+    #cursorGlow { position: fixed; width: 340px; height: 340px; border-radius: 50%; pointer-events: none; z-index: 0; background: radial-gradient(circle, rgba(11,101,216,.13), transparent 65%); transform: translate(-50%,-50%); opacity: 0; transition: opacity .4s; }
+
+    /* Brand mark atrofida pulsing halqa */
+    .brand-mark { position: relative; }
+    .brand-mark::after { content: ""; position: absolute; inset: -6px; border-radius: 20px; border: 2px solid rgba(11,101,216,.55); animation: ringPulse 2s ease-out infinite; }
+    @keyframes ringPulse { 0% { transform: scale(.8); opacity: 1; } 100% { transform: scale(1.6); opacity: 0; } }
+
+    /* Hero rasm atrofida aylanuvchi rainbow glow */
+    .hero-photo::before { content: ""; position: absolute; inset: -16px; border-radius: 40px; background: conic-gradient(from 0deg,#0b65d8,#7c3aed,#16a36a,#f5b301,#0b65d8); z-index: -1; filter: blur(22px); opacity: .5; animation: spinRing 9s linear infinite; }
+    @keyframes spinRing { to { transform: rotate(360deg); } }
+
+    /* Direktor kartasi: oqib turuvchi rangli border */
+    .director-card { border: 2px solid transparent; background: linear-gradient(135deg,#0e5fc5,#132f72) padding-box, linear-gradient(135deg,#6aa6ff,#b794f6,#16a36a,#f5b301,#6aa6ff) border-box !important; background-size: 100% 100%, 300% 300% !important; animation: borderFlow 6s linear infinite; }
+    @keyframes borderFlow { 0% { background-position: 0 0, 0% 50%; } 100% { background-position: 0 0, 300% 50%; } }
+
+    /* Clock panel ham rainbow border */
+    .clock-panel { border: 2px solid transparent; background: linear-gradient(135deg,#0c1f40,#123f7a) padding-box, linear-gradient(135deg,#6aa6ff,#16a36a,#f5b301,#6aa6ff) border-box; background-size: 100% 100%, 300% 300%; animation: borderFlow 8s linear infinite; }
+
+    /* Katta soat: neon glow nafas oladi */
+    .big-clock { text-shadow: 0 0 25px rgba(106,166,255,.4); animation: clockGlow 2.2s ease-in-out infinite; }
+    @keyframes clockGlow { 0%,100% { text-shadow: 0 0 18px rgba(106,166,255,.3); } 50% { text-shadow: 0 0 50px rgba(106,166,255,.85); } }
+
+    /* Yutuqlar sonlari: jonli gradient */
+    .achievement-number { background-size: 200% auto !important; animation: gradientMove 3s linear infinite; }
+
+    /* Menyu linklari: chiziq paydo bo'ladi */
+    .nav-link::after { content: ""; position: absolute; left: 11px; right: 11px; bottom: 6px; height: 2px; border-radius: 2px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .28s ease; }
+    .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+    .nav-link.active::after { background: #fff; }
+
+    /* Typewriter kursori */
+    .hero-lead.typing::after { content: "|"; margin-left: 3px; color: var(--primary); font-weight: 900; animation: caretBlink .75s step-end infinite; }
+    @keyframes caretBlink { 50% { opacity: 0; } }
+
+    /* H2 sarlavhalarda yumshoq neon soya */
+    h2 { text-shadow: 0 0 0 transparent; transition: text-shadow .5s; }
+    .visible h2, .page.active .page-title h1 { animation: titleGlow 3.5s ease-in-out infinite; }
+    @keyframes titleGlow { 0%,100% { text-shadow: 0 0 0 rgba(11,101,216,0); } 50% { text-shadow: 0 0 26px rgba(11,101,216,.28); } }
+
+    /* Map pin sakrash */
+    .map-placeholder { animation: mapPulse 2.4s ease-in-out infinite; }
+    @keyframes mapPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(11,101,216,.35); } 50% { box-shadow: 0 0 0 22px rgba(11,101,216,0); } }
+
+    /* Footer brend: neon oqim */
+    .footer-brand { background-size: 200% auto !important; animation: gradientMove 4s linear infinite; }
+
+    /* Qisqa kartalar: hoverda rainbow border */
+    .quick-card { position: relative; overflow: hidden; }
+    .quick-card::before { content: ""; position: absolute; inset: 0; border-radius: 18px; padding: 2px; background: linear-gradient(135deg,#0b65d8,#7c3aed,#16a36a); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity .35s; pointer-events: none; }
+    .quick-card:hover::before { opacity: 1; }
+
+    /* Confetti zarbchasi uchun */
+    .confetti-bit { position: fixed; pointer-events: none; z-index: 1000; font-size: 20px; }
+
     @media(max-width: 1100px) {
       .main-nav { gap: 0; }
       .nav-link { padding: 9px 7px; font-size: 11px; }
@@ -439,6 +496,8 @@
     <div class="bg-blob b3"></div>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="scrollProgress"></div>
+  <div id="cursorGlow"></div>
 
   <header class="topbar">
     <a class="brand" href="#home" data-page="home" aria-label="14-maktab bosh sahifa">
@@ -486,7 +545,7 @@
       </div>
 
       <div class="marquee-band">
-        <span>✨ BILIM OLING — KELAJAKNI YARATING! &nbsp;•&nbsp; 🏆 14-MAKTAB — SIQDARYONING FAXRI! &nbsp;•&nbsp; 📚 HAR KUNI YANGI BILIM — HAR KUNI YANGI G'ALABA! &nbsp;•&nbsp; 🇺🇿 VATAANPARVARLIK, ILOM VA TARBIYA! &nbsp;•&nbsp; 🎯 MAQSAD SARI BIRGA QADAM! &nbsp;•&nbsp; </span>
+        <span>✨ BILIM OLING — KELAJAKNI YARATING! &nbsp;•&nbsp; 🏆 14-MAKTAB — SIRDARYO VILOYATINING FAXRI! &nbsp;•&nbsp; 📚 HAR KUNI YANGI BILIM — HAR KUNI YANGI G'ALABA! &nbsp;•&nbsp; 🇺🇿 VATAANPARVARLIK, ILOM VA TARBIYA! &nbsp;•&nbsp; 🎯 MAQSAD SARI BIRGA QADAM! &nbsp;•&nbsp; </span>
       </div>
 
       <div class="quick-grid">
@@ -819,7 +878,7 @@
           <span class="section-kicker">MANZIL VA BOG'LANISH</span>
           <h2>Bizni qanday topish mumkin?</h2>
           <p style="color: var(--muted); margin: 10px 0;"><b>Manzil:</b> Sirdaryo viloyati, Xovos tumani, 14-maktab ko'chasi.</p>
-          <p style="color: var(--muted); margin: 0 0 15px;"><b>Telefon:</b> +998 (67) 123-45-67 | <b>Email:</b> xovos14maktab@uzedu.uz</p>
+          <p style="color: var(--muted); margin: 0 0 15px;"><b>Telefon:</b> +998 (90) 120 00 00 | <b>Email:</b> xovos14maktab@uzedu.uz</p>
           <div class="tag-row">
             <span>Mo'ljal: Markaziy masjid yaqinida</span>
             <span>Ish vaqti: 08:00 - 17:00</span>
@@ -879,7 +938,7 @@
         <h3>Biz bilan bog'lanish</h3>
         <p>Sirdaryo viloyati, Xovos tumani</p>
         <p>Ish kunlari: Dushanba - Shanba</p>
-        <p>Tel: +998 67 000-00-14</p>
+        <p>Tel: +998 (90) 120 00 00</p>
       </div>
     </div>
     <div class="footer-bottom">
@@ -1275,7 +1334,7 @@
         } else if (q.includes("manzil") || q.includes("qayerda") || q.includes("xovos")) {
           return "Maktabimiz Sirdaryo viloyati, Xovos tumanida joylashgan. Mo'ljal: Markaziy masjid yaqinida.";
         } else if (q.includes("telefon") || q.includes("raqam") || q.includes("bog'lanish")) {
-          return "Murojaat uchun telefon raqami: +998 67 000-00-14 yoki +998 67 123-45-67.";
+          return "Murojaat uchun telefon raqami: +998 (90) 120 00 00.";
         } else if (q.includes("dars") || q.includes("vaqt") || q.includes("qo'ng'iroq")) {
           return "Darslar soat 08:00 da boshlanadi. Har bir dars 45 daqiqa davom etadi, tanaffuslar 10-15 daqiqa.";
         } else if (q.includes("to'garak") || q.includes("sport") || q.includes("it")) {
@@ -1333,6 +1392,168 @@
 
     function escapeHtml(str) {
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+  </script>
+
+  <script>
+    /* ============ MEGA ANIMATSIYA PAKETI (JS) ============ */
+    document.addEventListener("DOMContentLoaded", () => {
+      initScrollProgress();
+      initCursorGlow();
+      initParticles();
+      initTiltCards();
+      initCounters();
+      initTypewriter();
+      initMagneticButtons();
+      initStarConfetti();
+    });
+
+    /* 1. Scroll progress bar */
+    function initScrollProgress() {
+      const bar = document.getElementById("scrollProgress");
+      if (!bar) return;
+      const update = () => {
+        const h = document.documentElement;
+        const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+        bar.style.width = pct + "%";
+      };
+      window.addEventListener("scroll", update, { passive: true });
+      update();
+    }
+
+    /* 2. Sichqoncha ortidan yuruvchi yumshoq glow */
+    function initCursorGlow() {
+      const glow = document.getElementById("cursorGlow");
+      if (!glow || window.matchMedia("(hover: none)").matches) return;
+      let tx = -500, ty = -500, x = -500, y = -500;
+      document.addEventListener("mousemove", e => {
+        tx = e.clientX; ty = e.clientY;
+        glow.style.opacity = "1";
+      });
+      (function loop() {
+        x += (tx - x) * 0.12; y += (ty - y) * 0.12;
+        glow.style.left = x + "px"; glow.style.top = y + "px";
+        requestAnimationFrame(loop);
+      })();
+    }
+
+    /* 3. Osmonda suzuvchi 30 ta yulduzcha / konuscha */
+    function initParticles() {
+      const wrap = document.querySelector(".bg-decor");
+      if (!wrap) return;
+      const icons = ["✦", "✧", "⭐", "✨", "•"];
+      for (let i = 0; i < 30; i++) {
+        const p = document.createElement("span");
+        p.textContent = icons[Math.floor(Math.random() * icons.length)];
+        p.style.cssText = `position:fixed;left:${Math.random()*100}vw;top:105vh;
+          font-size:${8 + Math.random()*16}px;color:${Math.random() > .5 ? '#0b65d8' : '#7c3aed'};
+          opacity:${.15 + Math.random()*.35};z-index:-1;pointer-events:none;
+          animation:particleFloat ${9 + Math.random()*14}s linear ${-Math.random()*20}s infinite;`;
+        wrap.appendChild(p);
+      }
+      const st = document.createElement("style");
+      st.textContent = "@keyframes particleFloat { from { transform: translateY(0) rotate(0deg); } to { transform: translateY(-120vh) rotate(360deg); } }";
+      document.head.appendChild(st);
+    }
+
+    /* 4. 3D tilt effekti — karta sichqonchaga qarab egiladi */
+    function initTiltCards() {
+      if (window.matchMedia("(hover: none)").matches) return;
+      const cards = document.querySelectorAll(".quick-card, .achievement-card, .person-card, .about-card, .audio-card, .rating-section");
+      cards.forEach(card => {
+        card.addEventListener("mousemove", e => {
+          const r = card.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - 0.5;
+          const py = (e.clientY - r.top) / r.height - 0.5;
+          card.style.transform = `perspective(900px) rotateY(${px * 10}deg) rotateX(${-py * 10}deg) translateY(-6px)`;
+          card.style.transition = "transform .08s ease";
+        });
+        card.addEventListener("mouseleave", () => {
+          card.style.transition = "transform .5s cubic-bezier(.2,.8,.2,1)";
+          card.style.transform = "";
+        });
+      });
+    }
+
+    /* 5. Yutuqlar raqamlari: 0 dan sanab o'sadi */
+    function initCounters() {
+      const nums = document.querySelectorAll(".achievement-number");
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (!en.isIntersecting || en.target.dataset.done) return;
+          en.target.dataset.done = "1";
+          const el = en.target;
+          const m = el.textContent.trim().match(/^(\d+)(.*)$/);
+          if (!m) return;
+          const target = parseInt(m[1], 10);
+          const suffix = m[2];
+          const dur = 1600;
+          const t0 = performance.now();
+          const tick = now => {
+            const p = Math.min((now - t0) / dur, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(target * eased) + suffix;
+            if (p < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        });
+      }, { threshold: 0.4 });
+      nums.forEach(n => obs.observe(n));
+    }
+
+    /* 6. Hero matn: mashinka kabi yozilib chiqadi */
+    function initTypewriter() {
+      const el = document.querySelector(".hero-lead");
+      if (!el) return;
+      const full = el.textContent.trim();
+      el.textContent = "";
+      el.classList.add("typing");
+      let i = 0;
+      const step = () => {
+        el.textContent = full.slice(0, ++i);
+        if (i < full.length) setTimeout(step, 32);
+        else setTimeout(() => el.classList.remove("typing"), 2500);
+      };
+      setTimeout(step, 500);
+    }
+
+    /* 7. Magnit tugmalar — tugma sichqonchaga tortiladi */
+    function initMagneticButtons() {
+      if (window.matchMedia("(hover: none)").matches) return;
+      document.querySelectorAll(".primary-btn, .ghost-btn, .outline-btn, .icon-btn").forEach(btn => {
+        btn.addEventListener("mousemove", e => {
+          const r = btn.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width / 2);
+          const dy = e.clientY - (r.top + r.height / 2);
+          btn.style.translate = `${dx * 0.18}px ${dy * 0.18}px`;
+        });
+        btn.addEventListener("mouseleave", () => { btn.style.translate = "0px 0px"; });
+      });
+    }
+
+    /* 8. 5 yulduz — konfetti portlashi! */
+    function initStarConfetti() {
+      document.querySelectorAll("#starContainer button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (btn.dataset.value !== "5") return;
+          const r = btn.getBoundingClientRect();
+          const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+          const emo = ["🎉", "⭐", "✨", "🎊", "💙", "🏆", "🌟"];
+          for (let i = 0; i < 26; i++) {
+            const c = document.createElement("span");
+            c.className = "confetti-bit";
+            c.textContent = emo[Math.floor(Math.random() * emo.length)];
+            c.style.left = cx + "px"; c.style.top = cy + "px";
+            document.body.appendChild(c);
+            const ang = Math.random() * Math.PI * 2;
+            const dist = 90 + Math.random() * 190;
+            c.animate([
+              { transform: "translate(0,0) rotate(0deg) scale(1)", opacity: 1 },
+              { transform: `translate(${Math.cos(ang)*dist}px, ${Math.sin(ang)*dist - 60}px) rotate(${Math.random()*540}deg) scale(${.4 + Math.random()})`, opacity: 0 }
+            ], { duration: 1100 + Math.random() * 700, easing: "cubic-bezier(.2,.8,.3,1)" }).onfinish = () => c.remove();
+          }
+        });
+      });
     }
   </script>
 </body>
