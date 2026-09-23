@@ -430,6 +430,7 @@
     }
   </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
   <div class="bg-decor">
@@ -903,14 +904,15 @@
     ];
 
     const studentsData = [
-      { id: 1, name: "Jasurbek Alisherov", grade: "11", desc: "Matematika fan olimpiadasi viloyat bosqichi g'olibi.", tag: "11-sinf · 1-o'rin" },
-      { id: 2, name: "Madina Rahimova", grade: "10", desc: "Ingliz tili (IELTS 7.0) va adabiyot yo'nalishi faoli.", tag: "10-sinf · IELTS 7.0" },
-      { id: 3, name: "Sardorbek Normurodov", grade: "11", desc: "Robototexnika va dasturlash bo'yicha Respublika ishtirokchisi.", tag: "11-sinf · IT" },
-      { id: 4, name: "Sevinchbek Turg'unova", grade: "9", desc: "Kimyo fanidan chuqurlashtirilgan bilim egasi.", tag: "9-sinf · Zukko" },
-      { id: 5, name: "Boburmirzo Karimov", grade: "10", desc: "Shaxmat bo'yicha tuman chempioni va sport faoli.", tag: "10-sinf · Sport" },
-      { id: 6, name: "Zuhra Xoliqova", grade: "8", desc: "Matematika va mantiqiy masalalar tanlovi g'olibi.", tag: "8-sinf · Matematika" },
-      { id: 7, name: "Asadbek Fayzullayev", grade: "9", desc: "Fizika fanidan ixtirochilik loyihalari muallifi.", tag: "9-sinf · Innovatsiya" },
-      { id: 8, name: "Ruxshona Xasanova", grade: "11", desc: "Maktab sardori, faol jamoatchi va ijodkor.", tag: "11-sinf · Sardor" }
+      // YANGI O'QUVCHI QO'SHISH UCHUN: pastdagi qatorni nusxalang va ism-familiyani yozing
+      { id: 1, name: "Salimov Sarvarjon", grade: "9", desc: "9-sinf o'quvchisi. Iqtidorli o'quvchi haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "9-sinf" },
+      { id: 2, name: "Mirzaboyev Lazizbek", grade: "9", desc: "9E sinf o'quvchisi, ushbu saytning muallifi va iqtidorli dasturchi.", tag: "9E-sinf · Sayt muallifi" },
+      { id: 3, name: "O'quvchi ismi", grade: "11", desc: "Iqtidorli o'quvchi haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "11-sinf" },
+      { id: 4, name: "O'quvchi ismi", grade: "10", desc: "Iqtidorli o'quvchi haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "10-sinf" },
+      { id: 5, name: "O'quvchi ismi", grade: "9", desc: "Iqtidorli o'quvchi haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "9-sinf" },
+      { id: 6, name: "O'quvchi ismi", grade: "8", desc: "Iqtidorli o'quvchi haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "8-sinf" },
+      { id: 7, name: "O'quvchi ismi", grade: "11", desc: "Iqtidorli o'quvchi haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "11-sinf" },
+      { id: 8, name: "O'quvchi ismi", grade: "10", desc: "Iqtidorli o'quvchi haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "10-sinf" }
     ];
 
     const scheduleData = [
@@ -1266,7 +1268,9 @@
 
       function getBotReply(q) {
         q = q.toLowerCase();
-        if (q.includes("direktor") || q.includes("rahbar") || q.includes("boltayev")) {
+        if (q.includes("kim yaratgan") || q.includes("muallif") || q.includes("yaratuvchi") || q.includes("kim qilgan") || q.includes("kim yasagan") || q.includes("who made") || q.includes("who created") || q.includes("dasturchi")) {
+          return "Ushbu zamonaviy saytni 9E sinf o'quvchisi Mirzaboyev Lazizbek yaratgan! U iqtidorli dasturchi bo'lib, saytning barcha kodlari, dizayni va funksiyalarini o'zi ishlab chiqqan. Qoyil, Lazizbek! 👏";
+        } else if (q.includes("direktor") || q.includes("rahbar") || q.includes("boltayev")) {
           return "Maktabimiz direktori — Boltayev Sherqo'zi. U oliy toifali, kuchli bilimli tajribali ustoz va 25 yillik mehnat tajribasiga ega munosib rahbar. Qabul kunlari: Dushanba - Juma (14:00 - 16:00).";
         } else if (q.includes("manzil") || q.includes("qayerda") || q.includes("xovos")) {
           return "Maktabimiz Sirdaryo viloyati, Xovos tumanida joylashgan. Mo'ljal: Markaziy masjid yaqinida.";
