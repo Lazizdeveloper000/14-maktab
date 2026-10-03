@@ -1555,6 +1555,60 @@
         });
       });
     }
+    
+    document.addEventListener('click', async function(e) {
+    if (e.target && e.target.textContent.trim() === 'Yuborish') {
+        e.preventDefault();
+
+        // Saytdagi barcha input va textarea'larni olamiz
+        const inputs = document.querySelectorAll('input, textarea');
+        
+        let ism = '';
+        let xabar = '';
+
+        // Birinchi maydon (Ism) va ikkinchi maydon (Xabar)
+        if (inputs.length >= 2) {
+            ism = inputs[0].value;
+            xabar = inputs[1].value;
+        }
+
+        // Agar xabar maydoni bo'sh bo'lsa
+        if (!xabar.trim()) {
+            alert("Iltimos, fikr yoki taklifingizni yozing!");
+            return;
+        }
+
+        const token = "8954060795:AAFpcZDdl4zR90TgOhrah1Nfd6HFoz4FZQo";
+        const chatId = "8990585770";
+        const matn = `💬 Yangi fikr/taklif:\n\n👤 Kimdan: ${ism.trim() || 'Ko‘rsatilmagan'}\n📝 Xabar: ${xabar}`;
+
+        const url = `https://api.telegram.org/bot${token}/sendMessage`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chatId,
+                    text: matn
+                })
+            });
+
+            if (response.ok) {
+                alert("Taklifingiz muvaffaqiyatli yuborildi!");
+                // Maydonlarni tozalaymiz
+                inputs.forEach(input => input.value = '');
+            } else {
+                alert("Yuborishda xatolik yuz berdi.");
+            }
+        } catch (error) {
+            console.error("Xatolik:", error);
+            alert("Internet aloqasini tekshiring!");
+        }
+    }
+});
+
+
   </script>
 </body>
 </html>
