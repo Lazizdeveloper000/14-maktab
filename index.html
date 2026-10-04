@@ -485,6 +485,159 @@
       .ai-panel { right: 15px; bottom: 85px; }
       .ai-fab { right: 15px; bottom: 15px; }
     }
+
+    /* ============ AQLLI QO'NG'IROQ TIZIMI ============ */
+    @property --pa { syntax: '<color>'; inherits: true; initial-value: #0c1f40; }
+    @property --pb { syntax: '<color>'; inherits: true; initial-value: #123f7a; }
+
+    .clock-panel.bs-panel {
+      --pa: #0c1f40; --pb: #123f7a; --ring: #6aa6ff;
+      background: linear-gradient(135deg, var(--pa), var(--pb)) padding-box, linear-gradient(135deg,#6aa6ff,#16a36a,#f5b301,#6aa6ff) border-box;
+      background-size: 100% 100%, 300% 300%;
+      transition: --pa .9s ease, --pb .9s ease;
+      display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center;
+    }
+    .bs-panel[data-state="lesson"] { --pa:#0c1f40; --pb:#123f7a; --ring:#6aa6ff; }
+    .bs-panel[data-state="break"]  { --pa:#052e2b; --pb:#0f766e; --ring:#5eead4; }
+    .bs-panel[data-state="wait"]   { --pa:#1e1b4b; --pb:#3730a3; --ring:#a5b4fc; }
+    .bs-panel[data-state="off"]    { --pa:#1f2937; --pb:#374151; --ring:#9ca3af; }
+    .bs-panel[data-state="ring"]   { --pa:#7c2d12; --pb:#c2410c; --ring:#fcd34d; }
+    .bs-panel[data-state="anthem"] { --pa:#0b3d91; --pb:#0f766e; --ring:#fde047; }
+
+    .bs-sync { margin: 2px 0 14px; color: #bcd2f2; font-size: 13px; }
+    .bs-next { margin: 12px 0 0; color: #dce9ff; font-size: 14px; font-weight: 600; min-height: 1.4em; }
+    .bs-panel .bell-state { width: fit-content; max-width: 100%; }
+    .bs-panel[data-state="ring"] #bellIconState, .bs-panel[data-state="anthem"] #bellIconState { animation: bellShake .5s ease-in-out infinite; transform-origin: 50% 10%; }
+    @keyframes bellShake { 0%,100% { transform: rotate(0); } 20% { transform: rotate(-22deg); } 40% { transform: rotate(18deg); } 60% { transform: rotate(-14deg); } 80% { transform: rotate(10deg); } }
+
+    .bs-ring { position: relative; width: clamp(170px, 22vw, 230px); aspect-ratio: 1; }
+    .bs-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+    .bs-ring .trk { fill: none; stroke: rgba(255,255,255,.13); stroke-width: 12; }
+    .bs-ring .bar { fill: none; stroke: var(--ring); stroke-width: 12; stroke-linecap: round; stroke-dasharray: 552.92; stroke-dashoffset: 552.92; transition: stroke-dashoffset .3s linear, stroke .8s; filter: drop-shadow(0 0 8px var(--ring)); }
+    .bs-ring-c { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+    .bs-count { font-family: Manrope; font-weight: 800; font-size: clamp(30px, 4.6vw, 46px); letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+    .bs-count-l { font-size: 11px; color: #bcd2f2; letter-spacing: .5px; }
+    .bs-panel[data-state="ring"] .bs-ring::before, .bs-panel[data-state="anthem"] .bs-ring::before {
+      content: ""; position: absolute; inset: 0; border-radius: 50%; border: 3px solid var(--ring); animation: ringPulse 1.4s ease-out infinite;
+    }
+
+    /* Ijro paytida "equalizer" */
+    .bs-eq { display: none; gap: 3px; height: 24px; align-items: flex-end; margin-left: 4px; }
+    .bs-eq i { width: 4px; background: currentColor; border-radius: 2px; animation: eqBar .8s ease-in-out infinite; height: 40%; }
+    .bs-eq i:nth-child(2) { animation-delay: -.2s; } .bs-eq i:nth-child(3) { animation-delay: -.45s; }
+    .bs-eq i:nth-child(4) { animation-delay: -.1s; } .bs-eq i:nth-child(5) { animation-delay: -.6s; }
+    @keyframes eqBar { 0%,100% { height: 20%; } 50% { height: 100%; } }
+    .bs-panel.bs-playing .bell-state .bs-eq, .bs-snd.bs-playing .bs-eq { display: flex; }
+    .bs-snd .bs-eq { color: var(--accent); margin-left: auto; }
+
+    /* To'liq ekran (televizor / proyektor uchun) */
+    .bs-panel:fullscreen { border-radius: 0; padding: 5vh 6vw; align-content: center; }
+    .bs-panel:fullscreen .big-clock { font-size: clamp(80px, 15vw, 260px); letter-spacing: -6px; }
+    .bs-panel:fullscreen .bs-ring { width: min(36vw, 62vh); }
+    .bs-panel:fullscreen .bs-count { font-size: clamp(44px, 7vw, 130px); }
+    .bs-panel:fullscreen .bell-state b { font-size: clamp(22px, 3vw, 46px); }
+    .bs-panel:fullscreen .bell-state small, .bs-panel:fullscreen .bs-next, .bs-panel:fullscreen .live-date { font-size: clamp(14px, 1.8vw, 28px); }
+    .bs-panel:fullscreen .bell-state > span:first-child { font-size: clamp(40px, 5vw, 80px); }
+
+    /* Ishga tushirish banneri */
+    .bs-arm { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 22px; margin-bottom: 18px; border-radius: 18px; border: 1px solid #f59e0b; background: linear-gradient(135deg, rgba(245,158,11,.16), rgba(245,158,11,.05)); animation: bsArmPulse 2.2s ease-in-out infinite; }
+    .bs-arm[hidden], .bs-demo-bar[hidden] { display: none; }
+    .bs-arm b { display: block; margin-bottom: 3px; }
+    .bs-arm span { color: var(--muted); font-size: 13px; }
+    .bs-arm button { flex-shrink: 0; }
+    @keyframes bsArmPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(245,158,11,.35); } 50% { box-shadow: 0 0 0 10px rgba(245,158,11,0); } }
+    .bs-demo-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 12px 16px; margin-bottom: 18px; border-radius: 14px; background: #fef3c7; color: #78350f; border: 1px dashed #d97706; font-size: 14px; }
+    .bs-demo-bar .ghost-btn { padding: 7px 12px; margin-left: auto; }
+    body.dark .bs-demo-bar { background: #3a2a07; color: #fde68a; }
+
+    .bs-chips { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 0; }
+    .bs-chip { padding: 6px 12px; border-radius: 99px; background: var(--surface); border: 1px solid var(--line); font-size: 12px; font-weight: 700; color: var(--muted); }
+    .bs-chip.ok { color: var(--accent); border-color: rgba(22,163,106,.4); background: rgba(22,163,106,.08); }
+    .bs-chip.warn { color: #b45309; border-color: rgba(245,158,11,.5); background: rgba(245,158,11,.1); }
+
+    .bs-controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 18px 0 0; }
+    .bs-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; }
+    .bs-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .bs-slider { width: 50px; height: 28px; border-radius: 99px; background: #cbd5e1; position: relative; transition: .25s; flex-shrink: 0; }
+    .bs-slider::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.25); transition: .25s; }
+    .bs-switch input:checked + .bs-slider { background: var(--accent); }
+    .bs-switch input:checked + .bs-slider::after { transform: translateX(22px); }
+    .bs-switch input:focus-visible + .bs-slider { outline: 3px solid rgba(11,101,216,.35); }
+    .bs-vol { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); }
+    .bs-vol input { width: 130px; accent-color: var(--primary); }
+    .bs-vol b { min-width: 42px; font-size: 13px; font-variant-numeric: tabular-nums; }
+
+    .bs-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; margin: 18px 0; }
+    .bs-grid2 { display: grid; grid-template-columns: 1.25fr 1fr; gap: 18px; }
+    .bs-grid2 .bs-card { margin: 0; }
+    .bs-grid2 > *, .bs-sounds > * { min-width: 0; }
+
+    .bs-tl { position: relative; height: 54px; border-radius: 14px; background: var(--surface2); overflow: hidden; margin-top: 16px; }
+    .bs-seg { position: absolute; top: 7px; bottom: 7px; border-radius: 9px; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #fff; }
+    .bs-seg.l { background: linear-gradient(135deg, var(--primary), var(--primary2)); }
+    .bs-seg.b { background: var(--accent); }
+    .bs-now { position: absolute; top: 0; bottom: 0; width: 3px; background: #f43f5e; box-shadow: 0 0 12px #f43f5e; transform: translateX(-50%); transition: left .3s linear; z-index: 2; display: none; }
+    .bs-tl-axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 6px; font-weight: 700; }
+
+    .bs-table { width: 100%; border-collapse: collapse; min-width: 440px; }
+    .bs-table th, .bs-table td { padding: 11px 10px; border-bottom: 1px solid var(--line); text-align: left; font-size: 13px; }
+    .bs-table th { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+    .bs-table tbody tr:hover { background: var(--surface2); }
+    .bs-table tr.now-row td { color: var(--primary); font-weight: 800; }
+    .bs-table tr.brk-row { background: rgba(22,163,106,.1); }
+    .bs-table tr.brk-row td { color: var(--accent); font-weight: 800; }
+    .bs-table tr.past td { color: var(--muted); }
+    .bs-table .status-badge { animation: none; }
+
+    .bs-events { display: grid; gap: 4px; max-height: 372px; overflow: auto; padding-right: 4px; }
+    .bs-ev { display: grid; grid-template-columns: 72px 1fr auto; gap: 10px; align-items: center; padding: 9px 11px; border-radius: 11px; font-size: 13px; }
+    .bs-ev time { font-family: Manrope; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .bs-ev em { font-style: normal; font-size: 11px; font-weight: 800; color: var(--muted); }
+    .bs-ev.done { color: var(--muted); }
+    .bs-ev.done em { color: var(--accent); }
+    .bs-ev.next { background: #eaf3ff; outline: 1px solid var(--primary); color: var(--primary); }
+    .bs-ev.next em { color: var(--primary); }
+    body.dark .bs-ev.next { background: #14263f; }
+
+    .bs-sounds { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .bs-sounds .bs-card { margin: 0; }
+    .bs-snd-head { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+    .bs-snd-ic { font-size: 30px; line-height: 1; }
+    .bs-snd-head h3 { margin: 0 0 3px; font-size: 16px; }
+    .bs-snd-head p { margin: 0; color: var(--muted); font-size: 12px; }
+    .bs-snd audio { width: 100%; }
+    .bs-snd-status { margin: 10px 0 12px; font-size: 12px; color: var(--muted); word-break: break-all; }
+    .bs-snd-status.ok { color: var(--accent); } .bs-snd-status.bad { color: #dc2626; }
+    .bs-snd-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .bs-pick { cursor: pointer; display: inline-block; }
+    .bs-pick input { display: none; }
+    .bs-snd-actions [hidden] { display: none; }
+
+    .bs-settings summary { cursor: pointer; font-weight: 800; font-family: Manrope; font-size: 17px; }
+    .bs-set { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-top: 18px; }
+    .bs-set label { display: grid; gap: 6px; font-size: 12px; font-weight: 700; color: var(--muted); }
+    .bs-set .bs-chk { display: flex; align-items: center; gap: 8px; align-self: end; padding-bottom: 12px; color: var(--text); }
+    .bs-days { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+    .bs-days label { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 99px; font-size: 13px; font-weight: 700; cursor: pointer; background: var(--surface2); }
+    .bs-demo { margin-top: 18px; padding-top: 16px; border-top: 1px dashed var(--line); font-size: 13px; }
+
+    /* Yuqori paneldagi kichik qo'ng'iroq tugmasi */
+    .bs-mini { display: flex; align-items: center; gap: 6px; height: 40px; padding: 0 12px; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; color: var(--text); font-weight: 800; font-size: 12px; font-variant-numeric: tabular-nums; }
+    .bs-mini:hover { border-color: var(--primary); color: var(--primary); }
+    .bs-mini.ringing { border-color: #ea580c; color: #ea580c; animation: bellShake .5s ease-in-out infinite; }
+
+    @media (max-width: 900px) {
+      .bs-grid2, .bs-sounds { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 820px) {
+      .clock-panel.bs-panel { grid-template-columns: 1fr; justify-items: start; }
+      .bs-ring { justify-self: center; }
+      .bs-arm { flex-direction: column; align-items: stretch; }
+    }
+    @media (max-width: 560px) {
+      .bs-vol input { width: 100px; }
+      .bs-mini #bsMiniText { display: none; }
+    }
   </style>
 <base target="_blank">
 <base target="_blank">
@@ -515,6 +668,7 @@
     </nav>
 
     <div class="header-actions">
+      <button class="bs-mini" id="bsMini" data-page="bell" title="Qo'ng'iroq tizimi"><span aria-hidden="true">🔔</span><span id="bsMiniText">--:--</span></button>
       <button id="themeToggle" class="icon-btn" title="Tungi/kunduzgi rejim" aria-label="Rejimni almashtirish">☾</button>
       <button id="menuToggle" class="icon-btn mobile-only" aria-label="Menyuni ochish">☰</button>
     </div>
@@ -662,35 +816,107 @@
     <section id="page-bell" class="page">
       <div class="page-title">
         <div>
-          <span class="eyebrow">RESTAURATSIYA VA VAQT</span>
+          <span class="eyebrow">AQLLI QO'NG'IROQ TIZIMI</span>
           <h1>Qo'ng'iroqlar jadvali va jonli vaqt</h1>
-          <p>Dars jarayonlari va tanaffuslar jadvalini kuzatib boring.</p>
+          <p>Dars, tanaffus va madhiya O'zbekiston vaqti (Toshkent, UTC+5) bo'yicha avtomatik yangraydi.</p>
         </div>
-        <span class="status-badge" id="schoolStatusBadge">Maktab vaqti</span>
+        <span class="status-badge" id="schoolStatusBadge">Yuklanmoqda…</span>
       </div>
 
-      <div class="clock-panel">
+      <!-- Brauzer ovozga ruxsat berishi uchun bir marta bosish kerak -->
+      <div class="bs-arm" id="bsArm">
         <div>
-          <span class="live-date" id="liveDate">2026-yil 21-sentyabr</span>
-          <div class="big-clock" id="bigClock">00:00:00</div>
-          <p style="margin: 0; color: #bcd2f2; font-size: 14px;">14-maktab rasmiy vaqt serveri</p>
+          <b>🔓 Avtomatik qo'ng'iroqni ishga tushiring</b>
+          <span>Brauzer xavfsizlik qoidasi tufayli ovoz chalinishi uchun sahifada bir marta tugmani bosish kerak. Shundan keyin qo'ng'iroqlar o'zi chalinadi. Bu sahifani yopmang (boshqa bo'limga o'tsangiz bo'ladi).</span>
         </div>
-        <div class="bell-state">
-          <span id="bellIconState">🔔</span>
-          <div>
-            <b id="bellStatusText">Dars davom etmoqda</b>
-            <small id="bellSubText">Keyingi qo'ng'iroqqa qadar...</small>
+        <button class="primary-btn" id="bsArmBtn">▶ Tizimni ishga tushirish</button>
+      </div>
+
+      <div class="bs-demo-bar" id="bsDemoBar" hidden>
+        🧪 <b>DEMO REJIM</b> — soat sun'iy ravishda o'zgartirilgan. Haqiqiy qo'ng'iroqlar bilan aloqasi yo'q.
+        <button class="ghost-btn" id="bsDemoOff">Haqiqiy vaqtga qaytish</button>
+      </div>
+
+      <div class="clock-panel bs-panel" id="bsPanel" data-state="wait">
+        <div class="bs-left">
+          <span class="live-date" id="liveDate">—</span>
+          <div class="big-clock" id="bigClock">00:00:00</div>
+          <p class="bs-sync" id="bsSync">Vaqt tekshirilmoqda…</p>
+          <div class="bell-state">
+            <span id="bellIconState">🔔</span>
+            <div>
+              <b id="bellStatusText">Yuklanmoqda…</b>
+              <small id="bellSubText">—</small>
+            </div>
+            <span class="bs-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          </div>
+          <p class="bs-next" id="bsNext"></p>
+        </div>
+        <div class="bs-ring">
+          <svg viewBox="0 0 200 200" aria-hidden="true">
+            <circle class="trk" cx="100" cy="100" r="88"/>
+            <circle class="bar" id="bsRingBar" cx="100" cy="100" r="88"/>
+          </svg>
+          <div class="bs-ring-c">
+            <div class="bs-count" id="bsCount">--:--</div>
+            <div class="bs-count-l" id="bsCountL"></div>
           </div>
         </div>
       </div>
 
-      <div class="bell-controls">
-        <button class="primary-btn" onclick="playBellSound('lesson')">🔊 Dars boshlanish qo'ng'irog'i</button>
-        <button class="ghost-btn" onclick="playBellSound('break')">🔔 Tanaffus qo'ng'irog'i</button>
-        <button class="outline-btn" onclick="toggleAutoBell()">⏰ Avtomat qo'ng'iroq rejimi: O'chirilgan</button>
+      <div class="bs-chips">
+        <span class="bs-chip" id="chipArm">⏳ Tekshirilmoqda</span>
+        <span class="bs-chip" id="chipAuto">—</span>
+        <span class="bs-chip" id="chipWake">🔓 Ekran o'chib qolishi mumkin</span>
       </div>
 
-      <div class="announcement">
+      <div class="bs-controls">
+        <label class="bs-switch">
+          <input type="checkbox" id="bsAuto" checked>
+          <span class="bs-slider"></span>
+          <b id="bsAutoText">Avtomat rejim: yoqilgan</b>
+        </label>
+        <div class="bs-vol">
+          <span>🔈</span>
+          <input type="range" id="bsVol" min="0" max="100" value="100" aria-label="Ovoz balandligi">
+          <b id="bsVolVal">100%</b>
+        </div>
+        <button class="ghost-btn" id="bsStop">⏹ Ovozni to'xtatish</button>
+        <button class="ghost-btn" id="bsFull">🖥 To'liq ekran</button>
+      </div>
+
+      <div class="bell-controls">
+        <button class="primary-btn" data-test="bell">🔔 Qo'ng'iroq</button>
+        <button class="ghost-btn" data-test="breakStart">🗣️ Tanaffus boshlandi</button>
+        <button class="ghost-btn" data-test="breakEnd">⏰ Tanaffus tugadi</button>
+        <button class="ghost-btn" data-test="anthem">🎼 Madhiya</button>
+        <button class="outline-btn" data-test="chain">▶ Qo'ng'iroq + tanaffus (ketma-ket)</button>
+      </div>
+
+      <div class="bs-card">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">BUGUNGI KUN XARITASI</span>
+            <h3 style="margin:4px 0 0;">Darslar (ko'k) va tanaffuslar (yashil)</h3>
+          </div>
+          <span class="count-badge" id="bsTlRange">—</span>
+        </div>
+        <div class="bs-tl" id="bsTimeline"></div>
+        <div class="bs-tl-axis"><span id="bsTlFrom">—</span><span id="bsTlTo">—</span></div>
+      </div>
+
+      <div class="bs-grid2">
+        <div class="bs-card">
+          <h3 style="margin-bottom:12px;">Dars jadvali va qo'ng'iroqlar vaqti</h3>
+          <div class="table-scroll"><table class="bs-table" id="bsTable"></table></div>
+        </div>
+        <div class="bs-card">
+          <h3 style="margin-bottom:12px;">Bugungi hodisalar</h3>
+          <div class="bs-events" id="bsEvents"></div>
+        </div>
+      </div>
+
+      <div class="announcement" style="margin-top:22px;">
         <span class="speaker">📢</span>
         <div>
           <b>Kun e'loni / Eslatma</b>
@@ -698,57 +924,36 @@
         </div>
       </div>
 
-      <div class="schedule-wrap" style="margin-top: 25px;">
-        <h3 style="margin-bottom: 15px;">1-Smena dars jadvali va qo'ng'iroqlar vaqti</h3>
-        <div class="table-scroll">
-          <table>
-            <thead>
-              <tr>
-                <th>№</th>
-                <th>Dars vaqti</th>
-                <th>Fan / Jarayon</th>
-                <th>Tanaffus</th>
-                <th>Holat</th>
-              </tr>
-            </thead>
-            <tbody id="scheduleBody"></tbody>
-          </table>
+      <div class="section-heading" style="margin:34px 0 14px;">
+        <div>
+          <span class="section-kicker">OVOZLAR</span>
+          <h2 style="margin:4px 0 0;font-size:28px;">Ovoz fayllari</h2>
         </div>
+        <span class="count-badge">Papkadan tanlang — brauzer eslab qoladi</span>
       </div>
+      <div class="bs-sounds" id="bsSounds"></div>
 
-      <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-        <div class="audio-card">
-          <span class="audio-icon">🎼</span>
-          <h3>Maktab madhiyasi</h3>
-          <p>Ertalab soat 08:00 da va abetdagi smena vaqtida (soat 13:00 da) madhiya avtomatik yangraydi. Quyidagi tugma orqali o'zingizning mp3 faylingizni papkadan tanlab qo'ysangiz bo'ladi.</p>
-          <audio controls id="anthemPlayer">
-            <source src="" type="audio/mpeg">
-            Brauzeringiz audioni qo'llab-quvvatlamaydi.
-          </audio>
-          <label class="file-label" style="margin-top: 15px;">
-            Madhiya faylini yuklash (mp3):
-            <input type="file" accept="audio/*" onchange="loadAnthemAudio(event)">
-          </label>
-          <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
-            <button class="outline-btn" onclick="playAnthem()">▶ Hozir tinglash</button>
-            <button class="ghost-btn" onclick="toggleAnthemSchedule()" id="anthemScheduleBtn">⏰ Avtomatik madhiya: Yoqilgan</button>
+      <details class="bs-card bs-settings">
+        <summary>⚙️ Sozlamalar va sinov (demo)</summary>
+        <div class="bs-set">
+          <label>1-smena boshlanishi<input class="search-input" type="time" id="cfgStart1"></label>
+          <label>Darslar soni<input class="search-input" type="number" id="cfgLessons" min="1" max="12"></label>
+          <label>Dars davomiyligi (daqiqa)<input class="search-input" type="number" id="cfgLessonMin" min="20" max="90"></label>
+          <label>Tanaffus (daqiqa)<input class="search-input" type="number" id="cfgBreakMin" min="1" max="30"></label>
+          <label class="bs-chk"><input type="checkbox" id="cfgShift2"> 2-smena (madhiya + qo'ng'iroqlar)</label>
+          <label>2-smena boshlanishi<input class="search-input" type="time" id="cfgStart2"></label>
+        </div>
+        <div class="bs-days" id="cfgDays"></div>
+        <div class="bs-demo">
+          <b>Sinab ko'rish (soat o'zgartiriladi, haqiqiy qo'ng'iroqlar ta'sirlanmaydi):</b>
+          <div class="bell-controls" style="margin:10px 0 0;">
+            <button class="outline-btn" data-demo="bell">🧪 1-dars tugashiga 10 soniya</button>
+            <button class="outline-btn" data-demo="breakEnd">🧪 Tanaffus tugashiga 10 soniya</button>
+            <button class="outline-btn" data-demo="anthem">🧪 Madhiyaga 8 soniya</button>
           </div>
         </div>
-
-        <div class="audio-card">
-          <span class="audio-icon">🎵</span>
-          <h3>Qo'ng'iroq ovozini sinash</h3>
-          <p>Siz bu yerda qo'ng'iroq audio faylini tinglashingiz yoki o'zingizning mp3 faylingizni yuklab qo'yishingiz mumkin.</p>
-          <audio controls id="audioPlayer">
-            <source src="https://actions.google.com/sounds/v1/alarms/school_bell.ogg" type="audio/ogg">
-            Brauzeringiz audioni qo'llab-quvvatlamaydi.
-          </audio>
-          <label class="file-label" style="margin-top: 15px;">
-            Maxsus qo'ng'iroq faylini yuklash (mp3/ogg):
-            <input type="file" accept="audio/*" onchange="loadCustomAudio(event)">
-          </label>
-        </div>
-      </div>
+        <button class="ghost-btn" id="cfgReset" style="margin-top:14px;">↺ Standart sozlamalarga qaytarish</button>
+      </details>
     </section>
 
     <!-- 4. ACHIEVEMENTS -->
@@ -974,15 +1179,6 @@
       { id: 8, name: "O'quvchi ismi", grade: "10", desc: "Iqtidorli o'quvchi haqida qisqacha ma'lumot shu yerga yoziladi.", tag: "10-sinf" }
     ];
 
-    const scheduleData = [
-      { num: 1, time: "08:00 - 08:45", lesson: "Matematika / Ona tili", break: "10 daqiqa", current: false },
-      { num: 2, time: "08:55 - 09:40", lesson: "Fizika / Ingliz tili", break: "15 daqiqa (Katta tanaffus)", current: false },
-      { num: 3, time: "09:55 - 10:40", lesson: "Tarix / Kimyo", break: "10 daqiqa", current: true },
-      { num: 4, time: "10:50 - 11:35", lesson: "Biologiya / Geografiya", break: "15 daqiqa", current: false },
-      { num: 5, time: "11:50 - 12:35", lesson: "Informatika / Adabiyot", break: "10 daqiqa", current: false },
-      { num: 6, time: "12:45 - 13:30", lesson: "Jismoniy tarbiya / Musiqa", break: "Tarqatish", current: false }
-    ];
-
     let comments = [
       { name: "Anvar Ota-ona", text: "Maktabingiz jamoasiga rahmat, farzandlarimiz bilim olishi uchun barcha sharoitlar yaratilgan." },
       { name: "Malika 11-sinf", text: "14-maktab – mening eng sevimli maskanim! Ustozlarimizga minnatdorchilik bildiraman." }
@@ -990,7 +1186,6 @@
 
     let ratingVotes = 128;
     let ratingScore = 4.8;
-    let autoBellActive = false;
 
     document.addEventListener("DOMContentLoaded", () => {
       initNavigation();
@@ -999,8 +1194,6 @@
       initComments();
       initTeachers();
       initStudents();
-      initSchedule();
-      initClock();
       initAiChat();
       initReveal();
     });
@@ -1211,63 +1404,6 @@
       }
     }
 
-    function initClock() {
-      const clockEl = document.getElementById("bigClock");
-      const dateEl = document.getElementById("liveDate");
-
-      setInterval(() => {
-        const now = new Date();
-        const h = String(now.getHours()).padStart(2, '0');
-        const m = String(now.getMinutes()).padStart(2, '0');
-        const s = String(now.getSeconds()).padStart(2, '0');
-        if (clockEl) clockEl.textContent = `${h}:${m}:${s}`;
-
-        const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-        if (dateEl) dateEl.textContent = now.toLocaleDateString('uz-UZ', options);
-      }, 1000);
-    }
-
-    function initSchedule() {
-      const tbody = document.getElementById("scheduleBody");
-      if (!tbody) return;
-      tbody.innerHTML = "";
-      scheduleData.forEach(item => {
-        const tr = document.createElement("tr");
-        if (item.current) tr.className = "now-row";
-        tr.innerHTML = `
-          <td><b>0${item.num}</b></td>
-          <td>${item.time}</td>
-          <td>${escapeHtml(item.lesson)}</td>
-          <td>${escapeHtml(item.break)}</td>
-          <td><span class="status-badge" style="${item.current ? 'background: #0b65d8; color: #fff;' : ''}">${item.current ? 'Hozirgi dars' : 'Reja'}</span></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function playBellSound(type) {
-      const player = document.getElementById("audioPlayer");
-      if (player) {
-        player.currentTime = 0;
-        player.play().catch(e => console.log("Audio play error:", e));
-      }
-      showToast(type === 'lesson' ? "🔊 Dars boshlanish qo'ng'irog'i chalindi!" : "🔔 Tanaffus qo'ng'irog'i chalindi!");
-    }
-
-    function toggleAutoBell() {
-      autoBellActive = !autoBellActive;
-      showToast(autoBellActive ? "⏰ Avtomat qo'ng'iroq rejimi yoqildi" : "⏰ Avtomat qo'ng'iroq rejimi o'chirildi");
-    }
-
-    function loadCustomAudio(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const url = URL.createObjectURL(file);
-      const player = document.getElementById("audioPlayer");
-      player.src = url;
-      showToast("Maxsus qo'ng'iroq fayli yuklandi!");
-    }
-
     function loadYoutubeVideo() {
       const input = document.getElementById("youtubeInput").value.trim();
       const container = document.getElementById("youtubeContainer");
@@ -1336,7 +1472,7 @@
         } else if (q.includes("telefon") || q.includes("raqam") || q.includes("bog'lanish")) {
           return "Murojaat uchun telefon raqami: +998 (90) 120 00 00.";
         } else if (q.includes("dars") || q.includes("vaqt") || q.includes("qo'ng'iroq")) {
-          return "Darslar soat 08:00 da boshlanadi. Har bir dars 45 daqiqa davom etadi, tanaffuslar 10-15 daqiqa.";
+          return "Darslar soat 08:00 da boshlanadi. Har bir dars 45 daqiqa davom etadi, har darsdan keyin 5 daqiqalik tanaffus bor. Qo'ng'iroqlar O'zbekiston vaqti bilan avtomatik chalinadi.";
         } else if (q.includes("to'garak") || q.includes("sport") || q.includes("it")) {
           return "Maktabimizda matematika, fizika, ingliz tili, robototexnika, futbol va shaxmat to'garaklari bepul faoliyat yuritadi.";
         } else {
@@ -1344,51 +1480,6 @@
         }
       }
     }
-
-    // ============ Maktab madhiyasi avtomatik rejimi ============
-    let anthemScheduleActive = true;
-    let anthemPlayedToday = {};
-    let anthemLoaded = false;
-
-    function loadAnthemAudio(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const url = URL.createObjectURL(file);
-      const player = document.getElementById("anthemPlayer");
-      player.src = url;
-      anthemLoaded = true;
-      showToast("Maktab madhiyasi fayli yuklandi! ✅");
-    }
-
-    function playAnthem() {
-      const player = document.getElementById("anthemPlayer");
-      if (!player.src || player.src === window.location.href) {
-        showToast("Iltimos, avval madhiya mp3 faylini yuklang!");
-        return;
-      }
-      player.currentTime = 0;
-      player.play().catch(() => showToast("Audio ijrosi uchun sahifada bir marta tugmaga bosing."));
-    }
-
-    function toggleAnthemSchedule() {
-      anthemScheduleActive = !anthemScheduleActive;
-      const btn = document.getElementById("anthemScheduleBtn");
-      btn.textContent = anthemScheduleActive ? "⏰ Avtomatik madhiya: Yoqilgan" : "⏰ Avtomatik madhiya: O'chirilgan";
-      showToast(anthemScheduleActive ? "Avtomatik madhiya rejimi yoqildi" : "Avtomatik madhiya rejimi o'chirildi");
-    }
-
-    setInterval(() => {
-      if (!anthemScheduleActive || !anthemLoaded) return;
-      const now = new Date();
-      const h = now.getHours();
-      const m = now.getMinutes();
-      const s = now.getSeconds();
-      const key = now.toDateString();
-      if ((h === 8 || h === 13) && m === 0 && s < 2 && !anthemPlayedToday[key + '-' + h]) {
-        anthemPlayedToday[key + '-' + h] = true;
-        playAnthem();
-      }
-    }, 1000);
 
     function escapeHtml(str) {
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
@@ -1561,7 +1652,7 @@
         e.preventDefault();
 
         // Saytdagi barcha input va textarea'larni olamiz
-        const inputs = document.querySelectorAll('input, textarea');
+        const inputs = document.querySelectorAll('#commentName, #commentText');
         
         let ism = '';
         let xabar = '';
@@ -1610,5 +1701,526 @@
 
 
   </script>
+  <script>
+    /* =====================================================================
+       AQLLI QO'NG'IROQ TIZIMI
+       - O'zbekiston (Toshkent, UTC+5) vaqti bo'yicha ishlaydi
+       - Smena boshida madhiya, har dars oxirida qo'ng'iroq → "tanaffus boshlandi",
+         tanaffus oxirida "tanaffus tugadi" ovozi avtomatik chalinadi
+       - Ovozlar: audio/ papkasidan yoki "Papkadan tanlash" orqali (brauzer eslab qoladi)
+       ===================================================================== */
+    (() => {
+      "use strict";
+
+      const TZ = 5 * 3600 * 1000;          // Toshkent: UTC+5 (yozgi/qishki vaqt yo'q)
+      const CATCHUP = 20;                  // brauzer kechiksa ham, 20 soniyagacha o'tkazib yuborilmaydi
+      const RING_C = 2 * Math.PI * 88;
+      const DEF = { start1: "08:00", lessons: 6, lessonMin: 45, breakMin: 5, shift2: true, start2: "13:00", days: [1, 2, 3, 4, 5, 6], auto: true, vol: 1 };
+      const SND = {
+        bell:       { icon: "🔔", title: "Dars tugash qo'ng'irog'i", desc: "Har bir dars tugaganda chalinadi", file: "audio/qongiroq.mp3" },
+        breakStart: { icon: "🗣️", title: "Tanaffus boshlandi", desc: "Qo'ng'iroqdan keyin darhol avtomatik yangraydi", file: "audio/tanafus-boshlanishi.mp3" },
+        breakEnd:   { icon: "⏰", title: "Tanaffus tugadi", desc: "Tanaffus vaqti tugaganda avtomatik yangraydi", file: "audio/tanafus-tugashi.mp3" },
+        anthem:     { icon: "🎼", title: "O'zbekiston Respublikasi Davlat madhiyasi", desc: "Har smena boshlanishida (08:00 va 13:00) yangraydi", file: "audio/madhiya.mp3" }
+      };
+      const WEEK = ["Yakshanba", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba"];
+      const DAYS_UI = [[1, "Du"], [2, "Se"], [3, "Ch"], [4, "Pa"], [5, "Ju"], [6, "Sh"], [0, "Ya"]];
+      const MONTH = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentyabr", "oktyabr", "noyabr", "dekabr"];
+
+      const $ = id => document.getElementById(id);
+      const pad = n => String(n).padStart(2, "0");
+      const hms = s => `${pad(Math.floor(s / 3600) % 24)}:${pad(Math.floor(s % 3600 / 60))}:${pad(Math.floor(s % 60))}`;
+      const hm = s => hms(s).slice(0, 5);
+      const mmss = s => { s = Math.max(0, Math.ceil(s)); const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = s % 60; return (h ? pad(h) + ":" : "") + pad(m) + ":" + pad(x); };
+      const parseHM = v => { const [h, m] = String(v || "").split(":").map(Number); return (h || 0) * 3600 + (m || 0) * 60; };
+      const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+      const store = {
+        get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+        set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+      };
+      const setText = (el, v) => { if (el && el.textContent !== v) el.textContent = v; };
+      const toast = m => { if (typeof showToast === "function") showToast(m); };
+
+      /* ---------------- Sozlamalar ---------------- */
+      let cfg = Object.assign({}, DEF, store.get("bs_cfg2", {}));
+      function sanitize() {
+        cfg.lessons = clamp(Math.round(+cfg.lessons) || DEF.lessons, 1, 12);
+        cfg.lessonMin = clamp(Math.round(+cfg.lessonMin) || DEF.lessonMin, 20, 90);
+        cfg.breakMin = clamp(Math.round(+cfg.breakMin) || DEF.breakMin, 1, 30);
+        if (!/^\d{1,2}:\d{2}$/.test(cfg.start1)) cfg.start1 = DEF.start1;
+        if (!/^\d{1,2}:\d{2}$/.test(cfg.start2)) cfg.start2 = DEF.start2;
+        if (!Array.isArray(cfg.days)) cfg.days = DEF.days.slice();
+        cfg.vol = clamp(+cfg.vol, 0, 1); if (isNaN(cfg.vol)) cfg.vol = 1;
+      }
+      const saveCfg = () => store.set("bs_cfg2", cfg);
+
+      /* ---------------- Vaqt (Toshkent) ---------------- */
+      let syncOff = 0, demoOff = 0, demoOn = false, syncInfo = null;
+      const nowMs = () => Date.now() + syncOff + demoOff;
+      function tz(ms) {
+        const d = new Date(ms + TZ);
+        return {
+          dow: d.getUTCDay(),
+          sod: d.getUTCHours() * 3600 + d.getUTCMinutes() * 60 + d.getUTCSeconds() + d.getUTCMilliseconds() / 1000,
+          key: `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}`,
+          dateText: `${d.getUTCDate()}-${MONTH[d.getUTCMonth()]}, ${d.getUTCFullYear()}-yil · ${WEEK[d.getUTCDay()]}`
+        };
+      }
+
+      /* ---------------- Jadval ---------------- */
+      let periods = [], lessons = [], events = [], dayStart = 0, dayEnd = 0;
+      function build() {
+        sanitize();
+        const D = cfg.lessonMin * 60, B = cfg.breakMin * 60, N = cfg.lessons;
+        const shifts = [{ n: 1, start: parseHM(cfg.start1) }];
+        if (cfg.shift2) shifts.push({ n: 2, start: parseHM(cfg.start2) });
+        periods = []; lessons = []; events = [];
+        shifts.forEach(sh => {
+          events.push({ id: `s${sh.n}-anthem`, t: sh.start, label: cfg.shift2 ? `${sh.n}-smena: madhiya` : "Madhiya · darslar boshlanadi", seq: ["anthem"] });
+          for (let i = 1; i <= N; i++) {
+            const ls = sh.start + (i - 1) * (D + B), le = ls + D, last = i === N;
+            periods.push({ kind: "lesson", shift: sh.n, num: i, start: ls, end: le });
+            lessons.push({ shift: sh.n, num: i, start: ls, end: le, brkEnd: last ? null : le + B, last });
+            if (!last) {
+              periods.push({ kind: "break", shift: sh.n, num: i, start: le, end: le + B });
+              events.push({ id: `s${sh.n}-l${i}-end`, t: le, label: `${i}-dars tugadi · qo'ng'iroq + tanaffus`, seq: ["bell", "breakStart"] });
+              events.push({ id: `s${sh.n}-l${i}-brk`, t: le + B, label: `Tanaffus tugadi · ${i + 1}-dars`, seq: ["breakEnd"] });
+            } else {
+              events.push({ id: `s${sh.n}-l${i}-end`, t: le, label: cfg.shift2 ? `${i}-dars tugadi · ${sh.n}-smena yakuni` : `${i}-dars tugadi · kun yakuni`, seq: ["bell"] });
+            }
+          }
+        });
+        periods.sort((a, b) => a.start - b.start);
+        events.sort((a, b) => a.t - b.t);
+        dayStart = periods[0].start; dayEnd = periods[periods.length - 1].end;
+        const span = dayEnd - dayStart;
+        $("bsTimeline").innerHTML = periods.map(p => {
+          const l = (p.start - dayStart) / span * 100, w = (p.end - p.start) / span * 100;
+          const name = p.kind === "lesson" ? `${p.num}-dars` : "Tanaffus";
+          return `<div class="bs-seg ${p.kind === "lesson" ? "l" : "b"}" style="left:${l}%;width:${w}%" title="${name} · ${hm(p.start)}–${hm(p.end)}">${p.kind === "lesson" ? p.num : ""}</div>`;
+        }).join("") + '<div class="bs-now" id="bsNow"></div>';
+        setText($("bsTlFrom"), hm(dayStart)); setText($("bsTlTo"), hm(dayEnd));
+        setText($("bsTlRange"), `${cfg.lessons} ta dars · ${cfg.lessonMin} daq + ${cfg.breakMin} daq tanaffus`);
+        lastSig = "";
+      }
+
+      function stateAt(sod) {
+        const p = periods.find(x => sod >= x.start && sod < x.end);
+        if (p) return { type: p.kind, p, remain: p.end - sod, total: p.end - p.start, elapsed: sod - p.start };
+        const next = periods.find(x => x.start > sod);
+        if (!next) return { type: "after" };
+        return { type: next === periods[0] ? "before" : "gap", next, remain: next.start - sod };
+      }
+
+      function describe(st) {
+        const sh = p => (cfg.shift2 ? `${p.shift}-smena · ` : "");
+        switch (st.type) {
+          case "lesson": return { ico: "📖", t: `${st.p.num}-dars davom etmoqda`, sub: `${sh(st.p)}${hm(st.p.start)} – ${hm(st.p.end)}`, rl: "dars tugashiga", badge: `${st.p.num}-dars` };
+          case "break":  return { ico: "☕", t: `Tanaffus · ${st.p.num}-darsdan keyin`, sub: `${st.p.num + 1}-dars ${hm(st.p.end)} da boshlanadi`, rl: "tanaffus tugashiga", badge: "Tanaffus" };
+          case "before": return { ico: "🌅", t: "Darslar hali boshlanmagan", sub: `${hm(st.next.start)} da madhiya yangraydi`, rl: "darsgacha", badge: "Darslar boshlanmagan" };
+          case "gap":    return { ico: "🍽️", t: "Smenalar oralig'i", sub: `${st.next.shift}-smena ${hm(st.next.start)} da boshlanadi`, rl: "smenagacha", badge: "Smenalar oralig'i" };
+          case "after":  return { ico: "🌙", t: "Bugungi darslar tugadi", sub: "E'tiboringiz uchun rahmat! 👋", rl: "", badge: "Darslar tugadi" };
+          default:       return { ico: "📅", t: "Bugun dam olish kuni", sub: "Avtomat qo'ng'iroq ishlamaydi", rl: "", badge: "Dam olish kuni" };
+        }
+      }
+
+      /* ---------------- Ovoz ---------------- */
+      const el = {};                       // key -> <audio>
+      let vol = 1, seqToken = 0, playing = null, armed = false, priming = false, wake = null, soundsReady = Promise.resolve();
+
+      const idb = (() => {
+        let dbp;
+        const open = () => dbp || (dbp = new Promise((res, rej) => {
+          try {
+            const r = indexedDB.open("maktab14-bell", 1);
+            r.onupgradeneeded = () => r.result.createObjectStore("sounds");
+            r.onsuccess = () => res(r.result);
+            r.onerror = () => rej(r.error);
+          } catch (e) { rej(e); }
+        }));
+        const tx = async (mode, fn) => {
+          const db = await open();
+          return new Promise((res, rej) => {
+            const t = db.transaction("sounds", mode); const rq = fn(t.objectStore("sounds"));
+            t.oncomplete = () => res(rq && rq.result); t.onerror = () => rej(t.error);
+          });
+        };
+        return { get: k => tx("readonly", s => s.get(k)), set: (k, v) => tx("readwrite", s => s.put(v, k)), del: k => tx("readwrite", s => s.delete(k)) };
+      })();
+
+      const custom = {};                   // key -> {url, name}
+      function status(k, text, cls) { const s = $("st-" + k); if (s) { s.textContent = text; s.className = "bs-snd-status " + (cls || ""); } }
+      function useDefault(k) {
+        const a = el[k]; if (custom[k]) { URL.revokeObjectURL(custom[k].url); delete custom[k]; }
+        a.dataset.broken = ""; a.src = SND[k].file; a.load();
+        const r = document.querySelector(`[data-reset="${k}"]`); if (r) r.hidden = true;
+        status(k, `Standart fayl: ${SND[k].file}`, "");
+      }
+      function useCustom(k, blob, name) {
+        const a = el[k]; if (custom[k]) URL.revokeObjectURL(custom[k].url);
+        custom[k] = { url: URL.createObjectURL(blob), name };
+        a.dataset.broken = ""; a.src = custom[k].url; a.load();
+        const r = document.querySelector(`[data-reset="${k}"]`); if (r) r.hidden = false;
+        status(k, `✅ Sizning faylingiz: ${name}`, "ok");
+      }
+      function buildSoundCards() {
+        $("bsSounds").innerHTML = Object.entries(SND).map(([k, s]) => `
+          <div class="bs-card bs-snd" data-k="${k}">
+            <div class="bs-snd-head">
+              <span class="bs-snd-ic">${s.icon}</span>
+              <div><h3>${s.title}</h3><p>${s.desc}</p></div>
+              <span class="bs-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            </div>
+            <audio controls preload="auto" id="snd-${k}"></audio>
+            <div class="bs-snd-status" id="st-${k}">…</div>
+            <div class="bs-snd-actions">
+              <label class="outline-btn bs-pick">📂 Papkadan tanlash<input type="file" accept="audio/*" data-pick="${k}"></label>
+              <button class="ghost-btn" data-reset="${k}" hidden>↺ Standart faylga</button>
+            </div>
+          </div>`).join("");
+        Object.keys(SND).forEach(k => {
+          const a = el[k] = $("snd-" + k);
+          a.addEventListener("error", () => {
+            if (!a.getAttribute("src")) return;
+            a.dataset.broken = "1";
+            status(k, custom[k] ? "⚠ Bu faylni o'qib bo'lmadi" : `⚠ Fayl topilmadi: ${SND[k].file} — "Papkadan tanlash" orqali yuklang`, "bad");
+          });
+          a.addEventListener("loadedmetadata", () => {
+            const d = isFinite(a.duration) ? ` · ${Math.floor(a.duration / 60)}:${pad(Math.round(a.duration % 60))}` : "";
+            const s = $("st-" + k); if (s && !a.dataset.broken) s.textContent = (custom[k] ? `✅ Sizning faylingiz: ${custom[k].name}` : `✅ Standart fayl: ${SND[k].file}`) + d;
+            if (s && !a.dataset.broken) s.className = "bs-snd-status ok";
+          });
+          a.addEventListener("play", () => { if (!playing && !priming) setPlayingUI(k); });
+          a.addEventListener("pause", () => { if (!playing && !priming) setPlayingUI(null); });
+        });
+        $("bsSounds").addEventListener("change", async e => {
+          const k = e.target.dataset && e.target.dataset.pick; if (!k) return;
+          const f = e.target.files[0]; if (!f) return;
+          useCustom(k, f, f.name);
+          try { await idb.set(k, { blob: f, name: f.name }); toast(`✅ "${f.name}" yuklandi va saqlandi`); }
+          catch (err) { toast(`✅ "${f.name}" yuklandi (brauzer saqlashga ruxsat bermadi — sahifa yopilsa yo'qoladi)`); }
+          e.target.value = "";
+        });
+        $("bsSounds").addEventListener("click", async e => {
+          const b = e.target.closest("[data-reset]"); if (!b) return;
+          const k = b.dataset.reset; try { await idb.del(k); } catch (err) {}
+          useDefault(k); toast("↺ Standart faylga qaytarildi");
+        });
+      }
+      async function loadSounds() {
+        for (const k of Object.keys(SND)) {
+          let rec = null; try { rec = await idb.get(k); } catch (e) {}
+          if (rec && rec.blob) useCustom(k, rec.blob, rec.name || "fayl"); else useDefault(k);
+        }
+      }
+      function applyVol() { Object.values(el).forEach(a => { a.volume = vol; }); }
+
+      function setPlayingUI(k) {
+        const p = $("bsPanel"); p.classList.toggle("bs-playing", !!k);
+        document.querySelectorAll(".bs-snd").forEach(c => c.classList.toggle("bs-playing", c.dataset.k === k));
+        $("bsMini").classList.toggle("ringing", !!k && k !== "anthem");
+      }
+      function setPlaying(k) { playing = k; setPlayingUI(k); lastSig = ""; }
+
+      function stopAll() {
+        seqToken++;
+        Object.values(el).forEach(a => { if (!a.paused) a.pause(); });
+        setPlaying(null);
+      }
+
+      function playOne(k) {
+        return new Promise(res => {
+          const a = el[k];
+          if (!a || !a.getAttribute("src") || a.dataset.broken) { res("missing"); return; }
+          let done = false, started = false, timer;
+          const fin = r => {
+            if (done) return; done = true; clearTimeout(timer);
+            ["pause", "ended", "error", "playing"].forEach((ev, i) => a.removeEventListener(ev, hs[i]));
+            res(r);
+          };
+          const hs = [() => { if (started) fin("ok"); }, () => fin("ok"), () => fin("error"), () => { started = true; }];
+          ["pause", "ended", "error", "playing"].forEach((ev, i) => a.addEventListener(ev, hs[i]));
+          a.volume = vol; a.currentTime = 0;
+          timer = setTimeout(() => fin("timeout"), ((isFinite(a.duration) && a.duration) || 60) * 1000 + 5000);
+          const pr = a.play();
+          if (pr && pr.catch) pr.catch(err => fin(err && err.name === "NotAllowedError" ? "blocked" : "error"));
+        });
+      }
+
+      async function playSeq(keys) {
+        const token = ++seqToken;
+        Object.values(el).forEach(a => { if (!a.paused) a.pause(); });
+        for (const k of keys) {
+          if (token !== seqToken) return;
+          setPlaying(k);
+          const r = await playOne(k);
+          if (token !== seqToken) return;
+          if (r === "blocked") { armed = false; updateArmUI(); setPlaying(null); toast("⚠ Brauzer ovozni blokladi — «Tizimni ishga tushirish» tugmasini bosing"); return; }
+          if (r === "missing" || r === "error") toast(`⚠ "${SND[k].title}" ovozi topilmadi — ovoz fayllarini tekshiring`);
+        }
+        if (token === seqToken) setPlaying(null);
+      }
+
+      /* ---- Brauzer avtoplay cheklovini yechish (bir marta bosish) ---- */
+      async function arm() {
+        if (armed) return;
+        const list = Object.values(el).filter(a => a.getAttribute("src") && !a.dataset.broken && a.paused);
+        priming = true;
+        const rs = await Promise.allSettled(list.map(a => { a.muted = true; return a.play(); }));
+        list.forEach(a => { a.pause(); a.currentTime = 0; a.muted = false; });
+        setTimeout(() => { priming = false; }, 300);
+        armed = rs.some(r => r.status === "fulfilled");
+        requestWake(); updateArmUI(); lastSig = "";
+      }
+      async function requestWake() {
+        try {
+          if ("wakeLock" in navigator && !wake) {
+            wake = await navigator.wakeLock.request("screen");
+            wake.addEventListener("release", () => { wake = null; updateArmUI(); });
+            updateArmUI();
+          }
+        } catch (e) {}
+      }
+      function updateArmUI() {
+        $("bsArm").hidden = armed;
+        const c = $("chipArm");
+        setText(c, armed ? "🟢 Tizim faol — ovoz tayyor" : "🟠 Ishga tushirilmagan — tugmani bosing");
+        c.className = "bs-chip " + (armed ? "ok" : "warn");
+        const w = $("chipWake");
+        setText(w, wake ? "🔒 Ekran o'chmaydi" : "🔓 Ekran o'chib qolishi mumkin");
+        w.className = "bs-chip " + (wake ? "ok" : "");
+        const a = $("chipAuto");
+        setText(a, cfg.auto ? "⏰ Avtomat rejim: yoqilgan" : "🔕 Avtomat rejim: o'chirilgan");
+        a.className = "bs-chip " + (cfg.auto ? "ok" : "warn");
+        setText($("bsAutoText"), cfg.auto ? "Avtomat rejim: yoqilgan" : "Avtomat rejim: o'chirilgan");
+        $("bsAuto").checked = cfg.auto;
+      }
+
+      /* ---------------- Hodisalarni ishga tushirish ---------------- */
+      let firedReal = store.get("bs_fired", {}), firedDemo = {};
+      const firedMap = key => demoOn ? firedDemo : (firedReal[key] || (firedReal[key] = {}));
+      function markFired(key, id) {
+        firedMap(key)[id] = 1;
+        if (!demoOn) { Object.keys(firedReal).forEach(k => { if (k !== key) delete firedReal[k]; }); store.set("bs_fired", firedReal); }
+      }
+      function checkEvents(T) {
+        const f = firedMap(T.key);
+        for (const ev of events) {
+          const late = T.sod - ev.t;
+          if (late >= 0 && late < CATCHUP && !f[ev.id]) {
+            markFired(T.key, ev.id);
+            toast(`🔔 ${ev.label}`);
+            playSeq(ev.seq);
+          }
+        }
+      }
+
+      /* ---------------- Ekranni yangilash ---------------- */
+      let lastSig = "", lastLoop = 0, baseTitle = document.title;
+      function render(T, active) {
+        const st = active ? stateAt(T.sod) : { type: "off" };
+        const d = describe(st);
+        setText($("bigClock"), hms(T.sod));
+        setText($("liveDate"), T.dateText);
+
+        let ui = st.type === "lesson" ? "lesson" : st.type === "break" ? "break" : (st.type === "before" || st.type === "gap") ? "wait" : "off";
+        if (playing) ui = playing === "anthem" ? "anthem" : "ring";
+        $("bsPanel").dataset.state = ui;
+
+        setText($("bellIconState"), playing ? "🔔" : d.ico);
+        setText($("bellStatusText"), playing ? `${SND[playing].title} yangramoqda…` : d.t);
+        setText($("bellSubText"), d.sub);
+        setText($("schoolStatusBadge"), d.badge);
+
+        // aylana + hisoblagich
+        const bar = $("bsRingBar");
+        if (st.remain != null) {
+          const prog = st.total ? st.elapsed / st.total : 0;
+          bar.style.strokeDashoffset = (RING_C * (1 - prog)).toFixed(2);
+          setText($("bsCount"), mmss(st.remain)); setText($("bsCountL"), d.rl);
+        } else {
+          bar.style.strokeDashoffset = RING_C.toFixed(2);
+          setText($("bsCount"), "—"); setText($("bsCountL"), "");
+        }
+
+        // keyingi hodisa
+        const nextIdx = events.findIndex(e => e.t > T.sod);
+        const nx = active && nextIdx >= 0 ? events[nextIdx] : null;
+        setText($("bsNext"), nx ? `Keyingi: ${nx.label} — ${hms(nx.t)} (${mmss(nx.t - T.sod)} dan keyin)` : (active ? "Bugun boshqa qo'ng'iroq yo'q" : `Ish kunlari: ${DAYS_UI.filter(x => cfg.days.includes(x[0])).map(x => x[1]).join(", ")}`));
+
+        // yuqoridagi kichik tugma + sahifa sarlavhasi
+        const mini = !cfg.auto ? "O'chiq" : !active ? "Dam" : st.remain != null ? mmss(st.remain) : "—";
+        setText($("bsMiniText"), mini);
+        const ttl = (armed && cfg.auto && st.remain != null && (st.type === "lesson" || st.type === "break")) ? `${mmss(st.remain)} · ${d.badge} | 14-Maktab` : baseTitle;
+        if (document.title !== ttl) document.title = ttl;
+
+        // kun xaritasidagi "hozir" chizig'i
+        const now = $("bsNow");
+        if (now) {
+          const inRange = active && T.sod >= dayStart && T.sod <= dayEnd;
+          now.style.display = inRange ? "block" : "none";
+          if (inRange) now.style.left = ((T.sod - dayStart) / (dayEnd - dayStart) * 100).toFixed(3) + "%";
+        }
+
+        // jadval va hodisalar ro'yxati — faqat o'zgarganda
+        const f = firedMap(T.key);
+        const sig = [st.type, st.p ? st.p.start : "", nextIdx, Object.keys(f).length, active, cfg.auto, ui === "ring"].join("|");
+        if (sig !== lastSig) { lastSig = sig; renderTable(st, T, active); renderEvents(T, nextIdx, f, active); }
+      }
+
+      function renderTable(st, T, active) {
+        const two = cfg.shift2;
+        const head = `<thead><tr><th>№</th>${two ? "<th>Smena</th>" : ""}<th>Dars vaqti</th><th>Qo'ng'iroq</th><th>Tanaffus</th><th>Holat</th></tr></thead>`;
+        const rows = lessons.map(l => {
+          let cls = "", badge = '<span class="status-badge">Reja</span>';
+          if (active) {
+            const inLesson = st.type === "lesson" && st.p.start === l.start;
+            const inBreak = st.type === "break" && st.p.start === l.end;
+            const past = T.sod >= (l.brkEnd != null ? l.brkEnd : l.end);
+            if (inLesson) { cls = "now-row"; badge = '<span class="status-badge" style="background:#0b65d8;color:#fff;">Hozir dars</span>'; }
+            else if (inBreak) { cls = "brk-row"; badge = '<span class="status-badge" style="background:#16a36a;color:#fff;">Tanaffus</span>'; }
+            else if (past) { cls = "past"; badge = '<span class="status-badge" style="background:var(--surface2);color:var(--muted);">O\'tdi ✔</span>'; }
+          }
+          return `<tr class="${cls}"><td><b>${pad(l.num)}</b></td>${two ? `<td>${l.shift}</td>` : ""}<td>${hm(l.start)} – ${hm(l.end)}</td><td>${hms(l.end)}</td><td>${l.brkEnd != null ? `${hm(l.end)} – ${hm(l.brkEnd)}` : "Kun yakuni"}</td><td>${badge}</td></tr>`;
+        }).join("");
+        $("bsTable").innerHTML = head + `<tbody>${rows}</tbody>`;
+      }
+
+      function renderEvents(T, nextIdx, f, active) {
+        $("bsEvents").innerHTML = events.map((e, i) => {
+          const past = active && T.sod >= e.t;
+          const cls = !active ? "" : f[e.id] ? "done" : past ? "done" : i === nextIdx ? "next" : "";
+          const mark = !active ? "" : f[e.id] ? "✔ chalindi" : past ? "— chalinmadi" : i === nextIdx ? "keyingi" : "";
+          return `<div class="bs-ev ${cls}"><time>${hms(e.t)}</time><span>${e.label}</span><em>${mark}</em></div>`;
+        }).join("");
+      }
+
+      function loop() {
+        const t = performance.now(); if (t - lastLoop < 120) return; lastLoop = t;
+        const T = tz(nowMs());
+        const active = demoOn || cfg.days.includes(T.dow);
+        if (active && cfg.auto) checkEvents(T);
+        render(T, active);
+      }
+      function startTicker() {
+        let ok = false;
+        try {
+          const w = new Worker(URL.createObjectURL(new Blob(["setInterval(()=>postMessage(1),250)"], { type: "text/javascript" })));
+          w.onmessage = loop; ok = true;       // Worker fon (yashirin) sahifada ham susaymaydi
+        } catch (e) {}
+        setInterval(loop, ok ? 1000 : 250);
+        document.addEventListener("visibilitychange", () => { lastLoop = 0; loop(); if (document.visibilityState === "visible" && armed) requestWake(); });
+      }
+
+      /* ---------------- Aniq vaqt bilan sinxronlash ---------------- */
+      async function fetchServerTime() {
+        const ctl = (ms) => { const c = new AbortController(); setTimeout(() => c.abort(), ms); return c.signal; };
+        if (/^https?:$/.test(location.protocol)) {
+          try {
+            const r = await fetch(location.pathname + "?_=" + Date.now(), { method: "HEAD", cache: "no-store", signal: ctl(4000) });
+            const h = r.headers.get("date"), age = +r.headers.get("age") || 0; if (h) return { ms: new Date(h).getTime() + age * 1000 + 500, src: "sayt serveri" };
+          } catch (e) {}
+        }
+        try {
+          const r = await fetch("https://worldtimeapi.org/api/timezone/Asia/Tashkent", { cache: "no-store", signal: ctl(4000) });
+          const j = await r.json(); if (j && j.unixtime) return { ms: j.unixtime * 1000 + 500, src: "worldtimeapi.org" };
+        } catch (e) {}
+        return null;
+      }
+      async function syncTime() {
+        const t0 = Date.now(); const r = await fetchServerTime(); const t1 = Date.now();
+        if (r) { const err = r.ms - (t0 + t1) / 2; syncOff = err; syncInfo = { src: r.src, err }; }
+        else if (!syncInfo) syncInfo = null;
+        paintSync();
+      }
+      function paintSync() {
+        const e = $("bsSync");
+        if (demoOn) setText(e, "🧪 Demo vaqti (haqiqiy emas)");
+        else if (syncInfo) setText(e, `✅ Aniq vaqt bilan sinxronlangan (${syncInfo.src})${Math.abs(syncInfo.err) > 3000 ? ` · qurilma soati ${Math.round(Math.abs(syncInfo.err) / 1000)} soniyaga xato edi — to'g'rilandi` : ""}`);
+        else setText(e, "🕒 Qurilma soati ishlatilmoqda (Toshkent vaqti, UTC+5)");
+      }
+
+      /* ---------------- Demo ---------------- */
+      function demoAt(sod) {
+        const realNow = Date.now() + syncOff;
+        const mid = Math.floor((realNow + TZ) / 86400000) * 86400000 - TZ;
+        demoOff = mid + sod * 1000 - realNow; demoOn = true; firedDemo = {};
+        $("bsDemoBar").hidden = false; paintSync(); lastSig = ""; lastLoop = 0; loop();
+      }
+      function demoStop() {
+        demoOn = false; demoOff = 0; firedDemo = {}; stopAll();
+        $("bsDemoBar").hidden = true; paintSync(); lastSig = ""; lastLoop = 0; loop();
+      }
+
+      /* ---------------- Boshqaruv elementlari ---------------- */
+      function bindControls() {
+        $("bsArmBtn").addEventListener("click", () => { arm(); toast("✅ Qo'ng'iroq tizimi ishga tushdi"); });
+        $("bsAuto").addEventListener("change", e => { cfg.auto = e.target.checked; saveCfg(); updateArmUI(); toast(cfg.auto ? "⏰ Avtomat rejim yoqildi" : "🔕 Avtomat rejim o'chirildi"); });
+        $("bsStop").addEventListener("click", () => { stopAll(); toast("⏹ Ovoz to'xtatildi"); });
+        $("bsVol").addEventListener("input", e => { vol = e.target.value / 100; cfg.vol = vol; applyVol(); setText($("bsVolVal"), e.target.value + "%"); saveCfg(); });
+        $("bsFull").addEventListener("click", () => {
+          const p = $("bsPanel");
+          if (document.fullscreenElement) document.exitFullscreen();
+          else (p.requestFullscreen || p.webkitRequestFullscreen || (() => {})).call(p);
+        });
+        document.addEventListener("fullscreenchange", () => setText($("bsFull"), document.fullscreenElement ? "✖ Ekrandan chiqish" : "🖥 To'liq ekran"));
+        $("bsDemoOff").addEventListener("click", demoStop);
+        document.querySelectorAll("[data-test]").forEach(b => b.addEventListener("click", () => {
+          arm();
+          const k = b.dataset.test;
+          playSeq(k === "chain" ? ["bell", "breakStart"] : [k]);
+        }));
+        document.querySelectorAll("[data-demo]").forEach(b => b.addEventListener("click", () => {
+          arm();
+          const s = parseHM(cfg.start1), D = cfg.lessonMin * 60, B = cfg.breakMin * 60, k = b.dataset.demo;
+          demoAt(k === "bell" ? s + D - 10 : k === "breakEnd" ? s + D + B - 10 : s - 8);
+          toast("🧪 Demo boshlandi — ovozni yoqing va kuting");
+        }));
+        vol = cfg.vol; $("bsVol").value = Math.round(vol * 100); setText($("bsVolVal"), Math.round(vol * 100) + "%");
+        const gest = () => { if (!armed) arm(); };
+        ["click", "keydown", "touchend", "pointerup"].forEach(ev => document.addEventListener(ev, gest, { capture: true, passive: true }));
+      }
+
+      function bindSettings() {
+        const put = () => {
+          $("cfgStart1").value = cfg.start1.padStart(5, "0"); $("cfgStart2").value = cfg.start2.padStart(5, "0");
+          $("cfgLessons").value = cfg.lessons; $("cfgLessonMin").value = cfg.lessonMin; $("cfgBreakMin").value = cfg.breakMin;
+          $("cfgShift2").checked = cfg.shift2;
+          $("cfgDays").innerHTML = DAYS_UI.map(([n, t]) => `<label><input type="checkbox" data-day="${n}" ${cfg.days.includes(n) ? "checked" : ""}> ${t}</label>`).join("");
+        };
+        const read = () => {
+          cfg.start1 = $("cfgStart1").value || DEF.start1; cfg.start2 = $("cfgStart2").value || DEF.start2;
+          cfg.lessons = $("cfgLessons").value; cfg.lessonMin = $("cfgLessonMin").value; cfg.breakMin = $("cfgBreakMin").value;
+          cfg.shift2 = $("cfgShift2").checked;
+          cfg.days = [...document.querySelectorAll("[data-day]")].filter(x => x.checked).map(x => +x.dataset.day);
+          sanitize(); saveCfg(); build(); put(); loop();
+        };
+        put();
+        ["cfgStart1", "cfgStart2", "cfgLessons", "cfgLessonMin", "cfgBreakMin", "cfgShift2"].forEach(id => $(id).addEventListener("change", read));
+        $("cfgDays").addEventListener("change", read);
+        $("cfgReset").addEventListener("click", () => { cfg = Object.assign({}, DEF, { vol: cfg.vol }); saveCfg(); build(); put(); updateArmUI(); loop(); toast("↺ Sozlamalar tiklandi"); });
+      }
+
+      /* ---------------- Ishga tushirish ---------------- */
+      function init() {
+        if (!$("page-bell")) return;
+        sanitize();
+        buildSoundCards();
+        bindControls();
+        bindSettings();
+        build();
+        soundsReady = loadSounds().then(applyVol);
+        updateArmUI();
+        // Agar brauzer avtoplayga oldindan ruxsat bergan bo'lsa — o'zi yoqiladi
+        soundsReady.then(() => {
+          let pol = ""; try { pol = navigator.getAutoplayPolicy ? navigator.getAutoplayPolicy("mediaelement") : ""; } catch (e) {}
+          if (pol === "allowed" || (navigator.userActivation && navigator.userActivation.hasBeenActive)) arm();
+        });
+        syncTime(); setInterval(syncTime, 15 * 60 * 1000);
+        startTicker(); loop();
+      }
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
+    })();
+  </script>
+  
 </body>
 </html>
