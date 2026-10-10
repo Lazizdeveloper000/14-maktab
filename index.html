@@ -2,9 +2,25 @@
 <html lang="uz">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b65d8">
   <meta name="description" content="Sirdaryo viloyati Xovos tumani 14-maktab rasmiy zamonaviy veb-sayti">
   <title>14-Maktab | Xovos tumani</title>
+
+  <!-- Yengil rejim: telefon, sensorli ekran, kam xotirali yoki "tejash" rejimidagi qurilmalarda og'ir effektlarni o'chiradi -->
+  <script>
+    (function () {
+      try {
+        var w = window, d = document.documentElement, n = navigator, mm = w.matchMedia ? w.matchMedia.bind(w) : null;
+        var lite = w.innerWidth <= 900
+          || (mm && (mm('(pointer: coarse)').matches || mm('(prefers-reduced-motion: reduce)').matches))
+          || (n.deviceMemory && n.deviceMemory <= 4)
+          || (n.connection && n.connection.saveData);
+        if (lite) d.classList.add('lite');
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
@@ -22,26 +38,27 @@
       --gold: #f5b301;
       --shadow: 0 18px 55px rgba(15,23,42,.10);
       --radius: 22px;
+      --z: 1;
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: Inter, system-ui, sans-serif;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       line-height: 1.55;
       overflow-x: hidden;
     }
     button, input, textarea, select { font: inherit; }
     button, a { transition: .2s ease; }
-    button { cursor: pointer; }
+    button { cursor: pointer; touch-action: manipulation; }
     img { max-width: 100%; display: block; }
 
     /* ============ Chiroyli fon bezaklari ============ */
     .bg-decor { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
-    .bg-blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .35; animation: blobFloat 14s ease-in-out infinite alternate; }
+    .bg-blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .35; animation: blobFloat 14s ease-in-out infinite alternate; will-change: transform; }
     .bg-blob.b1 { width: 480px; height: 480px; background: #9ec5ff; top: -140px; left: -120px; }
     .bg-blob.b2 { width: 420px; height: 420px; background: #a7f3d0; top: 35%; right: -150px; animation-delay: 4s; }
     .bg-blob.b3 { width: 380px; height: 380px; background: #ddd6fe; bottom: -120px; left: 28%; animation-delay: 8s; }
@@ -77,8 +94,11 @@
       gap: 22px;
       min-height: 76px;
       padding: 12px 5vw;
+      padding-left: max(5vw, env(safe-area-inset-left));
+      padding-right: max(5vw, env(safe-area-inset-right));
       background: color-mix(in srgb, var(--surface) 92%, transparent);
       backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--line);
     }
     .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); min-width: max-content; }
@@ -99,7 +119,7 @@
     .nav-link:hover { color: var(--primary); background: var(--surface2); transform: translateY(-2px); }
     .nav-link.active { color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow: 0 6px 16px rgba(11,101,216,.3); }
 
-    .header-actions { display: flex; gap: 8px; }
+    .header-actions { display: flex; gap: 8px; margin-left: auto; }
     .icon-btn { width: 40px; height: 40px; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; color: var(--text); }
     .icon-btn:hover { transform: rotate(12deg) scale(1.08); border-color: var(--primary); color: var(--primary); }
     .mobile-only { display: none; }
@@ -107,6 +127,7 @@
     main { width: min(1240px, 92%); margin: auto; }
 
     .hero { display: grid; grid-template-columns: 1fr 1.05fr; gap: 35px; align-items: center; padding: 45px 0 32px; }
+    .hero > * { min-width: 0; }
     .eyebrow, .section-kicker { color: var(--primary); font-size: 11px; font-weight: 900; letter-spacing: 1.5px; }
     h1, h2, h3 { font-family: Manrope; margin: 0 0 12px; line-height: 1.15; }
     h1 {
@@ -116,10 +137,10 @@
       -webkit-background-clip: text; background-clip: text; color: transparent;
       animation: gradientMove 6s ease infinite;
     }
-    h2 { font-size: clamp(28px, 4vw, 42px); }
+    h2 { font-size: clamp(26px, 4vw, 42px); }
     h3 { font-size: 18px; }
 
-    .hero-lead { font-size: 22px; font-weight: 800; margin: 8px 0; }
+    .hero-lead { font-size: clamp(17px, 2.4vw, 22px); font-weight: 800; margin: 8px 0; min-height: 2.7em; }
     .hero-text { color: var(--muted); max-width: 620px; font-size: 16px; }
     .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 25px; }
 
@@ -137,7 +158,7 @@
       box-shadow: 0 10px 25px rgba(11,101,216,.18); position: relative; overflow: hidden;
     }
     .primary-btn::after {
-      content: ""; position: absolute; inset: 0;
+      content: ""; position: absolute; inset: 0; pointer-events: none;
       background: linear-gradient(110deg, transparent 30%, rgba(255,255,255,.35) 50%, transparent 70%);
       background-size: 200% auto; animation: shine 3s linear infinite;
     }
@@ -149,14 +170,14 @@
     .hero-photo img { width: 100%; height: 490px; object-fit: cover; border-radius: 30px; box-shadow: var(--shadow); }
     .photo-badge {
       position: absolute; left: 18px; bottom: 18px; display: flex; align-items: center; gap: 10px;
-      padding: 12px 15px; border-radius: 16px; background: rgba(255,255,255,.92); backdrop-filter: blur(12px); box-shadow: var(--shadow);
+      padding: 12px 15px; border-radius: 16px; background: rgba(255,255,255,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: var(--shadow);
       animation: bounceSlow 3s ease-in-out infinite;
     }
     .photo-badge span { width: 40px; height: 40px; border-radius: 12px; background: #0b65d8; color: #fff; display: grid; place-items: center; font-weight: 900; }
     .photo-badge b, .photo-badge small { display: block; }
     .photo-badge small { font-size: 11px; color: var(--muted); }
 
-    .quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 20px 0 70px; }
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin: 20px 0 70px; }
     .quick-card {
       display: flex; gap: 12px; padding: 18px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface);
       box-shadow: 0 8px 30px rgba(15,23,42,.04); transition: .3s ease;
@@ -164,25 +185,27 @@
     .quick-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 18px 40px rgba(11,101,216,.15); }
     .quick-icon { font-size: 25px; }
     .quick-card b { font-size: 13px; }
-    .quick-card p { font-size: 11px; color: var(--muted); margin: 3px 0 0; }
+    .quick-card p { font-size: 12px; color: var(--muted); margin: 3px 0 0; }
 
     .split-section { display: grid; grid-template-columns: 1fr 1fr; gap: 45px; align-items: center; margin-bottom: 65px; }
+    .split-section > * { min-width: 0; }
     .split-section p { color: var(--muted); }
-    .rounded-photo { height: 380px; width: 100%; object-fit: cover; border-radius: 25px; box-shadow: var(--shadow); }
+    .rounded-photo { height: clamp(220px, 32vw, 380px); width: 100%; object-fit: cover; border-radius: 25px; box-shadow: var(--shadow); }
 
     .rating-section, .comments-section, .youtube-section, .map-card, .schedule-wrap {
       background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; margin: 22px 0;
     }
-    .rating-section { display: flex; justify-content: space-between; gap: 30px; align-items: center; }
+    .rating-section { display: flex; justify-content: space-between; gap: 30px; align-items: center; flex-wrap: wrap; }
     .rating-box { text-align: center; }
-    .stars { display: flex; gap: 4px; }
-    .stars button { border: 0; background: transparent; color: #cbd5e1; font-size: 35px; padding: 0; transition: .15s; }
+    .stars { display: flex; gap: 4px; justify-content: center; }
+    .stars button { border: 0; background: transparent; color: #cbd5e1; font-size: 35px; padding: 0 2px; transition: .15s; }
     .stars button:hover { transform: scale(1.25) rotate(-8deg); }
     .rating-box strong, .rating-box small { display: block; }
     .rating-box small { color: var(--muted); }
 
     .section-heading, .page-title { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
-    .page-title { margin-bottom: 30px; }
+    .section-heading { flex-wrap: wrap; }
+    .page-title { margin-bottom: 30px; flex-wrap: wrap; }
     .page-title p { color: var(--muted); margin: 0; }
 
     .count-badge, .status-badge { padding: 8px 12px; border-radius: 999px; background: var(--surface2); color: var(--primary); font-size: 11px; font-weight: 900; white-space: nowrap; }
@@ -191,13 +214,13 @@
     .comment-form { display: grid; grid-template-columns: 220px 1fr auto; gap: 10px; margin-top: 20px; }
     .comment-form input, .comment-form textarea, .search-input, .select-input, .ai-form input {
       border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: 12px; padding: 12px; outline: none;
-      transition: .2s;
+      transition: .2s; min-width: 0;
     }
     .comment-form textarea { min-height: 48px; resize: vertical; }
     .comment-form input:focus, .comment-form textarea:focus, .search-input:focus, .select-input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(11,101,216,.12); }
 
     .comments-list { display: grid; gap: 10px; margin-top: 18px; }
-    .comment-item { padding: 14px; background: var(--surface2); border-radius: 15px; transition: .25s; border-left: 3px solid transparent; }
+    .comment-item { padding: 14px; background: var(--surface2); border-radius: 15px; transition: .25s; border-left: 3px solid transparent; overflow-wrap: anywhere; }
     .comment-item:hover { border-left-color: var(--primary); transform: translateX(5px); }
     .comment-item b { font-size: 13px; }
     .comment-item p { margin: 3px 0; color: var(--muted); font-size: 13px; }
@@ -216,7 +239,7 @@
       content: ""; position: absolute; bottom: -80px; left: 30%; width: 180px; height: 180px; border-radius: 50%;
       background: rgba(255,255,255,.05); animation: blobFloat 10s ease-in-out infinite alternate-reverse;
     }
-    .director-card > * { position: relative; z-index: 1; }
+    .director-card > * { position: relative; z-index: 1; min-width: 0; }
     .director-card h2 { margin-top: 4px; }
     .director-card p { color: #dce9ff; }
     .director-card .section-kicker { color: #9ec5ff; }
@@ -229,22 +252,23 @@
     .tag-row { display: flex; gap: 8px; flex-wrap: wrap; }
     .tag-row span { padding: 6px 9px; border: 1px solid rgba(255,255,255,.25); border-radius: 99px; font-size: 11px; transition: .2s; }
     .tag-row span:hover { background: rgba(255,255,255,.15); transform: translateY(-2px); }
+    .map-card .tag-row span { border-color: var(--line); background: var(--surface2); color: var(--muted); }
 
     .toolbar { display: flex; gap: 10px; margin-bottom: 18px; }
     .toolbar .search-input { flex: 1; }
     .select-input { min-width: 200px; }
 
-    .people-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
+    .people-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
     .person-card {
       background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 14px;
-      box-shadow: 0 8px 25px rgba(15,23,42,.04); overflow: hidden; transition: .3s ease;
+      box-shadow: 0 8px 25px rgba(15,23,42,.04); overflow: hidden; transition: .3s ease; min-width: 0;
     }
     .person-card:hover { transform: translateY(-8px); box-shadow: 0 18px 42px rgba(11,101,216,.15); border-color: var(--primary); }
     .person-photo {
       aspect-ratio: 3/4; border-radius: 13px; background: linear-gradient(145deg, #e7eef8, #d4dfed); display: grid; place-items: center;
       color: #7c8da5; font-weight: 900; margin-bottom: 12px; overflow: hidden; font-size: 34px;
     }
-    .person-card h3 { font-size: 15px; margin-bottom: 3px; }
+    .person-card h3 { font-size: 15px; margin-bottom: 3px; overflow-wrap: anywhere; }
     .person-card p { margin: 0; color: var(--muted); font-size: 11px; }
     .person-card .tag { display: inline-block; margin-top: 8px; background: var(--surface2); padding: 5px 8px; border-radius: 8px; font-size: 10px; color: var(--primary); font-weight: 800; }
 
@@ -255,10 +279,10 @@
     }
     .clock-panel::before {
       content: ""; position: absolute; top: -70px; right: -70px; width: 250px; height: 250px; border-radius: 50%;
-      background: rgba(255,255,255,.06); animation: blobFloat 9s ease-in-out infinite alternate;
+      background: rgba(255,255,255,.06); animation: blobFloat 9s ease-in-out infinite alternate; pointer-events: none;
     }
     .clock-panel > * { position: relative; z-index: 1; }
-    .big-clock { font-family: Manrope; font-size: clamp(48px, 9vw, 92px); letter-spacing: -4px; font-weight: 800; }
+    .big-clock { font-family: Manrope; font-size: clamp(48px, 9vw, 92px); letter-spacing: -4px; font-weight: 800; font-variant-numeric: tabular-nums; }
     .live-date { color: #bcd2f2; }
     .bell-state { display: flex; gap: 15px; align-items: center; padding: 16px 20px; background: rgba(255,255,255,.09); border-radius: 18px; }
     .bell-state > span { font-size: 40px; animation: bounceSlow 2s ease-in-out infinite; }
@@ -270,7 +294,7 @@
     .speaker { font-size: 30px; animation: bounceSlow 2.2s ease-in-out infinite; }
     .announcement p { margin: 3px 0; color: var(--muted); }
 
-    .table-scroll { overflow: auto; }
+    .table-scroll { overflow: auto; -webkit-overflow-scrolling: touch; }
     .schedule-wrap table { width: 100%; border-collapse: collapse; min-width: 650px; }
     .schedule-wrap th, .schedule-wrap td { padding: 13px; border-bottom: 1px solid var(--line); text-align: left; font-size: 13px; }
     .schedule-wrap th { color: var(--muted); font-size: 11px; text-transform: uppercase; }
@@ -287,14 +311,14 @@
     .file-label input { display: block; margin-top: 8px; width: 100%; }
 
     .youtube-controls { display: flex; gap: 10px; }
-    .youtube-controls input { flex: 1; }
-    .youtube-frame { margin-top: 15px; aspect-ratio: 16/9; border-radius: 18px; overflow: hidden; background: #0c1320; display: grid; place-items: center; color: #fff; }
+    .youtube-controls input { flex: 1; min-width: 0; }
+    .youtube-frame { margin-top: 15px; aspect-ratio: 16/9; border-radius: 18px; overflow: hidden; background: #0c1320; display: grid; place-items: center; color: #fff; text-align: center; padding: 10px; }
     .youtube-frame iframe { width: 100%; height: 100%; border: 0; }
     .youtube-frame.empty { background: linear-gradient(135deg, #0d1727, #162d4e); }
     .youtube-frame.empty span { font-size: 40px; }
-    .youtube-frame.empty p { margin-top: -60px; }
+    .youtube-frame.empty p { margin-top: 10px; }
 
-    .achievement-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .achievement-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
     .achievement-card {
       padding: 22px; border-radius: 21px; background: var(--surface); border: 1px solid var(--line); min-height: 190px;
       box-shadow: 0 10px 30px rgba(15,23,42,.04); transition: .3s ease;
@@ -304,10 +328,11 @@
       font-size: 35px; font-weight: 900;
       background: linear-gradient(135deg, var(--primary), var(--accent));
       -webkit-background-clip: text; background-clip: text; color: transparent;
+      font-variant-numeric: tabular-nums;
     }
     .achievement-card p { color: var(--muted); font-size: 13px; }
 
-    .about-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 18px; }
     .about-card { background: var(--surface); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; transition: .3s; }
     .about-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
     .about-card img { height: 250px; width: 100%; object-fit: cover; }
@@ -315,6 +340,7 @@
     .about-card p { color: var(--muted); font-size: 13px; }
 
     .map-card { display: grid; grid-template-columns: 1fr 330px; gap: 25px; align-items: center; }
+    .map-card > * { min-width: 0; }
     .map-placeholder {
       min-height: 220px; border-radius: 18px; background: linear-gradient(135deg, #dbeafe, #eef5ff); display: grid; place-items: center;
       text-align: center; color: #2361a6; font-size: 40px; transition: .3s;
@@ -323,7 +349,7 @@
     .map-placeholder span { font-size: 12px; display: block; }
     .map-card code { background: var(--surface2); padding: 2px 5px; border-radius: 5px; }
 
-    /* Marquee band - yangi bezak */
+    /* Marquee band */
     .marquee-band {
       overflow: hidden; white-space: nowrap; padding: 14px 0; margin: 10px 0 30px;
       background: linear-gradient(90deg, #0b65d8, #1649a8, #0b65d8); background-size: 200% auto;
@@ -331,7 +357,7 @@
     }
     .marquee-band span {
       display: inline-block; color: #fff; font-weight: 800; font-size: 14px; letter-spacing: 1px;
-      animation: marqueeScroll 22s linear infinite; padding-right: 60px;
+      animation: marqueeScroll 22s linear infinite; padding-right: 60px; will-change: transform;
     }
     @keyframes marqueeScroll { from { transform: translateX(100%); } to { transform: translateX(-100%); } }
 
@@ -345,16 +371,16 @@
     .ai-fab { padding: 0; overflow: hidden; background: #fff; border: 2px solid #0b65d8; }
     .ai-fab img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
     .ai-panel {
-      position: fixed; right: 24px; bottom: 92px; width: min(390px, calc(100vw - 30px)); height: 520px;
+      position: fixed; right: 24px; bottom: 92px; width: min(390px, calc(100vw - 30px)); height: min(520px, calc(100vh - 120px));
       background: var(--surface); border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 25px 80px rgba(15,23,42,.25); z-index: 79; display: none; flex-direction: column; overflow: hidden;
     }
     .ai-panel.open { display: flex; animation: pageIn .35s ease both; }
     .ai-head { padding: 15px 17px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--line); }
     .ai-head b, .ai-head small { display: block; }
     .ai-head small { color: var(--muted); font-size: 11px; }
-    .ai-head button { border: 0; background: transparent; font-size: 25px; }
-    .ai-messages { flex: 1; overflow: auto; padding: 14px; display: flex; flex-direction: column; gap: 9px; }
-    .ai-msg { max-width: 86%; padding: 10px 12px; border-radius: 14px; font-size: 12px; animation: fadeUp .3s ease both; }
+    .ai-head button { border: 0; background: transparent; font-size: 25px; color: var(--text); width: 40px; }
+    .ai-messages { flex: 1; overflow: auto; padding: 14px; display: flex; flex-direction: column; gap: 9px; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+    .ai-msg { max-width: 86%; padding: 10px 12px; border-radius: 14px; font-size: 12px; animation: fadeUp .3s ease both; overflow-wrap: anywhere; }
     .ai-msg.bot { background: var(--surface2); align-self: flex-start; }
     .ai-msg.user { background: #0b65d8; color: #fff; align-self: flex-end; }
     .ai-form { display: flex; gap: 7px; padding: 10px; border-top: 1px solid var(--line); }
@@ -362,7 +388,7 @@
     .ai-form button { width: 42px; border: 0; border-radius: 11px; background: var(--primary); color: #fff; }
     .ai-form button:hover { transform: scale(1.1); }
 
-    .footer { background: #05070b; color: #c9d1dc; margin-top: 0; padding: 55px 5vw 18px; }
+    .footer { background: #05070b; color: #c9d1dc; margin-top: 0; padding: 55px 5vw 18px; padding-bottom: calc(18px + env(safe-area-inset-bottom)); }
     .footer-grid { max-width: 1240px; margin: auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 40px; }
     .footer h3 { color: #fff; font-size: 14px; }
     .footer p { color: #8e99a8; font-size: 12px; }
@@ -379,7 +405,7 @@
     .footer-bottom p, .footer-bottom span { margin: 0; font-size: 11px; color: #778293; }
 
     .toast {
-      position: fixed; top: 90px; right: 20px; z-index: 100; padding: 12px 16px; border-radius: 12px;
+      position: fixed; top: 90px; right: 20px; z-index: 100; padding: 12px 16px; border-radius: 12px; max-width: calc(100vw - 40px);
       background: #101827; color: #fff; box-shadow: var(--shadow); opacity: 0; transform: translateY(-8px); pointer-events: none; transition: .25s;
     }
     .toast.show { opacity: 1; transform: none; }
@@ -390,11 +416,13 @@
     body.dark .topbar { background: rgba(16,23,34,.92); }
     body.dark .photo-badge { background: rgba(16,23,34,.92); }
     body.dark .now-row { background: #14263f; }
+    body.dark .status-badge { background: rgba(22,163,106,.15); }
+    body.dark .map-placeholder { background: linear-gradient(135deg, #14263f, #172231); color: #9ec5ff; }
 
 
     /* ============ MEGA ANIMATSIYA PAKETI ============ */
-    #scrollProgress { position: fixed; top: 0; left: 0; height: 4px; width: 0%; z-index: 999; background: linear-gradient(90deg,#0b65d8,#7c3aed,#16a36a,#f5b301); background-size: 300% 100%; animation: gradientMove 3s linear infinite; border-radius: 0 4px 4px 0; box-shadow: 0 0 14px rgba(124,58,237,.7); }
-    #cursorGlow { position: fixed; width: 340px; height: 340px; border-radius: 50%; pointer-events: none; z-index: 0; background: radial-gradient(circle, rgba(11,101,216,.13), transparent 65%); transform: translate(-50%,-50%); opacity: 0; transition: opacity .4s; }
+    #scrollProgress { position: fixed; top: 0; left: 0; height: 4px; width: 100%; transform: scaleX(0); transform-origin: left center; will-change: transform; z-index: 999; background: linear-gradient(90deg,#0b65d8,#7c3aed,#16a36a,#f5b301); background-size: 300% 100%; animation: gradientMove 3s linear infinite; border-radius: 0 4px 4px 0; box-shadow: 0 0 14px rgba(124,58,237,.7); pointer-events: none; }
+    #cursorGlow { position: fixed; top: 0; left: 0; width: 340px; height: 340px; border-radius: 50%; pointer-events: none; z-index: 0; background: radial-gradient(circle, rgba(11,101,216,.13), transparent 65%); transform: translate3d(-500px,-500px,0); opacity: 0; transition: opacity .4s; will-change: transform; }
 
     /* Brand mark atrofida pulsing halqa */
     .brand-mark { position: relative; }
@@ -448,58 +476,6 @@
     /* Confetti zarbchasi uchun */
     .confetti-bit { position: fixed; pointer-events: none; z-index: 1000; font-size: 20px; }
 
-    @media(max-width: 1100px) {
-      .main-nav { gap: 0; }
-      .nav-link { padding: 9px 7px; font-size: 11px; }
-      .people-grid { grid-template-columns: repeat(4, 1fr); }
-      .quick-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media(max-width: 820px) {
-      .topbar { padding: 10px 4%; }
-      .mobile-only { display: block; }
-      .main-nav { position: absolute; top: 76px; left: 0; right: 0; padding: 10px; background: var(--surface); border-bottom: 1px solid var(--line); display: none; flex-direction: column; align-items: stretch; }
-      .main-nav.open { display: flex; }
-      .nav-link { text-align: left; padding: 13px; }
-      .hero, .split-section { grid-template-columns: 1fr; }
-      .hero-photo img { height: 360px; }
-      .people-grid { grid-template-columns: repeat(3, 1fr); }
-      .director-card { grid-template-columns: 100px 1fr; }
-      .director-card .outline-btn { grid-column: 1/-1; }
-      .achievement-grid { grid-template-columns: 1fr 1fr; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-      .comment-form { grid-template-columns: 1fr; }
-      .map-card { grid-template-columns: 1fr; }
-    }
-    @media(max-width: 560px) {
-      main { width: 94%; }
-      .page { padding-top: 28px; }
-      .hero { padding-top: 18px; }
-      .hero h1 { font-size: 48px; }
-      .hero-photo img { height: 280px; }
-      .hero-stats { gap: 8px; }
-      .stat-card { flex-direction: column; align-items: flex-start; gap: 4px; padding: 11px; }
-      .stat-card b { font-size: 19px; }
-      .quick-grid, .people-grid, .achievement-grid, .about-grid { grid-template-columns: 1fr 1fr; }
-      .people-grid { gap: 9px; }
-      .person-card { padding: 9px; }
-      .person-card h3 { font-size: 12px; }
-      .person-card p { font-size: 10px; }
-      .page-title { align-items: flex-start; }
-      .page-title h1 { font-size: 32px; letter-spacing: -1px; }
-      .count-badge { display: none; }
-      .rating-section { display: block; }
-      .clock-panel { display: block; }
-      .bell-state { margin-top: 15px; }
-      .big-clock { font-size: 55px; }
-      .youtube-controls { display: block; }
-      .youtube-controls .primary-btn { margin-top: 8px; width: 100%; }
-      .footer-grid { grid-template-columns: 1fr; }
-      .footer-bottom { display: block; }
-      .footer-bottom p { margin-bottom: 7px; }
-      .ai-panel { right: 15px; bottom: 85px; }
-      .ai-fab { right: 15px; bottom: 15px; }
-    }
-
     /* ============ AQLLI QO'NG'IROQ TIZIMI ============ */
     @property --pa { syntax: '<color>'; inherits: true; initial-value: #0c1f40; }
     @property --pb { syntax: '<color>'; inherits: true; initial-value: #123f7a; }
@@ -518,6 +494,7 @@
     .bs-panel[data-state="ring"]   { --pa:#7c2d12; --pb:#c2410c; --ring:#fcd34d; }
     .bs-panel[data-state="anthem"] { --pa:#0b3d91; --pb:#0f766e; --ring:#fde047; }
 
+    .bs-left { min-width: 0; }
     .bs-sync { margin: 2px 0 14px; color: #bcd2f2; font-size: 13px; }
     .bs-next { margin: 12px 0 0; color: #dce9ff; font-size: 14px; font-weight: 600; min-height: 1.4em; }
     .bs-panel .bell-state { width: fit-content; max-width: 100%; }
@@ -527,7 +504,7 @@
     .bs-ring { position: relative; width: clamp(170px, 22vw, 230px); aspect-ratio: 1; }
     .bs-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
     .bs-ring .trk { fill: none; stroke: rgba(255,255,255,.13); stroke-width: 12; }
-    .bs-ring .bar { fill: none; stroke: var(--ring); stroke-width: 12; stroke-linecap: round; stroke-dasharray: 552.92; stroke-dashoffset: 552.92; transition: stroke-dashoffset .3s linear, stroke .8s; filter: drop-shadow(0 0 8px var(--ring)); }
+    .bs-ring .bar { fill: none; stroke: var(--ring); stroke-width: 12; stroke-linecap: round; stroke-dasharray: 552.92; stroke-dashoffset: 552.92; transition: stroke-dashoffset 1s linear, stroke .8s; filter: drop-shadow(0 0 8px var(--ring)); }
     .bs-ring-c { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
     .bs-count { font-family: Manrope; font-weight: 800; font-size: clamp(30px, 4.6vw, 46px); letter-spacing: -1px; font-variant-numeric: tabular-nums; }
     .bs-count-l { font-size: 11px; color: #bcd2f2; letter-spacing: .5px; }
@@ -545,7 +522,7 @@
     .bs-snd .bs-eq { color: var(--accent); margin-left: auto; }
 
     /* To'liq ekran (televizor / proyektor uchun) */
-    .bs-panel:fullscreen { border-radius: 0; padding: 5vh 6vw; align-content: center; }
+    .bs-panel:fullscreen { border-radius: 0; padding: 5vh 6vw; align-content: center; zoom: calc(1 / var(--z)); }
     .bs-panel:fullscreen .big-clock { font-size: clamp(80px, 15vw, 260px); letter-spacing: -6px; }
     .bs-panel:fullscreen .bs-ring { width: min(36vw, 62vh); }
     .bs-panel:fullscreen .bs-count { font-size: clamp(44px, 7vw, 130px); }
@@ -590,7 +567,7 @@
     .bs-seg { position: absolute; top: 7px; bottom: 7px; border-radius: 9px; display: grid; place-items: center; font-size: 12px; font-weight: 800; color: #fff; }
     .bs-seg.l { background: linear-gradient(135deg, var(--primary), var(--primary2)); }
     .bs-seg.b { background: var(--accent); }
-    .bs-now { position: absolute; top: 0; bottom: 0; width: 3px; background: #f43f5e; box-shadow: 0 0 12px #f43f5e; transform: translateX(-50%); transition: left .3s linear; z-index: 2; display: none; }
+    .bs-now { position: absolute; top: 0; bottom: 0; width: 3px; background: #f43f5e; box-shadow: 0 0 12px #f43f5e; transform: translateX(-50%); transition: left 1s linear; z-index: 2; display: none; }
     .bs-tl-axis { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-top: 6px; font-weight: 700; }
 
     .bs-table { width: 100%; border-collapse: collapse; min-width: 440px; }
@@ -603,7 +580,7 @@
     .bs-table tr.past td { color: var(--muted); }
     .bs-table .status-badge { animation: none; }
 
-    .bs-events { display: grid; gap: 4px; max-height: 372px; overflow: auto; padding-right: 4px; }
+    .bs-events { display: grid; gap: 4px; max-height: 372px; overflow: auto; padding-right: 4px; -webkit-overflow-scrolling: touch; }
     .bs-ev { display: grid; grid-template-columns: 72px 1fr auto; gap: 10px; align-items: center; padding: 9px 11px; border-radius: 11px; font-size: 13px; }
     .bs-ev time { font-family: Manrope; font-weight: 800; font-variant-numeric: tabular-nums; }
     .bs-ev em { font-style: normal; font-size: 11px; font-weight: 800; color: var(--muted); }
@@ -640,21 +617,207 @@
     .bs-mini:hover { border-color: var(--primary); color: var(--primary); }
     .bs-mini.ringing { border-color: #ea580c; color: #ea580c; animation: bellShake .5s ease-in-out infinite; }
 
+    /* =====================================================================
+       MOSLASHUVCHANLIK (telefon · planshet · noutbuk · katta monitor / televizor)
+       ===================================================================== */
+
+    /* ---- Katta ekranlar ---- */
+    @media (min-width: 1500px) {
+      main { width: min(1440px, 92%); }
+      .footer-grid, .footer-bottom { max-width: 1440px; }
+      .people-grid { grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); }
+    }
+    @media (min-width: 1900px) {
+      main { width: min(1680px, 90%); }
+      .footer-grid, .footer-bottom { max-width: 1680px; }
+    }
+    @media (min-width: 2200px) {
+      :root { --z: 1.25; }
+      body { zoom: var(--z); }
+    }
+    @media (min-width: 3000px) {
+      :root { --z: 1.6; }
+    }
+
+    /* ---- Noutbuk / kichik monitor ---- */
+    @media (max-width: 1100px) {
+      .main-nav { gap: 0; }
+      .nav-link { padding: 9px 7px; font-size: 11px; }
+    }
+
+    /* ---- Menyu: gamburger (planshet va telefon) ---- */
+    @media (max-width: 980px) {
+      .topbar { padding-top: 10px; padding-bottom: 10px; gap: 12px; }
+      .mobile-only { display: block; }
+      .main-nav {
+        position: absolute; top: 100%; left: 0; right: 0; padding: 10px;
+        background: var(--surface); border-bottom: 1px solid var(--line); box-shadow: 0 18px 30px rgba(15,23,42,.12);
+        display: none; flex-direction: column; align-items: stretch; justify-content: flex-start;
+        max-height: calc(100vh - 76px); max-height: calc(100dvh - 76px); overflow-y: auto;
+      }
+      .main-nav.open { display: flex; }
+      .nav-link { text-align: left; padding: 14px; font-size: 14px; }
+      .nav-link:hover { transform: none; }
+      .nav-link::after { display: none; }
+    }
+
+    /* ---- Planshet ---- */
     @media (max-width: 900px) {
       .bs-grid2, .bs-sounds { grid-template-columns: 1fr; }
     }
     @media (max-width: 820px) {
+      .hero, .split-section { grid-template-columns: 1fr; }
+      .hero { gap: 24px; }
+      .hero-photo img { height: clamp(240px, 52vw, 380px); }
+      .director-card { grid-template-columns: 110px 1fr; }
+      .director-card .outline-btn { grid-column: 1/-1; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid > :first-child { grid-column: 1/-1; }
+      .comment-form { grid-template-columns: 1fr; }
+      .map-card { grid-template-columns: 1fr; }
       .clock-panel.bs-panel { grid-template-columns: 1fr; justify-items: start; }
       .bs-ring { justify-self: center; }
       .bs-arm { flex-direction: column; align-items: stretch; }
+      .toolbar .select-input { min-width: 150px; }
     }
-    @media (max-width: 560px) {
-      .bs-vol input { width: 100px; }
+
+    /* ---- Telefon ---- */
+    @media (max-width: 640px) {
+      main { width: 94%; }
+      .page { padding-top: 24px; padding-bottom: 50px; }
+      .hero { padding-top: 14px; }
+      h1 { letter-spacing: -1.5px; }
+      .hero h1 { font-size: clamp(38px, 13vw, 52px); }
+      .hero-text { font-size: 15px; }
+      .hero-actions .primary-btn, .hero-actions .ghost-btn { flex: 1 1 100%; min-height: 46px; }
+      .hero-stats { gap: 8px; }
+      .stat-card { flex-direction: column; align-items: flex-start; gap: 4px; padding: 11px; }
+      .stat-card b { font-size: 19px; }
+      .photo-badge { left: 10px; bottom: 10px; padding: 9px 11px; }
+      .quick-grid { margin-bottom: 44px; }
+      .split-section { gap: 22px; margin-bottom: 40px; }
+      .rating-section, .comments-section, .youtube-section, .map-card, .bs-card { padding: 18px; border-radius: 18px; }
+      .rating-section { display: block; }
+      .rating-box { margin-top: 14px; }
+      .stars button { font-size: 40px; padding: 0 4px; min-height: 48px; }
+      .page-title { align-items: flex-start; margin-bottom: 20px; }
+      .page-title h1 { font-size: clamp(28px, 9vw, 36px); letter-spacing: -1px; }
+      .count-badge { display: none; }
+      .people-grid { grid-template-columns: repeat(2, 1fr); gap: 9px; }
+      .person-card { padding: 9px; border-radius: 14px; }
+      .person-card h3 { font-size: 12px; }
+      .person-card p { font-size: 10px; }
+      .achievement-grid, .about-grid { grid-template-columns: 1fr; }
+      .achievement-card { min-height: 0; }
+      .toolbar { flex-direction: column; }
+      .select-input { min-width: 0; width: 100%; }
+      .director-card { grid-template-columns: 1fr; padding: 18px; gap: 14px; border-radius: 20px; }
+      .director-photo { height: 96px; }
+      .clock-panel { padding: 20px; border-radius: 20px; }
+      .big-clock { font-size: clamp(44px, 15vw, 64px); letter-spacing: -2px; }
+      .bell-state { padding: 12px 14px; gap: 12px; }
+      .bell-state > span { font-size: 32px; }
+      .bs-ring { width: min(220px, 62vw); }
+      .bell-controls { gap: 8px; }
+      .bell-controls button { flex: 1 1 calc(50% - 8px); min-height: 46px; padding: 10px; font-size: 13px; }
+      .bs-controls { gap: 10px; }
+      .bs-controls .ghost-btn { flex: 1 1 calc(50% - 5px); min-height: 46px; }
+      .bs-vol { width: 100%; }
+      .bs-vol input { flex: 1; width: auto; }
+      .bs-ev { grid-template-columns: 62px 1fr; font-size: 12px; }
+      .bs-ev em { display: none; }
+      .bs-ev.next em, .bs-ev.done em { display: inline; grid-column: 2; }
       .bs-mini #bsMiniText { display: none; }
+      .bs-demo-bar .ghost-btn { margin-left: 0; width: 100%; }
+      .youtube-controls { display: block; }
+      .youtube-controls .primary-btn { margin-top: 8px; width: 100%; min-height: 46px; }
+      .announcement { padding: 14px; gap: 12px; }
+      .footer { padding-top: 40px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 26px; }
+      .footer-bottom { display: block; }
+      .footer-bottom p { margin-bottom: 7px; }
+      .footer button { padding: 8px 0; }
+      /* Telefonda yozuv maydonlari 16px — iPhone avtomatik kattalashtirmasligi uchun */
+      input, textarea, select { font-size: 16px; }
+      .ai-fab { right: 14px; bottom: 14px; bottom: calc(14px + env(safe-area-inset-bottom)); width: 54px; height: 54px; }
+      .ai-panel { right: 10px; left: 10px; width: auto; bottom: 80px; bottom: calc(80px + env(safe-area-inset-bottom)); height: min(520px, calc(100vh - 110px)); height: min(520px, calc(100dvh - 110px)); }
+      .toast { top: 84px; right: 10px; left: 10px; max-width: none; text-align: center; }
+    }
+
+    /* ---- Juda kichik telefonlar ---- */
+    @media (max-width: 380px) {
+      .brand small { display: none; }
+      .brand-mark { width: 42px; height: 42px; font-size: 17px; }
+      .hero-stats { grid-template-columns: 1fr; }
+      .stat-card { flex-direction: row; align-items: center; }
+      .bell-controls button, .bs-controls .ghost-btn { flex: 1 1 100%; }
+    }
+
+    /* ---- Telefon gorizontal holatda ---- */
+    @media (max-height: 520px) and (orientation: landscape) {
+      .topbar { min-height: 56px; }
+      .page { padding-top: 16px; }
+      .hero { padding-top: 6px; }
+      .ai-panel { height: calc(100vh - 80px); bottom: 70px; }
+      .main-nav { max-height: calc(100vh - 56px); }
+    }
+
+    /* =====================================================================
+       YENGIL REJIM — og'ir effektlar o'chiriladi (telefonlar qotmasligi uchun)
+       ===================================================================== */
+    html.lite .bg-decor,
+    html.lite #cursorGlow,
+    html.lite .hero-photo::before { display: none !important; }
+
+    html.lite .topbar,
+    html.lite .photo-badge { backdrop-filter: none; -webkit-backdrop-filter: none; }
+    html.lite .topbar { background: var(--surface); }
+    html.lite .photo-badge { background: var(--surface); }
+
+    html.lite .brand-mark,
+    html.lite .brand-mark::after,
+    html.lite .primary-btn::after,
+    html.lite .hero-photo,
+    html.lite h1,
+    html.lite .visible h2,
+    html.lite .page.active .page-title h1,
+    html.lite .director-card,
+    html.lite .director-card::before,
+    html.lite .director-card::after,
+    html.lite .clock-panel,
+    html.lite .clock-panel::before,
+    html.lite .big-clock,
+    html.lite .achievement-number,
+    html.lite .footer-brand,
+    html.lite .map-placeholder,
+    html.lite .status-badge,
+    html.lite .bell-state > span,
+    html.lite .speaker,
+    html.lite .photo-badge,
+    html.lite .ai-fab,
+    html.lite .marquee-band,
+    html.lite .bs-arm,
+    html.lite #scrollProgress { animation: none !important; }
+
+    html.lite .big-clock { text-shadow: none; }
+    html.lite .bs-ring .bar { filter: none; }
+    html.lite .brand-mark { box-shadow: 0 8px 18px rgba(11,101,216,.25); }
+    html.lite .clock-panel::before { display: none; }
+    html.lite .director-card::before, html.lite .director-card::after { display: none; }
+    html.lite #scrollProgress { box-shadow: none; }
+    html.lite .page.active { animation: pageInLite .25s ease both; }
+    html.lite .reveal { transform: translateY(14px); transition-duration: .45s; }
+    html.lite .reveal.visible { transform: none; }
+    html.lite .person-card:hover, html.lite .quick-card:hover, html.lite .achievement-card:hover, html.lite .about-card:hover { transform: none; }
+    @keyframes pageInLite { from { opacity: 0; } to { opacity: 1; } }
+
+    /* Animatsiyani kamaytirishni so'ragan foydalanuvchilar uchun */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+      .marquee-band span { animation: none !important; transform: none; }
     }
   </style>
-<base target="_blank">
-<base target="_blank">
 </head>
 <body>
   <div class="bg-decor">
@@ -684,7 +847,7 @@
     <div class="header-actions">
       <button class="bs-mini" id="bsMini" data-page="bell" title="Qo'ng'iroq tizimi"><span aria-hidden="true">🔔</span><span id="bsMiniText">--:--</span></button>
       <button id="themeToggle" class="icon-btn" title="Tungi/kunduzgi rejim" aria-label="Rejimni almashtirish">☾</button>
-      <button id="menuToggle" class="icon-btn mobile-only" aria-label="Menyuni ochish">☰</button>
+      <button id="menuToggle" class="icon-btn mobile-only" aria-label="Menyuni ochish" aria-expanded="false" aria-controls="mainNav">☰</button>
     </div>
   </header>
 
@@ -708,8 +871,8 @@
           </div>
         </div>
         <div class="hero-photo">
-          <!-- Yuqori o'ng tarafdagi rasm (maktab.jpg faylini papkaga tashlang) -->
-          <img src="ChatGPT Image 21 сент. 2026 г., 21_15_09.png" alt="14-Maktab binosi">
+          <!-- Yuqori o'ng tarafdagi rasm. MUHIM: rasm hajmini kichraytiring (qarang: izoh) -->
+          <img src="ChatGPT Image 21 сент. 2026 г., 21_15_09.png" alt="14-Maktab binosi" fetchpriority="high" decoding="async">
           <div class="photo-badge">
             <span>14</span>
             <div><b>Xovos Tumani</b><small>Zamonaviy Maktab</small></div>
@@ -748,8 +911,8 @@
           <button class="outline-btn" data-page="about" style="margin-top: 15px;">Batafsil tanishish →</button>
         </div>
         <div>
-          <!-- Pastdagi rasm joyi (maktab.jpg fayli ishlatiladi) -->
-          <img class="rounded-photo" src="ChatGPT Image 21 сент. 2026 г., 21_15_09.png" alt="Maktab binosi">
+          <!-- Pastdagi rasm joyi -->
+          <img class="rounded-photo" src="ChatGPT Image 21 сент. 2026 г., 21_15_09.png" alt="Maktab binosi" loading="lazy" decoding="async">
         </div>
       </div>
 
@@ -761,11 +924,11 @@
         </div>
         <div class="rating-box">
           <div class="stars" id="starContainer">
-            <button data-value="1">★</button>
-            <button data-value="2">★</button>
-            <button data-value="3">★</button>
-            <button data-value="4">★</button>
-            <button data-value="5">★</button>
+            <button data-value="1" aria-label="1 yulduz">★</button>
+            <button data-value="2" aria-label="2 yulduz">★</button>
+            <button data-value="3" aria-label="3 yulduz">★</button>
+            <button data-value="4" aria-label="4 yulduz">★</button>
+            <button data-value="5" aria-label="5 yulduz">★</button>
           </div>
           <strong id="ratingText">Hali baholanmagan</strong>
           <small><span id="voteCount">0</span> ta ovoz</small>
@@ -811,7 +974,7 @@
           <div class="tag-row">
             <span>Oliy toifali rahbar</span>
             <span>Xalq ta'limi a'lochisi</span>
-            <span>25+ yil tajriba</span>
+            <span>10+ yil tajriba</span>
           </div>
         </div>
         <button class="outline-btn" style="border-color: rgba(255,255,255,.4); color: #fff;" onclick="alert('Direktor qabul kunlari: Dushanba - Juma (14:00 - 16:00)')">Qabul kunlari</button>
@@ -918,7 +1081,7 @@
             <span class="section-kicker">BUGUNGI KUN XARITASI</span>
             <h3 style="margin:4px 0 0;">Darslar (ko'k) va tanaffuslar (yashil)</h3>
           </div>
-          <span class="count-badge" id="bsTlRange">—</span>
+          <span class="count-badge" id="bsTlRange" style="display:inline-block;">—</span>
         </div>
         <div class="bs-tl" id="bsTimeline"></div>
         <div class="bs-tl-axis"><span id="bsTlFrom">—</span><span id="bsTlTo">—</span></div>
@@ -948,7 +1111,7 @@
           <span class="section-kicker">OVOZLAR</span>
           <h2 style="margin:4px 0 0;font-size:28px;">Ovoz fayllari</h2>
         </div>
-        <span class="count-badge">Papkadan tanlang — brauzer eslab qoladi</span>
+        <span class="count-badge" style="display:inline-block;">Papkadan tanlang — brauzer eslab qoladi</span>
       </div>
       <div class="bs-sounds" id="bsSounds"></div>
 
@@ -1119,21 +1282,21 @@
   </main>
 
   <!-- AI Assistant floating widget -->
-  <button class="ai-fab" id="aiFab" title="AI Yordamchi" aria-label="AI Yordamchini ochish"><img src="robot.png" alt="AI Yordamchi"></button>
+  <button class="ai-fab" id="aiFab" title="AI Yordamchi" aria-label="AI Yordamchini ochish"><img src="robot.png" alt="AI Yordamchi" decoding="async"></button>
   <div class="ai-panel" id="aiPanel">
     <div class="ai-head">
       <div>
         <b>14-Maktab AI Yordamchisi</b>
         <small>Savollaringizga javob berishga tayyor</small>
       </div>
-      <button id="aiCloseBtn">&times;</button>
+      <button id="aiCloseBtn" aria-label="Yopish">&times;</button>
     </div>
     <div class="ai-messages" id="aiMessages">
       <div class="ai-msg bot">Assalomu alaykum! Men 14-maktabning virtual yordamchisiman. Sizga maktabimiz, o'qituvchilar, dars jadvallari yoki qo'ng'iroq vaqtlari bo'yicha qanday yordam bera olaman?</div>
     </div>
     <form class="ai-form" id="aiForm">
       <input type="text" id="aiInput" placeholder="Savol yozing..." autocomplete="off" required>
-      <button type="submit">➔</button>
+      <button type="submit" aria-label="Yuborish">➔</button>
     </form>
   </div>
 
@@ -1172,6 +1335,8 @@
   </footer>
 
   <script>
+    const LITE = document.documentElement.classList.contains("lite");
+
     const teachersData = [
       // YANGI USTOZ QO'SHISH UCHUN: pastdagi qatorni nusxalang va ism-familiyani yozing
       { id: 1, name: "Boltayev Sherqo'zi", subject: "Matematika", cat: "Aniqlik", desc: "Maktab direktori, oliy toifali matematika o'qituvchisi. 25+ yil tajriba.", tag: "Direktor" },
@@ -1222,12 +1387,21 @@
       const mainNav = document.getElementById("mainNav");
       const menuToggle = document.getElementById("menuToggle");
 
-      menuToggle?.addEventListener("click", () => {
-        mainNav.classList.toggle("open");
+      const setMenu = open => {
+        mainNav.classList.toggle("open", open);
+        menuToggle?.setAttribute("aria-expanded", open ? "true" : "false");
+      };
+
+      menuToggle?.addEventListener("click", () => setMenu(!mainNav.classList.contains("open")));
+
+      // Menyudan tashqariga bosilsa — yopiladi
+      document.addEventListener("click", e => {
+        if (mainNav.classList.contains("open") && !mainNav.contains(e.target) && !menuToggle.contains(e.target)) setMenu(false);
       });
 
       navButtons.forEach(btn => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
           const pageId = btn.getAttribute("data-page");
           if (!pageId) return;
 
@@ -1239,8 +1413,8 @@
             else l.classList.remove("active");
           });
 
-          mainNav.classList.remove("open");
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          setMenu(false);
+          window.scrollTo({ top: 0, behavior: LITE ? "auto" : "smooth" });
         });
       });
     }
@@ -1248,14 +1422,15 @@
     function initReveal() {
       const els = document.querySelectorAll(".reveal");
       const obs = new IntersectionObserver(entries => {
-        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("visible"); });
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } });
       }, { threshold: 0.12 });
       els.forEach(el => obs.observe(el));
     }
 
     function initTheme() {
       const themeToggle = document.getElementById("themeToggle");
-      const savedTheme = localStorage.getItem("school_theme");
+      let savedTheme = null;
+      try { savedTheme = localStorage.getItem("school_theme"); } catch (e) {}
       if (savedTheme === "dark") {
         document.body.classList.add("dark");
         themeToggle.textContent = "☀";
@@ -1265,15 +1440,17 @@
         document.body.classList.toggle("dark");
         const isDark = document.body.classList.contains("dark");
         themeToggle.textContent = isDark ? "☀" : "☾";
-        localStorage.setItem("school_theme", isDark ? "dark" : "light");
+        try { localStorage.setItem("school_theme", isDark ? "dark" : "light"); } catch (e) {}
       });
     }
 
+    let toastTimer = 0;
     function showToast(msg) {
       const toast = document.getElementById("toast");
       toast.textContent = msg;
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 3000);
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 3000);
     }
 
     function initRating() {
@@ -1362,13 +1539,13 @@
       }
 
       function render(arr) {
-        grid.innerHTML = "";
+        const frag = document.createDocumentFragment();
         countBadge.textContent = `${arr.length} ta ustoz`;
         arr.forEach((t, i) => {
           const card = document.createElement("div");
           card.className = "person-card";
           card.style.animation = `fadeUp .5s ease both`;
-          card.style.animationDelay = `${i * 0.06}s`;
+          card.style.animationDelay = `${Math.min(i, 10) * 0.05}s`;
           card.innerHTML = `
             <div class="person-photo"><span>👤</span></div>
             <h3>${escapeHtml(t.name)}</h3>
@@ -1376,8 +1553,9 @@
             <p style="margin-top:4px;">${escapeHtml(t.desc)}</p>
             <span class="tag">${escapeHtml(t.tag)}</span>
           `;
-          grid.appendChild(card);
+          frag.appendChild(card);
         });
+        grid.replaceChildren(frag);
       }
     }
 
@@ -1404,23 +1582,30 @@
       }
 
       function render(arr) {
-        grid.innerHTML = "";
+        const frag = document.createDocumentFragment();
         countBadge.textContent = `${arr.length} nafar o'quvchi`;
         arr.forEach((s, i) => {
           const card = document.createElement("div");
           card.className = "person-card";
           card.style.animation = `fadeUp .5s ease both`;
-          card.style.animationDelay = `${i * 0.06}s`;
+          card.style.animationDelay = `${Math.min(i, 10) * 0.05}s`;
           card.innerHTML = `
             <div class="person-photo" style="background: linear-gradient(145deg, #e3f2fd, #bbdefb); color: #1565c0;"><span>⭐</span></div>
             <h3>${escapeHtml(s.name)}</h3>
-            <p><b>${s.grade}-sinf o'quvchisi</b></p>
+            <p><b>${escapeHtml(s.grade)}-sinf o'quvchisi</b></p>
             <p style="margin-top:4px;">${escapeHtml(s.desc)}</p>
             <span class="tag" style="background: #e3f2fd; color: #0d47a1;">${escapeHtml(s.tag)}</span>
           `;
-          grid.appendChild(card);
+          frag.appendChild(card);
         });
+        grid.replaceChildren(frag);
       }
+    }
+
+    function extractYoutubeId(input) {
+      const m = input.match(/(?:youtu\.be\/|[?&]v=|embed\/|shorts\/|live\/)([A-Za-z0-9_-]{11})/);
+      if (m) return m[1];
+      return /^[A-Za-z0-9_-]{11}$/.test(input) ? input : null;
     }
 
     function loadYoutubeVideo() {
@@ -1430,12 +1615,7 @@
         showToast("Iltimos, YouTube havolasini kiriting!");
         return;
       }
-      let videoId = input;
-      if (input.includes("youtu.be/")) {
-        videoId = input.split("youtu.be/")[1]?.split("?")[0];
-      } else if (input.includes("watch?v=")) {
-        videoId = input.split("watch?v=")[1]?.split("&")[0];
-      }
+      const videoId = extractYoutubeId(input);
 
       if (!videoId) {
         showToast("Noto'g'ri havola kiritildi!");
@@ -1443,7 +1623,7 @@
       }
 
       container.className = "youtube-frame";
-      container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
       showToast("Video muvaffaqiyatli yuklandi!");
     }
 
@@ -1501,12 +1681,12 @@
     }
 
     function escapeHtml(str) {
-      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+      return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
     }
   </script>
 
   <script>
-    /* ============ MEGA ANIMATSIYA PAKETI (JS) ============ */
+    /* ============ MEGA ANIMATSIYA PAKETI (JS) — yengil rejimda og'ir qismlari o'chiriladi ============ */
     document.addEventListener("DOMContentLoaded", () => {
       initScrollProgress();
       initCursorGlow();
@@ -1518,46 +1698,51 @@
       initStarConfetti();
     });
 
-    /* 1. Scroll progress bar */
+    /* 1. Scroll progress bar (transform — qayta chizishsiz) */
     function initScrollProgress() {
       const bar = document.getElementById("scrollProgress");
       if (!bar) return;
+      let ticking = false;
       const update = () => {
+        ticking = false;
         const h = document.documentElement;
-        const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-        bar.style.width = pct + "%";
+        const max = h.scrollHeight - h.clientHeight;
+        const pct = max > 0 ? Math.min(1, h.scrollTop / max) : 0;
+        bar.style.transform = `scaleX(${pct})`;
       };
-      window.addEventListener("scroll", update, { passive: true });
+      window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
       update();
     }
 
-    /* 2. Sichqoncha ortidan yuruvchi yumshoq glow */
+    /* 2. Sichqoncha ortidan yuruvchi yumshoq glow (faqat harakatlanganda chiziladi) */
     function initCursorGlow() {
       const glow = document.getElementById("cursorGlow");
-      if (!glow || window.matchMedia("(hover: none)").matches) return;
-      let tx = -500, ty = -500, x = -500, y = -500;
+      if (!glow || LITE || window.matchMedia("(hover: none)").matches) return;
+      let tx = -500, ty = -500, x = -500, y = -500, raf = 0;
+      const step = () => {
+        x += (tx - x) * 0.14; y += (ty - y) * 0.14;
+        glow.style.transform = `translate3d(${x - 170}px, ${y - 170}px, 0)`;
+        raf = (Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5) ? requestAnimationFrame(step) : 0;
+      };
       document.addEventListener("mousemove", e => {
         tx = e.clientX; ty = e.clientY;
         glow.style.opacity = "1";
-      });
-      (function loop() {
-        x += (tx - x) * 0.12; y += (ty - y) * 0.12;
-        glow.style.left = x + "px"; glow.style.top = y + "px";
-        requestAnimationFrame(loop);
-      })();
+        if (!raf) raf = requestAnimationFrame(step);
+      }, { passive: true });
     }
 
-    /* 3. Osmonda suzuvchi 30 ta yulduzcha / konuscha */
+    /* 3. Osmonda suzuvchi yulduzchalar (faqat kuchli qurilmalarda) */
     function initParticles() {
+      if (LITE) return;
       const wrap = document.querySelector(".bg-decor");
       if (!wrap) return;
       const icons = ["✦", "✧", "⭐", "✨", "•"];
-      for (let i = 0; i < 30; i++) {
+      for (let i = 0; i < 22; i++) {
         const p = document.createElement("span");
         p.textContent = icons[Math.floor(Math.random() * icons.length)];
         p.style.cssText = `position:fixed;left:${Math.random()*100}vw;top:105vh;
           font-size:${8 + Math.random()*16}px;color:${Math.random() > .5 ? '#0b65d8' : '#7c3aed'};
-          opacity:${.15 + Math.random()*.35};z-index:-1;pointer-events:none;
+          opacity:${.15 + Math.random()*.35};z-index:-1;pointer-events:none;will-change:transform;
           animation:particleFloat ${9 + Math.random()*14}s linear ${-Math.random()*20}s infinite;`;
         wrap.appendChild(p);
       }
@@ -1566,9 +1751,9 @@
       document.head.appendChild(st);
     }
 
-    /* 4. 3D tilt effekti — karta sichqonchaga qarab egiladi */
+    /* 4. 3D tilt effekti — faqat sichqonchali, kuchli qurilmalarda */
     function initTiltCards() {
-      if (window.matchMedia("(hover: none)").matches) return;
+      if (LITE || window.matchMedia("(hover: none)").matches) return;
       const cards = document.querySelectorAll(".quick-card, .achievement-card, .person-card, .about-card, .audio-card, .rating-section");
       cards.forEach(card => {
         card.addEventListener("mousemove", e => {
@@ -1597,7 +1782,7 @@
           if (!m) return;
           const target = parseInt(m[1], 10);
           const suffix = m[2];
-          const dur = 1600;
+          const dur = LITE ? 900 : 1600;
           const t0 = performance.now();
           const tick = now => {
             const p = Math.min((now - t0) / dur, 1);
@@ -1611,8 +1796,9 @@
       nums.forEach(n => obs.observe(n));
     }
 
-    /* 6. Hero matn: mashinka kabi yozilib chiqadi */
+    /* 6. Hero matn: mashinka kabi yozilib chiqadi (yengil rejimda o'tkazib yuboriladi) */
     function initTypewriter() {
+      if (LITE) return;
       const el = document.querySelector(".hero-lead");
       if (!el) return;
       const full = el.textContent.trim();
@@ -1627,9 +1813,9 @@
       setTimeout(step, 500);
     }
 
-    /* 7. Magnit tugmalar — tugma sichqonchaga tortiladi */
+    /* 7. Magnit tugmalar — faqat sichqonchali qurilmalarda */
     function initMagneticButtons() {
-      if (window.matchMedia("(hover: none)").matches) return;
+      if (LITE || window.matchMedia("(hover: none)").matches) return;
       document.querySelectorAll(".primary-btn, .ghost-btn, .outline-btn, .icon-btn").forEach(btn => {
         btn.addEventListener("mousemove", e => {
           const r = btn.getBoundingClientRect();
@@ -1641,7 +1827,7 @@
       });
     }
 
-    /* 8. 5 yulduz — konfetti portlashi! */
+    /* 8. 5 yulduz — konfetti portlashi! (telefonda kamroq zarracha) */
     function initStarConfetti() {
       document.querySelectorAll("#starContainer button").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -1649,7 +1835,8 @@
           const r = btn.getBoundingClientRect();
           const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
           const emo = ["🎉", "⭐", "✨", "🎊", "💙", "🏆", "🌟"];
-          for (let i = 0; i < 26; i++) {
+          const count = LITE ? 12 : 26;
+          for (let i = 0; i < count; i++) {
             const c = document.createElement("span");
             c.className = "confetti-bit";
             c.textContent = emo[Math.floor(Math.random() * emo.length)];
@@ -1665,7 +1852,10 @@
         });
       });
     }
-    
+
+    /* Fikr/taklifni Telegramga yuborish.
+       DIQQAT: bot tokeni brauzer kodida ochiq turibdi — uni kimdir ko'rib, botdan suiiste'mol qilishi mumkin.
+       Tokenni BotFather orqali yangilab (/revoke), so'rovni serverga (masalan, Cloudflare Worker) o'tkazish tavsiya etiladi. */
     document.addEventListener('click', async function(e) {
     if (e.target && e.target.textContent.trim() === 'Yuborish') {
         e.preventDefault();
@@ -1717,8 +1907,6 @@
         }
     }
 });
-
-
   </script>
   <script>
     /* =====================================================================
@@ -1727,6 +1915,8 @@
        - Smena boshida madhiya, har dars oxirida qo'ng'iroq → "tanaffus boshlandi",
          tanaffus oxirida "tanaffus tugadi" ovozi avtomatik chalinadi
        - Ovozlar: audio/ papkasidan yoki "Papkadan tanlash" orqali (brauzer eslab qoladi)
+       - YANGILIK: ekran faqat sekundiga 1 marta yangilanadi (telefon qotmasligi uchun),
+         hodisalar esa har 0.25 soniyada tekshiriladi (qo'ng'iroq aniq vaqtida chalinadi)
        ===================================================================== */
     (() => {
       "use strict";
@@ -1734,6 +1924,7 @@
       const TZ = 5 * 3600 * 1000;          // Toshkent: UTC+5 (yozgi/qishki vaqt yo'q)
       const CATCHUP = 20;                  // brauzer kechiksa ham, 20 soniyagacha o'tkazib yuborilmaydi
       const RING_C = 2 * Math.PI * 88;
+      const IS_LITE = document.documentElement.classList.contains("lite");
       const DEF = { start1: "08:00", lessons: 6, lessonMin: 45, breakMin: 5, shift2: true, start2: "13:00", days: [1, 2, 3, 4, 5, 6], auto: true, vol: 1 };
       const SND = {
         bell:       { icon: "🔔", title: "Dars tugash qo'ng'irog'i", desc: "Har bir dars tugaganda chalinadi", file: "audio/qongiroq.mp3" },
@@ -1882,6 +2073,8 @@
         status(k, `✅ Sizning faylingiz: ${name}`, "ok");
       }
       function buildSoundCards() {
+        // Telefonda / trafik tejash rejimida audio faqat kerak bo'lganda yuklanadi
+        const preload = IS_LITE ? "metadata" : "auto";
         $("bsSounds").innerHTML = Object.entries(SND).map(([k, s]) => `
           <div class="bs-card bs-snd" data-k="${k}">
             <div class="bs-snd-head">
@@ -1889,7 +2082,7 @@
               <div><h3>${s.title}</h3><p>${s.desc}</p></div>
               <span class="bs-eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
             </div>
-            <audio controls preload="auto" id="snd-${k}"></audio>
+            <audio controls preload="${preload}" id="snd-${k}"></audio>
             <div class="bs-snd-status" id="st-${k}">…</div>
             <div class="bs-snd-actions">
               <label class="outline-btn bs-pick">📂 Papkadan tanlash<input type="file" accept="audio/*" data-pick="${k}"></label>
@@ -2034,7 +2227,7 @@
       }
 
       /* ---------------- Ekranni yangilash ---------------- */
-      let lastSig = "", lastLoop = 0, baseTitle = document.title;
+      let lastSig = "", lastLoop = 0, lastSec = -1, baseTitle = document.title;
       function render(T, active) {
         const st = active ? stateAt(T.sod) : { type: "off" };
         const d = describe(st);
@@ -2043,7 +2236,8 @@
 
         let ui = st.type === "lesson" ? "lesson" : st.type === "break" ? "break" : (st.type === "before" || st.type === "gap") ? "wait" : "off";
         if (playing) ui = playing === "anthem" ? "anthem" : "ring";
-        $("bsPanel").dataset.state = ui;
+        const panel = $("bsPanel");
+        if (panel.dataset.state !== ui) panel.dataset.state = ui;
 
         setText($("bellIconState"), playing ? "🔔" : d.ico);
         setText($("bellStatusText"), playing ? `${SND[playing].title} yangramoqda…` : d.t);
@@ -2113,11 +2307,16 @@
         }).join("");
       }
 
+      /* Asosiy tsikl: hodisalar har ~0.25 s da tekshiriladi (aniqlik uchun),
+         lekin ekran (DOM) faqat soniya o'zgarganda yangilanadi (yengillik uchun). */
       function loop() {
         const t = performance.now(); if (t - lastLoop < 120) return; lastLoop = t;
         const T = tz(nowMs());
         const active = demoOn || cfg.days.includes(T.dow);
         if (active && cfg.auto) checkEvents(T);
+        const sec = Math.floor(T.sod);
+        if (sec === lastSec && lastSig !== "") return;
+        lastSec = sec;
         render(T, active);
       }
       function startTicker() {
@@ -2127,7 +2326,7 @@
           w.onmessage = loop; ok = true;       // Worker fon (yashirin) sahifada ham susaymaydi
         } catch (e) {}
         setInterval(loop, ok ? 1000 : 250);
-        document.addEventListener("visibilitychange", () => { lastLoop = 0; loop(); if (document.visibilityState === "visible" && armed) requestWake(); });
+        document.addEventListener("visibilitychange", () => { lastLoop = 0; lastSec = -1; loop(); if (document.visibilityState === "visible" && armed) requestWake(); });
       }
 
       /* ---------------- Aniq vaqt bilan sinxronlash ---------------- */
@@ -2179,7 +2378,7 @@
         $("bsFull").addEventListener("click", () => {
           const p = $("bsPanel");
           if (document.fullscreenElement) document.exitFullscreen();
-          else (p.requestFullscreen || p.webkitRequestFullscreen || (() => {})).call(p);
+          else (p.requestFullscreen || p.webkitRequestFullscreen || (() => { toast("Bu qurilma to'liq ekranni qo'llab-quvvatlamaydi"); })).call(p);
         });
         document.addEventListener("fullscreenchange", () => setText($("bsFull"), document.fullscreenElement ? "✖ Ekrandan chiqish" : "🖥 To'liq ekran"));
         $("bsDemoOff").addEventListener("click", demoStop);
@@ -2240,6 +2439,6 @@
       if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
     })();
   </script>
-  
+
 </body>
 </html>
