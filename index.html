@@ -974,7 +974,7 @@
           <div class="tag-row">
             <span>Oliy toifali rahbar</span>
             <span>Xalq ta'limi a'lochisi</span>
-            <span>10+ yil tajriba</span>
+            <span>25+ yil tajriba</span>
           </div>
         </div>
         <button class="outline-btn" style="border-color: rgba(255,255,255,.4); color: #fff;" onclick="alert('Direktor qabul kunlari: Dushanba - Juma (14:00 - 16:00)')">Qabul kunlari</button>
@@ -1908,6 +1908,7 @@
     }
 });
   </script>
+  <script src="ovoz.js"></script>
   <script>
     /* =====================================================================
        AQLLI QO'NG'IROQ TIZIMI
@@ -1927,10 +1928,10 @@
       const IS_LITE = document.documentElement.classList.contains("lite");
       const DEF = { start1: "08:00", lessons: 6, lessonMin: 45, breakMin: 5, shift2: true, start2: "13:00", days: [1, 2, 3, 4, 5, 6], auto: true, vol: 1 };
       const SND = {
-        bell:       { icon: "🔔", title: "Dars tugash qo'ng'irog'i", desc: "Har bir dars tugaganda chalinadi", file: "audio/qongiroq.mp3" },
-        breakStart: { icon: "🗣️", title: "Tanaffus boshlandi", desc: "Qo'ng'iroqdan keyin darhol avtomatik yangraydi", file: "audio/tanafus-boshlanishi.mp3" },
-        breakEnd:   { icon: "⏰", title: "Tanaffus tugadi", desc: "Tanaffus vaqti tugaganda avtomatik yangraydi", file: "audio/tanafus-tugashi.mp3" },
-        anthem:     { icon: "🎼", title: "O'zbekiston Respublikasi Davlat madhiyasi", desc: "Har smena boshlanishida (08:00 va 13:00) yangraydi", file: "audio/madhiya.mp3" }
+        bell:       { icon: "🔔", title: "Dars tugash qo'ng'irog'i", desc: "Har bir dars tugaganda chalinadi", file: "qongiroq.mp3" },
+        breakStart: { icon: "🗣️", title: "Tanaffus boshlandi", desc: "Qo'ng'iroqdan keyin darhol avtomatik yangraydi", file: "tanafus-boshlanishi.mp3" },
+        breakEnd:   { icon: "⏰", title: "Tanaffus tugadi", desc: "Tanaffus vaqti tugaganda avtomatik yangraydi", file: "tanafus-tugashi.mp3" },
+        anthem:     { icon: "🎼", title: "O'zbekiston Respublikasi Davlat madhiyasi", desc: "Har smena boshlanishida (08:00 va 13:00) yangraydi", file: "madhiya.mp3" }
       };
       const WEEK = ["Yakshanba", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba"];
       const DAYS_UI = [[1, "Du"], [2, "Se"], [3, "Ch"], [4, "Pa"], [5, "Ju"], [6, "Sh"], [0, "Ya"]];
@@ -2057,13 +2058,27 @@
         return { get: k => tx("readonly", s => s.get(k)), set: (k, v) => tx("readwrite", s => s.put(v, k)), del: k => tx("readwrite", s => s.delete(k)) };
       })();
 
+      /* Saytga joylangan ovozni Blob manzilga aylantiradi (katta data: manzillardan ishonchliroq) */
+      const embeddedCache = {};
+      function embeddedUrl(k) {
+        try {
+          const b64 = window.BELL_AUDIO && window.BELL_AUDIO[k];
+          if (!b64) return "";
+          if (!embeddedCache[k]) {
+            const bin = atob(b64), u8 = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+            embeddedCache[k] = URL.createObjectURL(new Blob([u8], { type: "audio/mpeg" }));
+          }
+          return embeddedCache[k];
+        } catch (e) { return ""; }
+      }
       const custom = {};                   // key -> {url, name}
       function status(k, text, cls) { const s = $("st-" + k); if (s) { s.textContent = text; s.className = "bs-snd-status " + (cls || ""); } }
       function useDefault(k) {
         const a = el[k]; if (custom[k]) { URL.revokeObjectURL(custom[k].url); delete custom[k]; }
-        a.dataset.broken = ""; a.src = SND[k].file; a.load();
+        a.dataset.broken = ""; a.src = embeddedUrl(k) || SND[k].file; a.load();
         const r = document.querySelector(`[data-reset="${k}"]`); if (r) r.hidden = true;
-        status(k, `Standart fayl: ${SND[k].file}`, "");
+        status(k, `Standart ovoz: ${SND[k].file}`, "");
       }
       function useCustom(k, blob, name) {
         const a = el[k]; if (custom[k]) URL.revokeObjectURL(custom[k].url);
@@ -2098,7 +2113,7 @@
           });
           a.addEventListener("loadedmetadata", () => {
             const d = isFinite(a.duration) ? ` · ${Math.floor(a.duration / 60)}:${pad(Math.round(a.duration % 60))}` : "";
-            const s = $("st-" + k); if (s && !a.dataset.broken) s.textContent = (custom[k] ? `✅ Sizning faylingiz: ${custom[k].name}` : `✅ Standart fayl: ${SND[k].file}`) + d;
+            const s = $("st-" + k); if (s && !a.dataset.broken) s.textContent = (custom[k] ? `✅ Sizning faylingiz: ${custom[k].name}` : `✅ Standart ovoz: ${SND[k].file}`) + d;
             if (s && !a.dataset.broken) s.className = "bs-snd-status ok";
           });
           a.addEventListener("play", () => { if (!playing && !priming) setPlayingUI(k); });
