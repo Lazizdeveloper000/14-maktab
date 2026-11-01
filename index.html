@@ -310,10 +310,13 @@
     .file-label { display: block; border: 1px dashed var(--line); padding: 10px; border-radius: 10px; font-size: 12px; }
     .file-label input { display: block; margin-top: 8px; width: 100%; }
 
-    .youtube-controls { display: flex; gap: 10px; }
+    .youtube-controls { display: flex; gap: 10px; flex-wrap: wrap; }
     .youtube-controls input { flex: 1; min-width: 0; }
     .youtube-frame { margin-top: 15px; aspect-ratio: 16/9; border-radius: 18px; overflow: hidden; background: #0c1320; display: grid; place-items: center; color: #fff; text-align: center; padding: 10px; }
     .youtube-frame iframe { width: 100%; height: 100%; border: 0; }
+    .youtube-frame { padding: 0; contain: layout paint; }
+    .youtube-frame video { width: 100%; height: 100%; display: block; object-fit: contain; background: #000; border-radius: inherit; }
+    .youtube-controls .ghost-btn[hidden] { display: none; }
     .youtube-frame.empty { background: linear-gradient(135deg, #0d1727, #162d4e); }
     .youtube-frame.empty span { font-size: 40px; }
     .youtube-frame.empty p { margin-top: 10px; }
@@ -872,7 +875,8 @@
       .bs-mini #bsMiniText { display: none; }
       .bs-demo-bar .ghost-btn { margin-left: 0; width: 100%; }
       .youtube-controls { display: block; }
-      .youtube-controls .primary-btn { margin-top: 8px; width: 100%; min-height: 46px; }
+      .youtube-controls .primary-btn, .youtube-controls .ghost-btn { margin-top: 8px; width: 100%; min-height: 46px; }
+      .youtube-frame { border-radius: 14px; margin-top: 12px; }
       .announcement { padding: 14px; gap: 12px; }
       .footer { padding-top: 40px; }
       .footer-grid { grid-template-columns: 1fr; gap: 26px; }
@@ -1642,7 +1646,7 @@
       <div class="bell-controls">
         <button class="primary-btn" data-test="bell">🔔 Qo'ng'iroq</button>
         <button class="ghost-btn" data-test="breakStart">🗣️ Tanaffus boshlandi</button>
-        <button class="ghost-btn" data-test="breakEnd">⏰ Tanaffus tugadi</button>
+        <button class="ghost-btn" data-test="breakEndChain">🔔 Tanaffus tugadi (qo'ng'iroq + ovoz)</button>
         <button class="ghost-btn" data-test="anthem">🎼 Madhiya</button>
         <button class="outline-btn" data-test="chain">▶ Qo'ng'iroq + tanaffus (ketma-ket)</button>
       </div>
@@ -1771,17 +1775,18 @@
             <span class="section-kicker">VIDEO LAVHALAR</span>
             <h2>Maktabimiz hayotidan videoroliklar</h2>
           </div>
-          <p style="color: var(--muted); font-size: 13px; margin: 0;">YouTube havolasini kiriting va tomosha qiling</p>
+          <p style="color: var(--muted); font-size: 13px; margin: 0;">Maktab videosi yoki YouTube havolasi</p>
         </div>
         <div class="youtube-controls" style="margin-top: 15px;">
-          <input type="text" id="youtubeInput" class="search-input" placeholder="YouTube video havolasi yoki ID si (masalan: dQw4w9WgXcQ)">
-          <button class="primary-btn" onclick="loadYoutubeVideo()">Videoni yuklash</button>
+          <input type="text" id="youtubeInput" class="search-input" placeholder="YouTube havolasi (ixtiyoriy), masalan: https://youtu.be/..." inputmode="url" autocomplete="off">
+          <button class="primary-btn" onclick="loadYoutubeVideo()">YouTube'ni ochish</button>
+          <button class="ghost-btn" type="button" onclick="loadSchoolVideo()" id="schoolVideoBtn" hidden>Maktab videosi</button>
         </div>
-        <div class="youtube-frame empty" id="youtubeContainer">
-          <div>
-            <span>▶</span>
-            <p style="margin: 10px 0 0; color: #94a3b8;">Hozircha video kiritilmadi. Yuqoriga havola yozing.</p>
-          </div>
+        <div class="youtube-frame" id="youtubeContainer">
+          <video src="maktab-hayoti.mp4" id="schoolVideo" controls playsinline webkit-playsinline preload="none"
+                 poster="maktab-hayoti.mp4" controlsList="nodownload">
+            Brauzeringiz videoni qo'llab-quvvatlamaydi.
+          </video>
         </div>
       </div>
     </section>
@@ -1981,7 +1986,7 @@
     const studentsData = [
       { id: 1, name: "Salimov Sarvarjon", grade: "9", tag: "9E sinf", desc: "Bilimga intiluvchan, faol va zukko o'quvchi.", icon: "⚙️", photo: "" },
       { id: 2, name: "Mirzaboyev Lazizbek", grade: "9", tag: "9E sinf", desc: "Maqsadli, intiluvchan va iqtidorli o'quvchi.", icon: "📖", photo: MIRZA_PHOTO },
-      { id: 3, name: "O'quvchi ismi", grade: "11", tag: "11-sinf", desc: "Ijodkor, faol va intiluvchan o'quvchi.", icon: "☆", photo: "" },
+      { id: 3, name: "Jasmina Kofler", grade: "8", tag: "8-sinf", desc: "Ijodkor, faol va intiluvchan o'quvchi.", icon: "☆", photo: "" },
       { id: 4, name: "O'quvchi ismi", grade: "10", tag: "10-sinf", desc: "O'z ustida ishlaydigan, faol o'quvchi.", icon: "📊", photo: "" },
       { id: 5, name: "O'quvchi ismi", grade: "9", tag: "9-sinf", desc: "Bilimli, mehribon va faol o'quvchi.", icon: "☆", photo: "" },
       { id: 6, name: "O'quvchi ismi", grade: "8", tag: "8-sinf", desc: "Kelajakda yuksak marralarga erishadi.", icon: "🏆", photo: "" },
@@ -2282,10 +2287,45 @@
         return;
       }
 
+      stopSchoolVideo();
       container.className = "youtube-frame";
+      document.getElementById("schoolVideoBtn").hidden = false;
       container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
       showToast("Video muvaffaqiyatli yuklandi!");
     }
+
+    /* ---- Maktab videosi (o'z fayl): telefonda yengil variant, kerak bo'lganda yuklanadi ---- */
+    function stopSchoolVideo() {
+      const v = document.getElementById("schoolVideo");
+      if (v && !v.paused) v.pause();
+    }
+    function pickVideoSrc() {
+      const c = navigator.connection || {};
+      const small = window.innerWidth <= 900 || c.saveData || /2g|3g/.test(c.effectiveType || "");
+      return small ? "videos/maktab-hayoti-480.mp4" : "videos/maktab-hayoti.mp4";
+    }
+    function setupSchoolVideo() {
+      const v = document.getElementById("schoolVideo");
+      if (!v || v.dataset.ready) return;
+      v.dataset.ready = "1";
+      // Manzil faqat birinchi bosishda beriladi — sahifa ochilganda video yuklanmaydi (qotmaydi)
+      const load = () => { if (!v.getAttribute("src")) { v.src = pickVideoSrc(); v.preload = "metadata"; } };
+      v.addEventListener("play", load, { once: true });
+      v.addEventListener("touchstart", load, { once: true, passive: true });
+      v.addEventListener("pointerdown", load, { once: true, passive: true });
+      // Boshqa bo'limga o'tilsa yoki sahifa yashirilsa — video to'xtaydi
+      document.addEventListener("visibilitychange", () => { if (document.hidden) stopSchoolVideo(); });
+      new MutationObserver(() => { if (!document.getElementById("page-achievements").classList.contains("active")) stopSchoolVideo(); })
+        .observe(document.getElementById("page-achievements"), { attributes: true, attributeFilter: ["class"] });
+    }
+    function loadSchoolVideo() {
+      const c = document.getElementById("youtubeContainer");
+      c.className = "youtube-frame";
+      c.innerHTML = '<video id="schoolVideo" controls playsinline webkit-playsinline preload="none" poster="videos/maktab-hayoti.jpg" controlsList="nodownload"></video>';
+      document.getElementById("schoolVideoBtn").hidden = true;
+      setupSchoolVideo();
+    }
+    document.addEventListener("DOMContentLoaded", setupSchoolVideo);
 
     function initAiChat() {
       const fab = document.getElementById("aiFab");
@@ -2325,7 +2365,7 @@
         if (q.includes("kim yaratgan") || q.includes("muallif") || q.includes("yaratuvchi") || q.includes("kim qilgan") || q.includes("kim yasagan") || q.includes("who made") || q.includes("who created") || q.includes("dasturchi")) {
           return "Ushbu zamonaviy saytni 9E sinf o'quvchisi Mirzaboyev Lazizbek yaratgan! U iqtidorli dasturchi bo'lib, saytning barcha kodlari, dizayni va funksiyalarini o'zi ishlab chiqqan. Qoyil, Lazizbek! 👏";
         } else if (q.includes("direktor") || q.includes("rahbar") || q.includes("boltayev")) {
-          return "Maktabimiz direktori — Boltayev Sherqo'zi. U oliy toifali, kuchli bilimli tajribali ustoz va 25 yillik mehnat tajribasiga ega munosib rahbar. Qabul kunlari: Dushanba - Juma (14:00 - 16:00).";
+          return "Maktabimiz direktori — Boltayev Sherqo'zi. U oliy toifali, kuchli bilimli tajribali ustoz va 15 yillik mehnat tajribasiga ega munosib rahbar. Qabul kunlari: Dushanba - Juma (14:00 - 16:00).";
         } else if (q.includes("manzil") || q.includes("qayerda") || q.includes("xovos")) {
           return "Maktabimiz Sirdaryo viloyati, Xovos tumanida joylashgan. Mo'ljal: Markaziy masjid yaqinida.";
         } else if (q.includes("telefon") || q.includes("raqam") || q.includes("bog'lanish")) {
@@ -2589,8 +2629,8 @@
       const DEF = { start1: "08:00", lessons: 6, lessonMin: 45, breakMin: 5, shift2: true, start2: "13:00", days: [1, 2, 3, 4, 5, 6], auto: true, vol: 1 };
       const SND = {
         bell:       { icon: "🔔", title: "Dars tugash qo'ng'irog'i", desc: "Har bir dars tugaganda chalinadi", file: "qongiroq.mp3" },
-        breakStart: { icon: "🗣️", title: "Tanaffus boshlandi", desc: "Qo'ng'iroqdan keyin darhol avtomatik yangraydi", file: "Generated Audio October 17, 2026 - 7_46AM.wav" },
-        breakEnd:   { icon: "⏰", title: "Tanaffus tugadi", desc: "Tanaffus vaqti tugaganda avtomatik yangraydi", file: "Generated Audio October 13, 2026 - 3_35PM.wav" },
+        breakStart: { icon: "🗣️", title: "Tanaffus boshlandi", desc: "Qo'ng'iroqdan keyin darhol avtomatik yangraydi", file: "Tanafus boshlanishi yangi.mp3" },
+        breakEnd:   { icon: "⏰", title: "Tanaffus tugadi", desc: "Tanaffus tugaganda qo'ng'iroqdan keyin avtomatik yangraydi", file: "Yangi tanfus tugashi.mp3" },
         anthem:     { icon: "🎼", title: "O'zbekiston Respublikasi Davlat madhiyasi", desc: "Har smena boshlanishida (08:00 va 13:00) yangraydi", file: "madhiya.mp3" }
       };
       const WEEK = ["Yakshanba", "Dushanba", "Seshanba", "Chorshanba", "Payshanba", "Juma", "Shanba"];
@@ -2660,7 +2700,7 @@
             if (!last) {
               periods.push({ kind: "break", shift: sh.n, num: i, start: le, end: le + B });
               events.push({ id: `s${sh.n}-l${i}-end`, t: le, label: `${i}-dars tugadi · qo'ng'iroq + tanaffus`, seq: ["bell", "breakStart"] });
-              events.push({ id: `s${sh.n}-l${i}-brk`, t: le + B, label: `Tanaffus tugadi · ${i + 1}-dars`, seq: ["breakEnd"] });
+              events.push({ id: `s${sh.n}-l${i}-brk`, t: le + B, label: `Tanaffus tugadi · qo'ng'iroq · ${i + 1}-dars`, seq: ["bell", "breakEnd"] });
             } else {
               events.push({ id: `s${sh.n}-l${i}-end`, t: le, label: cfg.shift2 ? `${i}-dars tugadi · ${sh.n}-smena yakuni` : `${i}-dars tugadi · kun yakuni`, seq: ["bell"] });
             }
@@ -2841,6 +2881,7 @@
 
       async function playSeq(keys) {
         const token = ++seqToken;
+        if (typeof stopSchoolVideo === "function") stopSchoolVideo();
         Object.values(el).forEach(a => { if (!a.paused) a.pause(); });
         for (const k of keys) {
           if (token !== seqToken) return;
@@ -3078,7 +3119,7 @@
         document.querySelectorAll("[data-test]").forEach(b => b.addEventListener("click", () => {
           arm();
           const k = b.dataset.test;
-          playSeq(k === "chain" ? ["bell", "breakStart"] : [k]);
+          playSeq(k === "chain" ? ["bell", "breakStart"] : k === "breakEndChain" ? ["bell", "breakEnd"] : [k]);
         }));
         document.querySelectorAll("[data-demo]").forEach(b => b.addEventListener("click", () => {
           arm();
@@ -3131,6 +3172,34 @@
       }
       if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
     })();
+
+
+    function startClock() {
+  const clockElement = document.getElementById('clock'); // Saytdagi soat ID-si
+  if (!clockElement) return;
+
+  function update() {
+    const now = new Date();
+    
+    // Aniq O'zbekiston (Toshkent) vaqtini olish
+    const options = {
+      timeZone: 'Asia/Tashkent',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    };
+
+    const formatter = new Intl.DateTimeFormat('uz-UZ', options);
+    clockElement.textContent = formatter.format(now);
+  }
+
+  update();
+  setInterval(update, 1000);
+}
+
+// Sahifa to'liq yuklangach ishga tushirish
+document.addEventListener('DOMContentLoaded', startClock);
   </script>
 
 </body>
