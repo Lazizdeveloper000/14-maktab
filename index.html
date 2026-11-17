@@ -594,6 +594,11 @@
     .sv-sum { text-align: left; max-width: 560px; margin: 0 auto 24px; display: grid; gap: 8px; }
     .sv-sum div { padding: 10px 14px; border-radius: 12px; background: var(--surface2); font-size: 13px; }
     .sv-sum b { display: block; color: var(--muted); font-size: 11px; font-weight: 700; }
+    .sv-name { max-width: 380px; margin: 0 auto 18px; text-align: left; }
+    .sv-name label { display: block; font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+    .sv-name input { width: 100%; padding: 14px 16px; border-radius: 14px; border: 2px solid var(--line); background: var(--surface); color: var(--text); font-weight: 600; }
+    .sv-name input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(11,101,216,.12); }
+    .sv-name small { color: #e11d48; font-weight: 700; display: block; margin-top: 6px; }
     .sv-card [hidden] { display: none !important; }
     @media (max-width: 640px) {
       .sv-opts.grid2 { grid-template-columns: 1fr; }
@@ -1407,7 +1412,7 @@
           <h1>So‘rovnoma</h1>
           <p>O‘quvchilar fikri – maktab rivoji uchun!</p>
         </div>
-        <span class="status-badge">Anonim</span>
+        <span class="status-badge">Maktab ovozi</span>
       </div>
       <div class="sv-wrap">
         <div class="sv-card" id="svCard">
@@ -1416,8 +1421,9 @@
             <span class="eyebrow">14-MAKTAB · XOVOS TUMANI</span>
             <h2>MAKTAB OVOZI</h2>
             <p><b>Sizning fikringiz maktabimiz kelajagi uchun muhim!</b></p>
-            <p>Har bir savolga faqat bitta javob tanlang. So‘rovnoma ishtirokchisining ismi, familiyasi yoki telefon raqami so‘ralmaydi.</p>
-            <div class="sv-chips"><span class="sv-chip">🔒 To‘liq anonim</span><span class="sv-chip">⏱ ~3 daqiqa</span><span class="sv-chip">✅ 1 marta topshiriladi</span></div>
+            <p>Har bir savolga faqat bitta javob tanlang. Boshlashdan oldin ism-familiyangizni yozing.</p>
+            <div class="sv-chips"><span class="sv-chip">📝 21 ta savol</span><span class="sv-chip">⏱ ~3 daqiqa</span><span class="sv-chip">✅ 1 marta topshiriladi</span></div>
+            <div class="sv-name"><label for="svName">👤 Ism-familiyangiz</label><input type="text" id="svName" placeholder="Masalan: Aliyev Vali" maxlength="60" autocomplete="name"><small id="svNameErr" hidden>Iltimos, ism va familiyangizni yozing.</small></div>
             <button class="primary-btn" id="svStart" type="button">So‘rovnomani boshlash →</button>
           </div>
           <div id="svRun" hidden>
@@ -1434,7 +1440,7 @@
           <div class="sv-done" id="svDone" hidden>
             <div class="sv-check">✓</div>
             <h2 id="svDoneTitle">Rahmat!</h2>
-            <p id="svDoneText">Javoblaringiz anonim tarzda qabul qilindi. Sizning fikringiz maktabimiz rivojiga hissa qo‘shadi.</p>
+            <p id="svDoneText">Javoblaringiz qabul qilindi. Sizning fikringiz maktabimiz rivojiga hissa qo‘shadi.</p>
             <div class="sv-sum" id="svSum" hidden></div>
             <button class="ghost-btn" type="button" data-page="home">Bosh sahifaga qaytish</button>
           </div>
@@ -2714,11 +2720,11 @@
       /* ====== SOZLAMALAR (yangi so'rovnoma uchun faqat shu qismni o'zgartiring) ====== */
       const SURVEY_ID    = "maktab-ovozi-1";   // YANGI savollar qo'ysangiz buni ham o'zgartiring (masalan "maktab-ovozi-2"), shunda o'quvchilar yana qatnasha oladi
       const SURVEY_TITLE = "MAKTAB OVOZI";      // Telegramga boradigan xabar sarlavhasi
-      const TG_TOKEN     = "";                  // BotFather bergan token, masalan "123456:ABC-DEF..."
-      const TG_CHAT_ID   = "";                  // Xabar boradigan chat ID (o'zingizniki yoki guruh/kanal)
+      const TG_TOKEN     = "8954060795:AAFpcZDdl4zR90TgOhrah1Nfd6HFoz4FZQo";                  // BotFather bergan token, masalan "123456:ABC-DEF..."
+      const TG_CHAT_ID   = "8990585770";                  // Xabar boradigan chat ID (o'zingizniki yoki guruh/kanal)
       const TG_ENDPOINT  = "";                  // XAVFSIZ USUL: Cloudflare Worker manzili (masalan "https://maktab-ovozi.ismingiz.workers.dev"). Shu to'ldirilsa TG_TOKEN va TG_CHAT_ID bo'sh qoladi
       /* ============================================================================== */
-      const KEY_DONE = SURVEY_ID + "_done", KEY_DATA = SURVEY_ID + "_javoblar", KEY_DRAFT = SURVEY_ID + "_draft", KEY_PEND = SURVEY_ID + "_pending";
+      const KEY_NAME = SURVEY_ID + "_name", KEY_DONE = SURVEY_ID + "_done", KEY_DATA = SURVEY_ID + "_javoblar", KEY_DRAFT = SURVEY_ID + "_draft", KEY_PEND = SURVEY_ID + "_pending";
       const Q = [
         { s: "A. Umumiy ma'lumotlar", q: "Nechanchi sinfda o‘qiysiz?", g: 1, o: ["5-sinf","6-sinf","7-sinf","8-sinf","9-sinf","10-sinf","11-sinf"] },
         { s: "A. Umumiy ma'lumotlar", q: "Qaysi smenada ta'lim olasiz?", o: ["1-smena (ertalab)","2-smena (tushdan keyin)"] },
@@ -2785,14 +2791,20 @@
         if (i < Q.length - 1) return go(i + 1);
         finish();
       });
+      let fullName = ls.get(KEY_NAME) || "";
+      $("svName").value = fullName;
+      $("svName").addEventListener("input", () => { $("svNameErr").hidden = true; });
       $("svStart").addEventListener("click", () => {
+        const nm = $("svName").value.replace(/\s+/g, " ").trim();
+        if (nm.length < 3 || nm.indexOf(" ") < 1) { $("svNameErr").hidden = false; $("svName").focus(); return; }
+        $("svNameErr").hidden = true; fullName = nm; ls.set(KEY_NAME, nm);
         const first = ans.findIndex(a => a === null);
         i = first === -1 ? 0 : first; show("svRun"); render(true);
       });
 
       function buildMsg(rec) {
         const d = new Date(rec.t).toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" });
-        return "📝 " + SURVEY_TITLE + " — yangi javob\n🕒 " + d + "\n\n" +
+        return "📝 " + SURVEY_TITLE + " — yangi javob\n👤 Ism-familiya: " + (rec.n || "—") + "\n🕒 " + d + "\n\n" +
           rec.a.map((x, n) => (n + 1) + ". " + x.q + "\n   ➜ " + x.v).join("\n");
       }
       async function sendTg(rec) {
@@ -2823,7 +2835,7 @@
         if (ans.some(a => a === null)) { i = ans.findIndex(a => a === null); render(true); return; }
         if (ls.get(KEY_DONE)) return showDone(true);
         let all = []; try { all = JSON.parse(ls.get(KEY_DATA) || "[]"); } catch (e) {}
-        all.push({ t: new Date().toISOString(), a: ans.map((k, n) => ({ q: Q[n].q, v: Q[n].o[k] })) });
+        all.push({ t: new Date().toISOString(), n: fullName, a: ans.map((k, n) => ({ q: Q[n].q, v: Q[n].o[k] })) });
         ls.set(KEY_DATA, JSON.stringify(all)); ls.set(KEY_DONE, "1"); ls.del(KEY_DRAFT);
         const rec = all[all.length - 1];
         sendTg(rec).then(ok => {
@@ -2839,7 +2851,7 @@
         $("svDoneTitle").textContent = already ? "Siz allaqachon qatnashgansiz" : "Rahmat!";
         $("svDoneText").textContent = already
           ? "So‘rovnomani faqat bir marta topshirish mumkin. Ishtirokingiz uchun rahmat!"
-          : "Javoblaringiz anonim tarzda qabul qilindi. Sizning fikringiz maktabimiz rivojiga hissa qo‘shadi.";
+          : "Javoblaringiz qabul qilindi. Sizning fikringiz maktabimiz rivojiga hissa qo‘shadi.";
         show("svDone");
       }
 
